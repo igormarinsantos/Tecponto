@@ -3,14 +3,46 @@ import { X, Send, Check, CheckCheck } from "lucide-react";
 import { useRef, useState, useEffect } from "react";
 import whatsappAssistant from "@/assets/whatsapp-assistant.png";
 import whatsappIcon from "@/assets/whatsapp-icon.svg";
+import type { LandingVariant } from "@/types/landing";
 
-const WhatsAppButton = () => {
+const buttonContent: Record<LandingVariant, {
+  title: string;
+  defaultMessage: string;
+  firstMessage: JSX.Element;
+  secondMessage: JSX.Element;
+}> = {
+  repare: {
+    title: "TecPonto Reparos",
+    defaultMessage: "Olá! Gostaria de solicitar um orçamento para reparo de celular.",
+    firstMessage: <>Olá! 👋 Sou o atendimento da <span className="font-semibold">TecPonto</span>. Como posso ajudar com o seu celular?</>,
+    secondMessage: <>📱 Trabalhamos com <span className="font-semibold">todas as marcas</span>: iPhone, Samsung, Xiaomi, Motorola...</>,
+  },
+  troque: {
+    title: "TecPonto Trocas",
+    defaultMessage: "Olá! Gostaria de avaliar meu celular para troca.",
+    firstMessage: <>Olá! 👋 Quer trocar seu celular com a <span className="font-semibold">TecPonto</span>?</>,
+    secondMessage: <>Envie modelo, fotos e estado do aparelho para uma <span className="font-semibold">pré-avaliação rápida</span>.</>,
+  },
+  compre: {
+    title: "TecPonto Vendas",
+    defaultMessage: "Olá! Gostaria de ver os celulares disponíveis para compra.",
+    firstMessage: <>Olá! 👋 Quer comprar um celular revisado pela <span className="font-semibold">TecPonto</span>?</>,
+    secondMessage: <>Me diga marca ou faixa de preço e envio os <span className="font-semibold">modelos disponíveis</span>.</>,
+  },
+};
+
+type WhatsAppButtonProps = {
+  variant?: LandingVariant;
+};
+
+const WhatsAppButton = ({ variant = "repare" }: WhatsAppButtonProps) => {
   const [showPopup, setShowPopup] = useState(false);
   const [showNotification, setShowNotification] = useState(false);
   const [message, setMessage] = useState("");
   const [offerVisible, setOfferVisible] = useState(false);
   const lastScrollY = useRef(0);
   const animationFrame = useRef<number | null>(null);
+  const content = buttonContent[variant];
 
   useEffect(() => {
     const updateVisibility = () => {
@@ -56,7 +88,7 @@ const WhatsAppButton = () => {
 
   const handleSendMessage = () => {
     const encodedMessage = encodeURIComponent(
-      message || "Olá! Gostaria de solicitar um orçamento para reparo de celular."
+      message || content.defaultMessage
     );
     window.open(`https://wa.me/5511930642742?text=${encodedMessage}`, "_blank");
     setShowPopup(false);
@@ -127,7 +159,7 @@ const WhatsAppButton = () => {
                 <span className="absolute bottom-0 right-0 w-3 h-3 bg-[#25D366] rounded-full border-2 border-[#075E54]" />
               </div>
               <div className="flex-1">
-                <p className="font-semibold text-white text-sm">TecPonto Reparos</p>
+                <p className="font-semibold text-white text-sm">{content.title}</p>
                 <p className="text-[11px] text-white/80">online agora</p>
               </div>
               <button
@@ -150,7 +182,7 @@ const WhatsAppButton = () => {
               <div className="flex gap-2 mb-3">
                 <div className="bg-white rounded-lg rounded-tl-none px-3 py-2 max-w-[85%] shadow-sm">
                   <p className="text-[13px] text-gray-800 leading-relaxed">
-                    Olá! 👋 Sou o atendimento da <span className="font-semibold">TecPonto</span>. Como posso ajudar com o seu celular?
+                    {content.firstMessage}
                   </p>
                   <div className="flex items-center justify-end gap-1 mt-1">
                     <span className="text-[10px] text-gray-500">agora</span>
@@ -163,7 +195,7 @@ const WhatsAppButton = () => {
               <div className="flex gap-2">
                 <div className="bg-white rounded-lg rounded-tl-none px-3 py-2 max-w-[85%] shadow-sm">
                   <p className="text-[13px] text-gray-800 leading-relaxed">
-                    📱 Trabalhamos com <span className="font-semibold">todas as marcas</span>: iPhone, Samsung, Xiaomi, Motorola...
+                    {content.secondMessage}
                   </p>
                   <div className="flex items-center justify-end gap-1 mt-1">
                     <span className="text-[10px] text-gray-500">agora</span>

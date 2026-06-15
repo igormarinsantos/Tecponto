@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { MapPin, Clock, Shield, Zap, Award, CheckCircle2 } from "lucide-react";
 import brokenPhone from "@/assets/broken-phone-hero.png";
 import { useCountdownTimer } from "@/hooks/useCountdownTimer";
+import type { LandingVariant } from "@/types/landing";
 
 const scrollToWhatsApp = () => {
   const element = document.getElementById("whatsapp-chat");
@@ -29,12 +30,78 @@ const HeroCountdown = () => {
   );
 };
 
-const NewHeroSection = () => {
-  const features = [
-    { icon: Zap, text: "Reparo Rápido" },
-    { icon: Shield, text: "90 Dias Garantia" },
-    { icon: Award, text: "Peças Originais" },
-  ];
+const heroContent: Record<LandingVariant, {
+  eyebrow: string;
+  title: string;
+  highlight: string;
+  description: JSX.Element;
+  features: Array<{ icon: typeof Zap; text: string }>;
+  floatingBadge: string;
+  imageAlt: string;
+}> = {
+  repare: {
+    eyebrow: "10% OFF Novos Clientes",
+    title: "Seu celular",
+    highlight: "quebrou?",
+    description: (
+      <>
+        <span className="font-bold text-foreground">Conserto rápido</span>,{" "}
+        <span className="font-bold text-foreground">garantia de 90 dias</span> e{" "}
+        <span className="font-bold text-foreground">atendimento especializado</span> que você merece
+      </>
+    ),
+    features: [
+      { icon: Zap, text: "Reparo Rápido" },
+      { icon: Shield, text: "90 Dias Garantia" },
+      { icon: Award, text: "Peças Originais" },
+    ],
+    floatingBadge: "Reparo em 2h",
+    imageAlt: "Celular quebrado - Conserto profissional",
+  },
+  troque: {
+    eyebrow: "Avaliação rápida do seu usado",
+    title: "Troque seu celular",
+    highlight: "sem enrolação",
+    description: (
+      <>
+        <span className="font-bold text-foreground">Avaliamos seu aparelho</span>,{" "}
+        <span className="font-bold text-foreground">aceitamos como entrada</span> e te ajudamos a sair com um modelo melhor
+      </>
+    ),
+    features: [
+      { icon: Zap, text: "Avaliação Rápida" },
+      { icon: Shield, text: "Troca Segura" },
+      { icon: Award, text: "Modelos Selecionados" },
+    ],
+    floatingBadge: "Troca facilitada",
+    imageAlt: "Celular para troca - Avaliação TecPonto",
+  },
+  compre: {
+    eyebrow: "Celulares revisados e com garantia",
+    title: "Compre seu próximo",
+    highlight: "celular",
+    description: (
+      <>
+        <span className="font-bold text-foreground">Aparelhos selecionados</span>,{" "}
+        <span className="font-bold text-foreground">testados pela assistência</span> e prontos para você comprar com confiança
+      </>
+    ),
+    features: [
+      { icon: Zap, text: "Pronta Entrega" },
+      { icon: Shield, text: "Garantia TecPonto" },
+      { icon: Award, text: "Curadoria Técnica" },
+    ],
+    floatingBadge: "Compra segura",
+    imageAlt: "Celular revisado para venda - TecPonto",
+  },
+};
+
+type NewHeroSectionProps = {
+  variant?: LandingVariant;
+};
+
+const NewHeroSection = ({ variant = "repare" }: NewHeroSectionProps) => {
+  const content = heroContent[variant];
 
   return (
     <section id="hero" className="relative min-h-[100dvh] flex items-center bg-gradient-to-br from-background via-background/95 to-primary/10 overflow-hidden py-6 md:py-12">
@@ -91,7 +158,7 @@ const NewHeroSection = () => {
                 
                 <div className="inline-flex items-center gap-1.5 md:gap-2 bg-primary text-primary-foreground px-3 py-1.5 md:px-4 md:py-2 rounded-full">
                   <Clock className="w-3 h-3" />
-                  <span className="text-[10px] md:text-xs font-semibold uppercase">10% OFF Novos Clientes</span>
+                  <span className="text-[10px] md:text-xs font-semibold uppercase">{content.eyebrow}</span>
                   <span className="text-[10px] md:text-xs opacity-70">|</span>
                   <HeroCountdown />
                 </div>
@@ -104,9 +171,9 @@ const NewHeroSection = () => {
                 transition={{ duration: 0.8, delay: 0.2 }}
                 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-foreground mb-3 md:mb-4 leading-tight tracking-tight"
               >
-                Seu celular{" "}
+                {content.title}{" "}
                 <span className="text-primary relative">
-                  quebrou?
+                  {content.highlight}
                   <motion.span
                     initial={{ scaleX: 0 }}
                     animate={{ scaleX: 1 }}
@@ -123,9 +190,7 @@ const NewHeroSection = () => {
                 transition={{ duration: 0.8, delay: 0.4 }}
                 className="text-sm md:text-base lg:text-lg text-muted-foreground mb-4 md:mb-6 max-w-lg"
               >
-                <span className="font-bold text-foreground">Conserto rápido</span>,{" "}
-                <span className="font-bold text-foreground">garantia de 90 dias</span> e{" "}
-                <span className="font-bold text-foreground">atendimento especializado</span> que você merece
+                {content.description}
               </motion.p>
 
               {/* Feature Pills */}
@@ -135,7 +200,7 @@ const NewHeroSection = () => {
                 transition={{ duration: 0.6, delay: 0.5 }}
                 className="flex flex-wrap gap-2 md:gap-3 mb-5 md:mb-6 justify-center lg:justify-start"
               >
-                {features.map((feature, index) => (
+                {content.features.map((feature, index) => (
                   <motion.div
                     key={feature.text}
                     initial={{ opacity: 0, scale: 0.8 }}
@@ -237,7 +302,7 @@ const NewHeroSection = () => {
               >
                 <div className="flex items-center gap-2">
                   <Zap className="w-3 h-3" />
-                  <span className="text-[10px] md:text-xs font-bold">Reparo em 2h</span>
+                  <span className="text-[10px] md:text-xs font-bold">{content.floatingBadge}</span>
                 </div>
               </motion.div>
 
@@ -246,7 +311,7 @@ const NewHeroSection = () => {
                 animate={{ y: [0, -10, 0] }}
                 transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
                 src={brokenPhone} 
-                alt="Celular quebrado - Conserto profissional" 
+                alt={content.imageAlt} 
                 fetchPriority="high"
                 decoding="async"
                 className="w-full max-w-[160px] md:max-w-[220px] lg:max-w-[280px] drop-shadow-2xl relative z-10"

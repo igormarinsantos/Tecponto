@@ -15,19 +15,24 @@ import FAQSection from "@/components/FAQSection";
 import FinalCTASection from "@/components/FinalCTASection";
 import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
+import type { LandingVariant } from "@/types/landing";
 
-const Index = () => {
+type IndexProps = {
+  variant?: LandingVariant;
+};
+
+const Index = ({ variant = "repare" }: IndexProps) => {
   return (
     <div className="min-h-screen">
       {/* Header */}
       <Header />
 
       {/* WhatsApp Floating Button */}
-      <WhatsAppButton />
+      <WhatsAppButton variant={variant} />
       
       {/* Hero Section - Centered with countdown */}
       <section id="hero" className="pt-20">
-        <NewHeroSection />
+        <NewHeroSection variant={variant} />
       </section>
 
       {/* Brand Carousel */}
@@ -37,7 +42,7 @@ const Index = () => {
       <StatsSection />
 
       {/* Services Section - With Photos */}
-      <NewServicesSection />
+      <NewServicesSection variant={variant} />
 
       {/* Warranty Section */}
       <WarrantySection />
@@ -46,7 +51,7 @@ const Index = () => {
       <DeliverySection />
 
       {/* WhatsApp Chat Simulation */}
-      <WhatsAppChatSection />
+      <WhatsAppChatSection variant={variant} />
 
 
       {/* Testimonials - Bento Grid */}
@@ -59,10 +64,10 @@ const Index = () => {
       <NewComparisonSection />
 
       {/* FAQ Section */}
-      <FAQSection />
+      <FAQSection variant={variant} />
 
       {/* Final CTA Section */}
-      <FinalCTASection />
+      <FinalCTASection variant={variant} />
 
       {/* Footer */}
       <section id="footer">

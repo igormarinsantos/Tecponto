@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
+import { NavLink } from "react-router-dom";
 import logo from "@/assets/logo-horizontal.png";
 
 const Header = () => {
@@ -17,6 +18,15 @@ const Header = () => {
       { label: "Avaliações", id: "testimonials" },
       { label: "FAQ", id: "faq" },
       { label: "Contato", id: "whatsapp-chat" },
+    ],
+    [],
+  );
+
+  const pageItems = useMemo(
+    () => [
+      { label: "Compre", path: "/compre" },
+      { label: "Troque", path: "/troque" },
+      { label: "Repare", path: "/repare" },
     ],
     [],
   );
@@ -78,7 +88,23 @@ const Header = () => {
             <img src={logo} alt="TecPonto" className="h-3 md:h-4" />
           </div>
 
-          <div className="hidden md:flex items-center gap-8">
+          <div className="hidden md:flex items-center gap-2 mr-4">
+            {pageItems.map((item) => (
+              <NavLink
+                key={item.path}
+                to={item.path}
+                className={({ isActive }) =>
+                  `px-3 py-2 rounded-full text-sm font-bold uppercase transition-colors ${
+                    isActive ? "bg-primary text-primary-foreground" : "text-foreground hover:bg-primary/10 hover:text-primary"
+                  }`
+                }
+              >
+                {item.label}
+              </NavLink>
+            ))}
+          </div>
+
+          <div className="hidden md:flex items-center gap-6">
             {menuItems.map((item) => (
               <button
                 key={item.id}
@@ -124,6 +150,22 @@ const Header = () => {
               className="md:hidden overflow-hidden bg-card/95 backdrop-blur-lg rounded-xl mt-4 shadow-strong border border-border"
             >
               <div className="flex flex-col gap-2 p-4">
+                <div className="grid grid-cols-3 gap-2 mb-2">
+                  {pageItems.map((item) => (
+                    <NavLink
+                      key={item.path}
+                      to={item.path}
+                      onClick={() => setIsMenuOpen(false)}
+                      className={({ isActive }) =>
+                        `text-center rounded-lg px-2 py-3 text-xs font-bold uppercase transition-colors ${
+                          isActive ? "bg-primary text-primary-foreground" : "bg-primary/10 text-foreground"
+                        }`
+                      }
+                    >
+                      {item.label}
+                    </NavLink>
+                  ))}
+                </div>
                 {menuItems.map((item) => (
                   <button
                     key={item.id}
