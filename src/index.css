@@ -1,0 +1,99 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    /* Brand colors - Assistência Técnica */
+    --brand-orange: 18 99% 50%;        /* #fe5000 */
+    --brand-orange-dark: 18 99% 40%;
+    --brand-orange-light: 18 99% 60%;
+    --brand-dark: 210 10% 16%;         /* #25292c */
+    --brand-light: 246 25% 95%;        /* #eeedf6 */
+    
+    /* Semantic tokens */
+    --background: 246 25% 95%;
+    --foreground: 210 10% 16%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 210 10% 16%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 210 10% 16%;
+
+    --primary: 18 99% 50%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 210 10% 16%;
+    --secondary-foreground: 246 25% 95%;
+
+    --muted: 210 10% 90%;
+    --muted-foreground: 210 10% 40%;
+
+    --accent: 18 99% 50%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 210 10% 85%;
+    --input: 210 10% 90%;
+    --ring: 18 99% 50%;
+
+    --radius: 0.75rem;
+    
+    /* Shadows */
+    --shadow-soft: 0 4px 24px rgba(254, 80, 0, 0.1);
+    --shadow-strong: 0 8px 32px rgba(254, 80, 0, 0.2);
+    
+    /* Transitions */
+    --transition-base: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-['Space_Grotesk',sans-serif] antialiased;
+  }
+  
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+@layer utilities {
+  .shadow-soft {
+    box-shadow: var(--shadow-soft);
+  }
+  
+  .shadow-strong {
+    box-shadow: var(--shadow-strong);
+  }
+  
+  .transition-base {
+    transition: var(--transition-base);
+  }
+  
+  .pulse-ring {
+    animation: pulse-ring 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+}
+
+@keyframes pulse-ring {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 0.9;
+  }
+}
