@@ -92,7 +92,7 @@ const Home = () => {
       <WhatsAppButton />
       <WhatsAppQualificationModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} variant={modalVariant} />
       
-      <section className="relative flex min-h-[90dvh] items-center overflow-hidden bg-primary py-16 md:py-20">
+      <section className="relative flex min-h-screen items-center overflow-hidden bg-primary py-16 md:py-20">
 
         <div className="container mx-auto px-4 relative z-10">
           <div className="grid items-center gap-12 lg:grid-cols-[1.05fr_0.95fr] max-w-6xl mx-auto">
