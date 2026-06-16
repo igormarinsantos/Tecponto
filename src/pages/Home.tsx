@@ -139,20 +139,22 @@ const Home = () => {
                 </Button>
               </div>
 
-              {/* Prova Social Clientes Atendidos e Avaliação */}
-              <div className="mt-8 flex flex-row items-center gap-4 border-t border-white/10 pt-6">
-                <div className="flex -space-x-3">
-                  <img className="w-10 h-10 rounded-full border-2 border-white object-cover shadow-md shrink-0" src={customer1} alt="Cliente TecPonto" />
-                  <img className="w-10 h-10 rounded-full border-2 border-white object-cover shadow-md shrink-0" src={customer2} alt="Cliente TecPonto" />
-                  <img className="w-10 h-10 rounded-full border-2 border-white object-cover shadow-md shrink-0" src={customer3} alt="Cliente TecPonto" />
-                  <img className="w-10 h-10 rounded-full border-2 border-white object-cover shadow-md shrink-0" src={customer4} alt="Cliente TecPonto" />
+              {/* Estatísticas de Prova Social */}
+              <div className="mt-8 grid grid-cols-3 gap-2 md:gap-4 border-t border-white/10 pt-6">
+                <div>
+                  <span className="block text-2xl md:text-3xl font-black text-white leading-none">1000+</span>
+                  <span className="block text-[11px] md:text-xs text-white/75 mt-1.5 font-semibold uppercase tracking-wider">Clientes Satisfeitos</span>
                 </div>
-                <div className="flex flex-col text-white">
-                  <span className="font-extrabold text-base md:text-lg tracking-tight leading-none">+2000 Clientes Atendidos</span>
-                  <span className="flex items-center gap-1.5 text-xs md:text-sm text-white/85 font-semibold mt-1">
-                    <CheckCircle2 className="w-4 h-4 text-[#25D366] shrink-0" />
-                    Avaliação 4.9/5 no Google
+                <div>
+                  <span className="block text-2xl md:text-3xl font-black text-white leading-none">8+</span>
+                  <span className="block text-[11px] md:text-xs text-white/75 mt-1.5 font-semibold uppercase tracking-wider">Anos de Experiência</span>
+                </div>
+                <div>
+                  <span className="block text-2xl md:text-3xl font-black text-white leading-none flex items-center gap-1">
+                    4.9
+                    <span className="text-yellow-400 text-base md:text-xl leading-none">★</span>
                   </span>
+                  <span className="block text-[11px] md:text-xs text-white/75 mt-1.5 font-semibold uppercase tracking-wider">Avaliação Média</span>
                 </div>
               </div>
 
