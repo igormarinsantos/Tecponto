@@ -102,7 +102,7 @@ const Header = () => {
                 }`}
               >
                 Soluções
-                <ChevronDown className="h-4 w-4" />
+                <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${isSolutionsOpen ? "rotate-180" : ""}`} />
               </button>
 
               <div

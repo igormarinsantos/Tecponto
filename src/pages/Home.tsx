@@ -56,6 +56,31 @@ const trustPoints = [
 
 const words = ["reparar", "trocar", "comprar"];
 
+const AnimatedCounter = ({ end, duration = 1200, suffix = "", decimals = 0 }: { end: number; duration?: number; suffix?: string; decimals?: number }) => {
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    let startTimestamp: number | null = null;
+    const step = (timestamp: number) => {
+      if (!startTimestamp) startTimestamp = timestamp;
+      const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+      const currentValue = progress * end;
+      setCount(currentValue);
+      if (progress < 1) {
+        window.requestAnimationFrame(step);
+      }
+    };
+    window.requestAnimationFrame(step);
+  }, [end, duration]);
+
+  return (
+    <span>
+      {count.toFixed(decimals)}
+      {suffix}
+    </span>
+  );
+};
+
 const Home = () => {
   const [videoHover, setVideoHover] = useState(false);
   const [videoHoverPosition, setVideoHoverPosition] = useState({ x: 0, y: 0 });
@@ -130,31 +155,35 @@ const Home = () => {
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
                 <Button
+                  asChild
                   size="lg"
                   variant="outline"
-                  onClick={() => document.getElementById("modalidades")?.scrollIntoView({ behavior: "smooth" })}
-                  className="rounded-full border-2 border-white bg-transparent hover:bg-white hover:text-primary px-8 py-6 font-bold uppercase text-white transition-all"
+                  className="rounded-full border-2 border-white bg-transparent hover:bg-white hover:text-primary px-8 py-6 font-bold uppercase text-white transition-all cursor-pointer"
                 >
-                  Ver Modalidades
+                  <NavLink to="/contato">Nossa Localização</NavLink>
                 </Button>
               </div>
 
               {/* Estatísticas de Prova Social */}
-              <div className="mt-8 grid grid-cols-3 gap-2 md:gap-4 border-t border-white/10 pt-6">
+              <div className="mt-8 grid grid-cols-3 gap-2 md:gap-4">
                 <div>
-                  <span className="block text-2xl md:text-3xl font-black text-white leading-none">1000+</span>
-                  <span className="block text-[11px] md:text-xs text-white/75 mt-1.5 font-semibold uppercase tracking-wider">Clientes Satisfeitos</span>
-                </div>
-                <div>
-                  <span className="block text-2xl md:text-3xl font-black text-white leading-none">8+</span>
-                  <span className="block text-[11px] md:text-xs text-white/75 mt-1.5 font-semibold uppercase tracking-wider">Anos de Experiência</span>
-                </div>
-                <div>
-                  <span className="block text-2xl md:text-3xl font-black text-white leading-none flex items-center gap-1">
-                    4.9
-                    <span className="text-yellow-400 text-base md:text-xl leading-none">★</span>
+                  <span className="block text-xl md:text-2xl font-black text-white leading-none">
+                    <AnimatedCounter end={1000} suffix="+" />
                   </span>
-                  <span className="block text-[11px] md:text-xs text-white/75 mt-1.5 font-semibold uppercase tracking-wider">Avaliação Média</span>
+                  <span className="block text-[10px] md:text-[11px] text-white/75 mt-1.5 font-semibold uppercase tracking-wider">Clientes Satisfeitos</span>
+                </div>
+                <div>
+                  <span className="block text-xl md:text-2xl font-black text-white leading-none">
+                    <AnimatedCounter end={8} suffix="+" />
+                  </span>
+                  <span className="block text-[10px] md:text-[11px] text-white/75 mt-1.5 font-semibold uppercase tracking-wider">Anos de Experiência</span>
+                </div>
+                <div>
+                  <span className="block text-xl md:text-2xl font-black text-white leading-none flex items-center gap-1">
+                    <AnimatedCounter end={4.9} decimals={1} />
+                    <span className="text-yellow-400 text-sm md:text-lg leading-none">★</span>
+                  </span>
+                  <span className="block text-[10px] md:text-[11px] text-white/75 mt-1.5 font-semibold uppercase tracking-wider">Avaliação Média</span>
                 </div>
               </div>
 
