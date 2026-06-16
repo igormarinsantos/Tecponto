@@ -1,9 +1,17 @@
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { MapPin, Clock, Shield, Zap, Award, CheckCircle2 } from "lucide-react";
-import brokenPhone from "@/assets/broken-phone-hero.png";
+import reparoPhone from "@/assets/reparo.png";
+import trocaPhone from "@/assets/troca.png";
+import comprePhone from "@/assets/compre.png";
 import { useCountdownTimer } from "@/hooks/useCountdownTimer";
 import type { LandingVariant } from "@/types/landing";
+
+const heroImages: Record<LandingVariant, string> = {
+  repare: reparoPhone,
+  troque: trocaPhone,
+  compre: comprePhone,
+};
 
 const scrollToWhatsApp = () => {
   const element = document.getElementById("whatsapp-chat");
@@ -161,13 +169,9 @@ const NewHeroSection = ({ variant = "repare" }: NewHeroSectionProps) => {
   const content = heroContent[variant];
 
   return (
-    <section id="hero" className="relative min-h-[100dvh] flex items-center bg-gradient-to-br from-background via-background/95 to-primary/10 overflow-hidden py-6 md:py-12">
+    <section id="hero" className="relative min-h-[100dvh] flex items-center bg-background overflow-hidden py-6 md:py-12">
       {/* Decorative background elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {/* Gradient orbs */}
-        <div className="absolute -top-1/4 -right-1/4 w-[80%] h-[80%] bg-gradient-to-br from-primary/15 to-primary/5 rounded-full blur-3xl" />
-        <div className="absolute -bottom-1/4 -left-1/4 w-[60%] h-[60%] bg-gradient-to-tr from-primary/10 to-transparent rounded-full blur-3xl" />
-        
         {/* Grid pattern */}
         <div 
           className="absolute inset-0 opacity-[0.02]"
@@ -313,11 +317,6 @@ const NewHeroSection = ({ variant = "repare" }: NewHeroSectionProps) => {
               transition={{ duration: 0.8, delay: 0.5 }}
               className="order-1 lg:order-2 flex justify-center lg:justify-end relative"
             >
-              {/* Glow effect behind phone */}
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-48 h-48 md:w-64 md:h-64 bg-primary/20 rounded-full blur-3xl" />
-              </div>
-              
               <motion.div
                 animate={{ y: [0, 10, 0], x: [0, -5, 0] }}
                 transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
@@ -333,7 +332,7 @@ const NewHeroSection = ({ variant = "repare" }: NewHeroSectionProps) => {
               <motion.img 
                 animate={{ y: [0, -10, 0] }}
                 transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                src={brokenPhone} 
+                src={heroImages[variant]} 
                 alt={content.imageAlt} 
                 fetchPriority="high"
                 decoding="async"

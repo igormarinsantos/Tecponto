@@ -1,55 +1,78 @@
-import { Phone, Mail, Instagram, MessageCircle } from "lucide-react";
+import { ExternalLink, Instagram, MessageCircle } from "lucide-react";
+import { NavLink } from "react-router-dom";
+import logo from "@/assets/logo-horizontal.png";
+import { SHOPEE_STORE_URL } from "@/lib/links";
+
+const mainLinks = [
+  { label: "Compre", path: SHOPEE_STORE_URL, external: true },
+  { label: "Troque", path: "/troque" },
+  { label: "Repare", path: "/repare" },
+  { label: "Garantia", path: "/garantia" },
+  { label: "FAQ", path: "/faq" },
+  { label: "Contato", path: "/contato" },
+];
 
 const Footer = () => {
   return (
-    <footer className="bg-secondary text-secondary-foreground py-12">
-      <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-          {/* About */}
+    <footer className="border-t border-border bg-background">
+      <div className="container mx-auto px-4 py-10">
+        <div className="flex flex-col gap-8 md:flex-row md:items-center md:justify-between">
           <div>
-            <h3 className="text-xl font-bold mb-4">TecPonto</h3>
-            <p className="text-secondary-foreground/80 mb-4">
-              Assistência técnica especializada em smartphones com mais de 10 anos de experiência.
-            </p>
-            <p className="text-sm text-secondary-foreground/60">
-              @tecpontobrasil
+            <NavLink to="/" className="inline-flex">
+              <img src={logo} alt="TecPonto" className="h-5 w-auto" />
+            </NavLink>
+            <p className="mt-3 max-w-md text-sm text-muted-foreground">
+              Compre. Troque. Repare.
             </p>
           </div>
 
-          {/* Contact */}
-          <div>
-            <h3 className="text-xl font-bold mb-4">Contato</h3>
-            <div className="space-y-3">
-              <a 
-                href="https://wa.me/5511930642742" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 hover:text-primary transition-colors"
-              >
-                <MessageCircle className="h-4 w-4" />
-                <span>(11) 93064-2742</span>
-              </a>
-              <div className="flex items-center gap-2">
-                <Mail className="h-4 w-4" />
-                <span>contato@tecponto.com</span>
-              </div>
-              <a 
-                href="https://instagram.com/tecpontobrasil" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 hover:text-primary transition-colors"
-              >
-                <Instagram className="h-4 w-4" />
-                <span>@tecpontobrasil</span>
-              </a>
-            </div>
-          </div>
+          <nav className="flex flex-wrap gap-x-5 gap-y-3 text-sm font-semibold text-foreground">
+            {mainLinks.map((item) =>
+              item.external ? (
+                <a key={item.path} href={item.path} target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-primary">
+                  {item.label}
+                </a>
+              ) : (
+                <NavLink key={item.path} to={item.path} className="transition-colors hover:text-primary">
+                  {item.label}
+                </NavLink>
+              )
+            )}
+          </nav>
         </div>
 
-        <div className="mt-8 pt-8 border-t border-secondary-foreground/20 text-center">
-          <p className="text-secondary-foreground/80">
-            &copy; {new Date().getFullYear()} TecPonto. Todos os direitos reservados.
-          </p>
+        <div className="mt-8 flex flex-col gap-4 border-t border-border pt-6 text-sm text-muted-foreground md:flex-row md:items-center md:justify-between">
+          <p>&copy; {new Date().getFullYear()} TecPonto. Todos os direitos reservados.</p>
+
+          <div className="flex flex-wrap gap-3">
+            <a
+              href="https://wa.me/5511930642742"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 transition-colors hover:text-primary"
+            >
+              <MessageCircle className="h-4 w-4" />
+              WhatsApp
+            </a>
+            <a
+              href="https://instagram.com/tecpontobrasil"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 transition-colors hover:text-primary"
+            >
+              <Instagram className="h-4 w-4" />
+              Instagram
+            </a>
+            <a
+              href={SHOPEE_STORE_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 transition-colors hover:text-primary"
+            >
+              Shopee
+              <ExternalLink className="h-4 w-4" />
+            </a>
+          </div>
         </div>
       </div>
     </footer>

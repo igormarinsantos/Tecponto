@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import brokenPhoneHero from "@/assets/broken-phone-hero.jpg";
+import brokenPhoneHero from "@/assets/broken-phone-hero.png";
 import customer1 from "@/assets/customer-1.jpg";
 import customer2 from "@/assets/customer-2.jpg";
 import customer3 from "@/assets/customer-3.jpg";

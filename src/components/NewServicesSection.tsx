@@ -8,7 +8,7 @@ import internalRepair from "@/assets/services/internal-repair.png";
 import software from "@/assets/services/software.png";
 import speaker from "@/assets/services/speaker.png";
 import perfectPhone from "@/assets/perfect-phone.jpg";
-import brokenPhone from "@/assets/broken-phone-hero.jpg";
+import brokenPhone from "@/assets/broken-phone-hero.png";
 import type { LandingVariant } from "@/types/landing";
 
 type ServiceItem = {
