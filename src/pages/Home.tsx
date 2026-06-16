@@ -161,105 +161,110 @@ const Home = () => {
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.6, delay: 0.15 }}
-                onMouseMove={handleMouseMove}
-                onMouseEnter={() => setIsHovered(true)}
-                onMouseLeave={() => { setIsHovered(false); setMousePos({ x: 0, y: 0 }); }}
-                style={{
-                  transform: `perspective(1000px) rotateX(${isHovered ? -mousePos.y * 30 : 0}deg) rotateY(${isHovered ? mousePos.x * 30 : 0}deg)`,
-                  transition: isHovered ? "none" : "transform 0.5s ease-out",
-                  transformStyle: "preserve-3d"
-                }}
-                className="relative w-full max-w-[380px] md:max-w-[420px] aspect-[4/5] flex items-center justify-center py-6 cursor-pointer"
+                className="relative w-full max-w-[380px] md:max-w-[420px] aspect-[4/5] flex items-center justify-center py-6"
               >
-                {/* Orbe de luz de fundo decorativo */}
-                <div className="absolute w-[85%] h-[85%] rounded-full bg-white/10 blur-[60px] pointer-events-none" />
-
-                {/* Mockup do Dispositivo (Smartphone) */}
-                <div 
+                {/* 3D Tilt Interaction Wrapper (Standard div to avoid Framer Motion override conflict) */}
+                <div
+                  onMouseMove={handleMouseMove}
+                  onMouseEnter={() => setIsHovered(true)}
+                  onMouseLeave={() => { setIsHovered(false); setMousePos({ x: 0, y: 0 }); }}
                   style={{
-                    transform: "translateZ(25px)",
+                    transform: `perspective(1000px) rotateX(${isHovered ? -mousePos.y * 35 : 0}deg) rotateY(${isHovered ? mousePos.x * 35 : 0}deg)`,
+                    transition: isHovered ? "none" : "transform 0.5s ease-out",
                     transformStyle: "preserve-3d"
                   }}
-                  className="relative w-[65%] max-w-[260px] rounded-[2.8rem] p-2.5 bg-white/15 backdrop-blur-md border border-white/20 shadow-2xl overflow-hidden aspect-[9/19]"
+                  className="relative w-full h-full flex items-center justify-center cursor-pointer"
                 >
+                  {/* Orbe de luz de fundo decorativo */}
+                  <div className="absolute w-[85%] h-[85%] rounded-full bg-white/10 blur-[60px] pointer-events-none" style={{ transform: "translateZ(-10px)" }} />
+
+                  {/* Mockup do Dispositivo (Smartphone) */}
                   <div 
-                    style={{ transform: "translateZ(10px)" }}
-                    className="w-full h-full rounded-[2.3rem] overflow-hidden border border-white/10 bg-zinc-950"
+                    style={{
+                      transform: "translateZ(30px)",
+                      transformStyle: "preserve-3d"
+                    }}
+                    className="relative w-[65%] max-w-[260px] rounded-[2.8rem] p-2.5 bg-white/15 backdrop-blur-md border border-white/20 shadow-2xl overflow-hidden aspect-[9/19]"
                   >
-                    <img
-                      src={deviceMockupImage}
-                      alt="Celular TecPonto"
-                      className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
-                    />
+                    <div 
+                      style={{ transform: "translateZ(15px)" }}
+                      className="w-full h-full rounded-[2.3rem] overflow-hidden border border-white/10 bg-zinc-950"
+                    >
+                      <img
+                        src={deviceMockupImage}
+                        alt="Celular TecPonto"
+                        className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
+                      />
+                    </div>
                   </div>
-                </div>
 
-                {/* Floating Pill: Repare */}
-                <div 
-                  className="absolute top-[18%] -left-[2%]" 
-                  style={{ transform: "translateZ(65px)", transformStyle: "preserve-3d" }}
-                >
-                  <motion.button
-                    onClick={() => openModal("repare")}
-                    animate={{ y: [0, -8, 0] }}
-                    transition={{
-                      repeat: Infinity,
-                      duration: 3.2,
-                      ease: "easeInOut"
-                    }}
-                    className="flex items-center gap-2 px-4 py-2.5 rounded-full bg-white/15 backdrop-blur-md border border-white/25 shadow-lg hover:bg-white/25 hover:scale-105 active:scale-95 transition-all text-white font-bold text-sm"
+                  {/* Floating Pill: Repare */}
+                  <div 
+                    className="absolute top-[18%] -left-[2%]" 
+                    style={{ transform: "translateZ(75px)", transformStyle: "preserve-3d" }}
                   >
-                    <div className="w-6 h-6 rounded-full bg-primary flex items-center justify-center shrink-0">
-                      <Wrench className="w-3.5 h-3.5 text-white" />
-                    </div>
-                    <span>Repare</span>
-                  </motion.button>
-                </div>
+                    <motion.button
+                      onClick={() => openModal("repare")}
+                      animate={{ y: [0, -8, 0] }}
+                      transition={{
+                        repeat: Infinity,
+                        duration: 3.2,
+                        ease: "easeInOut"
+                      }}
+                      className="flex items-center gap-2 px-4 py-2.5 rounded-full bg-white/15 backdrop-blur-md border border-white/25 shadow-lg hover:bg-white/25 hover:scale-105 active:scale-95 transition-all text-white font-bold text-sm"
+                    >
+                      <div className="w-6 h-6 rounded-full bg-primary flex items-center justify-center shrink-0">
+                        <Wrench className="w-3.5 h-3.5 text-white" />
+                      </div>
+                      <span>Repare</span>
+                    </motion.button>
+                  </div>
 
-                {/* Floating Pill: Troque */}
-                <div 
-                  className="absolute top-[45%] -right-[5%]" 
-                  style={{ transform: "translateZ(80px)", transformStyle: "preserve-3d" }}
-                >
-                  <motion.button
-                    onClick={() => openModal("troque")}
-                    animate={{ y: [0, -10, 0] }}
-                    transition={{
-                      repeat: Infinity,
-                      duration: 3.8,
-                      ease: "easeInOut",
-                      delay: 0.4
-                    }}
-                    className="flex items-center gap-2 px-4 py-2.5 rounded-full bg-white/15 backdrop-blur-md border border-white/25 shadow-lg hover:bg-white/25 hover:scale-105 active:scale-95 transition-all text-white font-bold text-sm"
+                  {/* Floating Pill: Troque */}
+                  <div 
+                    className="absolute top-[45%] -right-[5%]" 
+                    style={{ transform: "translateZ(90px)", transformStyle: "preserve-3d" }}
                   >
-                    <div className="w-6 h-6 rounded-full bg-emerald-500 flex items-center justify-center shrink-0">
-                      <RefreshCw className="w-3.5 h-3.5 text-white" />
-                    </div>
-                    <span>Troque</span>
-                  </motion.button>
-                </div>
+                    <motion.button
+                      onClick={() => openModal("troque")}
+                      animate={{ y: [0, -10, 0] }}
+                      transition={{
+                        repeat: Infinity,
+                        duration: 3.8,
+                        ease: "easeInOut",
+                        delay: 0.4
+                      }}
+                      className="flex items-center gap-2 px-4 py-2.5 rounded-full bg-white/15 backdrop-blur-md border border-white/25 shadow-lg hover:bg-white/25 hover:scale-105 active:scale-95 transition-all text-white font-bold text-sm"
+                    >
+                      <div className="w-6 h-6 rounded-full bg-emerald-500 flex items-center justify-center shrink-0">
+                        <RefreshCw className="w-3.5 h-3.5 text-white" />
+                      </div>
+                      <span>Troque</span>
+                    </motion.button>
+                  </div>
 
-                {/* Floating Pill: Compre */}
-                <div 
-                  className="absolute bottom-[22%] -left-[6%]" 
-                  style={{ transform: "translateZ(55px)", transformStyle: "preserve-3d" }}
-                >
-                  <motion.button
-                    onClick={() => openModal("compre")}
-                    animate={{ y: [0, -7, 0] }}
-                    transition={{
-                      repeat: Infinity,
-                      duration: 3.5,
-                      ease: "easeInOut",
-                      delay: 0.2
-                    }}
-                    className="flex items-center gap-2 px-4 py-2.5 rounded-full bg-white/15 backdrop-blur-md border border-white/25 shadow-lg hover:bg-white/25 hover:scale-105 active:scale-95 transition-all text-white font-bold text-sm"
+                  {/* Floating Pill: Compre */}
+                  <div 
+                    className="absolute bottom-[22%] -left-[6%]" 
+                    style={{ transform: "translateZ(65px)", transformStyle: "preserve-3d" }}
                   >
-                    <div className="w-6 h-6 rounded-full bg-sky-500 flex items-center justify-center shrink-0">
-                      <ShoppingBag className="w-3.5 h-3.5 text-white" />
-                    </div>
-                    <span>Compre</span>
-                  </motion.button>
+                    <motion.button
+                      onClick={() => openModal("compre")}
+                      animate={{ y: [0, -7, 0] }}
+                      transition={{
+                        repeat: Infinity,
+                        duration: 3.5,
+                        ease: "easeInOut",
+                        delay: 0.2
+                      }}
+                      className="flex items-center gap-2 px-4 py-2.5 rounded-full bg-white/15 backdrop-blur-md border border-white/25 shadow-lg hover:bg-white/25 hover:scale-105 active:scale-95 transition-all text-white font-bold text-sm"
+                    >
+                      <div className="w-6 h-6 rounded-full bg-sky-500 flex items-center justify-center shrink-0">
+                        <ShoppingBag className="w-3.5 h-3.5 text-white" />
+                      </div>
+                      <span>Compre</span>
+                    </motion.button>
+                  </div>
                 </div>
               </motion.div>
             </div>
