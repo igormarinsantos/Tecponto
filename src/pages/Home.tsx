@@ -63,14 +63,17 @@ const Home = () => {
   const [modalVariant, setModalVariant] = useState<LandingVariant | undefined>(undefined);
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-  const [isHovered, setIsHovered] = useState(false);
 
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const x = (e.clientX - rect.left) / rect.width - 0.5;
-    const y = (e.clientY - rect.top) / rect.height - 0.5;
-    setMousePos({ x, y });
-  };
+  useEffect(() => {
+    const handleGlobalMouseMove = (e: MouseEvent) => {
+      const x = e.clientX / window.innerWidth - 0.5;
+      const y = e.clientY / window.innerHeight - 0.5;
+      setMousePos({ x, y });
+    };
+
+    window.addEventListener("mousemove", handleGlobalMouseMove);
+    return () => window.removeEventListener("mousemove", handleGlobalMouseMove);
+  }, []);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -165,12 +168,9 @@ const Home = () => {
               >
                 {/* 3D Tilt Interaction Wrapper (Standard div to avoid Framer Motion override conflict) */}
                 <div
-                  onMouseMove={handleMouseMove}
-                  onMouseEnter={() => setIsHovered(true)}
-                  onMouseLeave={() => { setIsHovered(false); setMousePos({ x: 0, y: 0 }); }}
                   style={{
-                    transform: `perspective(1000px) rotateX(${isHovered ? -mousePos.y * 35 : 0}deg) rotateY(${isHovered ? mousePos.x * 35 : 0}deg)`,
-                    transition: isHovered ? "none" : "transform 0.5s ease-out",
+                    transform: `perspective(1000px) rotateX(${-mousePos.y * 35}deg) rotateY(${mousePos.x * 35}deg)`,
+                    transition: "transform 0.3s cubic-bezier(0.16, 1, 0.3, 1)",
                     transformStyle: "preserve-3d"
                   }}
                   className="relative w-full h-full flex items-center justify-center cursor-pointer"
