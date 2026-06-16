@@ -8,7 +8,7 @@ const WarrantySection = () => {
   const isInView = useInView(ref, { once: true, amount: 0.5 });
 
   return (
-    <section ref={ref} className="py-12 bg-background">
+    <section ref={ref} id="warranty" className="py-12 bg-background">
       <div className="container mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}

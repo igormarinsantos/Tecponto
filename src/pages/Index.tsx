@@ -1,4 +1,3 @@
-import Header from "@/components/Header";
 import NewHeroSection from "@/components/NewHeroSection";
 import BrandCarousel from "@/components/BrandCarousel";
 import StatsSection from "@/components/StatsSection";
@@ -24,9 +23,6 @@ type IndexProps = {
 const Index = ({ variant = "repare" }: IndexProps) => {
   return (
     <div className="min-h-screen">
-      {/* Header */}
-      <Header />
-
       {/* WhatsApp Floating Button */}
       <WhatsAppButton variant={variant} />
       

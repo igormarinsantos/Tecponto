@@ -111,23 +111,6 @@ const NewHeroSection = ({ variant = "repare" }: NewHeroSectionProps) => {
         <div className="absolute -top-1/4 -right-1/4 w-[80%] h-[80%] bg-gradient-to-br from-primary/15 to-primary/5 rounded-full blur-3xl" />
         <div className="absolute -bottom-1/4 -left-1/4 w-[60%] h-[60%] bg-gradient-to-tr from-primary/10 to-transparent rounded-full blur-3xl" />
         
-        {/* Floating shapes */}
-        <motion.div
-          animate={{ y: [0, -20, 0], rotate: [0, 5, 0] }}
-          transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute top-20 left-[10%] w-16 h-16 md:w-24 md:h-24 border-2 border-primary/20 rounded-2xl hidden md:block"
-        />
-        <motion.div
-          animate={{ y: [0, 20, 0], rotate: [0, -5, 0] }}
-          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute bottom-32 right-[15%] w-12 h-12 md:w-20 md:h-20 bg-primary/10 rounded-full hidden md:block"
-        />
-        <motion.div
-          animate={{ scale: [1, 1.1, 1] }}
-          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute top-1/3 right-[5%] w-8 h-8 bg-primary/20 rounded-lg hidden lg:block"
-        />
-        
         {/* Grid pattern */}
         <div 
           className="absolute inset-0 opacity-[0.02]"
@@ -174,12 +157,6 @@ const NewHeroSection = ({ variant = "repare" }: NewHeroSectionProps) => {
                 {content.title}{" "}
                 <span className="text-primary relative">
                   {content.highlight}
-                  <motion.span
-                    initial={{ scaleX: 0 }}
-                    animate={{ scaleX: 1 }}
-                    transition={{ duration: 0.8, delay: 1 }}
-                    className="absolute -bottom-1 left-0 right-0 h-1 md:h-1.5 bg-primary/30 rounded-full origin-left"
-                  />
                 </span>
               </motion.h1>
 
@@ -282,18 +259,6 @@ const NewHeroSection = ({ variant = "repare" }: NewHeroSectionProps) => {
               <div className="absolute inset-0 flex items-center justify-center">
                 <div className="w-48 h-48 md:w-64 md:h-64 bg-primary/20 rounded-full blur-3xl" />
               </div>
-              
-              {/* Floating elements around phone */}
-              <motion.div
-                animate={{ y: [0, -10, 0], x: [0, 5, 0] }}
-                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                className="absolute top-4 md:top-8 left-4 md:left-8 bg-card/90 backdrop-blur-sm px-3 py-2 rounded-lg shadow-lg border border-border/50 hidden sm:block"
-              >
-                <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-                  <span className="text-[10px] md:text-xs font-medium">Atendimento Online</span>
-                </div>
-              </motion.div>
               
               <motion.div
                 animate={{ y: [0, 10, 0], x: [0, -5, 0] }}
