@@ -96,6 +96,63 @@ const heroContent: Record<LandingVariant, {
   },
 };
 
+const glassShards = [
+  {
+    className: "left-[6%] top-[24%] h-16 w-11",
+    clipPath: "polygon(18% 0, 100% 20%, 72% 100%, 0 76%)",
+    delay: 0,
+  },
+  {
+    className: "left-[17%] top-[17%] h-10 w-8",
+    clipPath: "polygon(45% 0, 100% 100%, 0 78%)",
+    delay: 0.4,
+  },
+  {
+    className: "left-[36%] top-[23%] h-12 w-9",
+    clipPath: "polygon(0 18%, 82% 0, 100% 72%, 28% 100%)",
+    delay: 0.8,
+  },
+  {
+    className: "left-[2%] top-[55%] h-12 w-10",
+    clipPath: "polygon(18% 8%, 100% 0, 78% 100%, 0 62%)",
+    delay: 1.1,
+  },
+  {
+    className: "left-[24%] top-[69%] h-9 w-14",
+    clipPath: "polygon(0 0, 100% 32%, 72% 100%, 12% 78%)",
+    delay: 0.2,
+  },
+  {
+    className: "left-[43%] top-[62%] h-14 w-10",
+    clipPath: "polygon(35% 0, 100% 48%, 54% 100%, 0 32%)",
+    delay: 0.65,
+  },
+];
+
+const GlassShards = () => (
+  <div className="absolute inset-0 hidden md:block pointer-events-none" aria-hidden="true">
+    {glassShards.map((shard) => (
+      <motion.div
+        key={`${shard.className}-${shard.clipPath}`}
+        className={`absolute ${shard.className} border border-primary/25 bg-white/20 shadow-[0_8px_30px_rgba(255,255,255,0.25)] backdrop-blur-[2px]`}
+        style={{ clipPath: shard.clipPath }}
+        initial={{ opacity: 0, y: 10, rotate: -8 }}
+        animate={{
+          opacity: [0.22, 0.46, 0.22],
+          y: [0, -12, 0],
+          rotate: [-8, 5, -8],
+        }}
+        transition={{
+          duration: 7,
+          delay: shard.delay,
+          repeat: Infinity,
+          ease: "easeInOut",
+        }}
+      />
+    ))}
+  </div>
+);
+
 type NewHeroSectionProps = {
   variant?: LandingVariant;
 };
@@ -119,6 +176,7 @@ const NewHeroSection = ({ variant = "repare" }: NewHeroSectionProps) => {
             backgroundSize: '60px 60px'
           }}
         />
+        {variant === "repare" && <GlassShards />}
       </div>
 
       <div className="container mx-auto px-4 relative z-10">
