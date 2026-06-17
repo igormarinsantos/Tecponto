@@ -14,65 +14,87 @@ const mainLinks = [
 
 const Footer = () => {
   return (
-    <footer className="border-t border-border bg-background">
-      <div className="container mx-auto px-4 py-10">
-        <div className="flex flex-col gap-8 md:flex-row md:items-center md:justify-between">
-          <div>
-            <NavLink to="/" className="inline-flex">
-              <img src={logo} alt="TecPonto" className="h-5 w-auto" />
-            </NavLink>
-            <p className="mt-3 max-w-md text-sm text-muted-foreground">
-              Compre. Troque. Repare.
-            </p>
-          </div>
-
-          <nav className="flex flex-wrap gap-x-5 gap-y-3 text-sm font-semibold text-foreground">
+    <footer className="border-t border-border bg-background py-12 md:py-16">
+      <div className="container mx-auto px-4 max-w-[1360px]">
+        {/* Top row: Navigation and Socials */}
+        <div className="flex flex-col md:flex-row items-center justify-between gap-8 pb-10 border-b border-border/60">
+          {/* Navigation links */}
+          <nav className="flex flex-wrap justify-center md:justify-start gap-x-8 gap-y-3 text-sm font-semibold text-muted-foreground">
             {mainLinks.map((item) =>
               item.external ? (
-                <a key={item.path} href={item.path} target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-primary">
+                <a
+                  key={item.path}
+                  href={item.path}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="transition-colors hover:text-foreground relative group py-1"
+                >
                   {item.label}
+                  <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-primary transition-all duration-300 group-hover:w-full" />
                 </a>
               ) : (
-                <NavLink key={item.path} to={item.path} className="transition-colors hover:text-primary">
+                <NavLink
+                  key={item.path}
+                  to={item.path}
+                  className="transition-colors hover:text-foreground relative group py-1"
+                >
                   {item.label}
+                  <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-primary transition-all duration-300 group-hover:w-full" />
                 </NavLink>
               )
             )}
           </nav>
-        </div>
 
-        <div className="mt-8 flex flex-col gap-4 border-t border-border pt-6 text-sm text-muted-foreground md:flex-row md:items-center md:justify-between">
-          <p>&copy; {new Date().getFullYear()} TecPonto. Todos os direitos reservados.</p>
-
-          <div className="flex flex-wrap gap-3">
+          {/* Socials / Contact */}
+          <div className="flex flex-wrap justify-center gap-6 text-sm text-muted-foreground">
             <a
               href="https://wa.me/5511930642742"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 transition-colors hover:text-primary"
+              className="flex items-center gap-2 hover:text-foreground transition-colors"
             >
-              <MessageCircle className="h-4 w-4" />
-              WhatsApp
+              <MessageCircle className="h-4 w-4 text-[#25D366]" />
+              <span className="font-semibold">WhatsApp</span>
             </a>
             <a
               href="https://instagram.com/tecpontobrasil"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 transition-colors hover:text-primary"
+              className="flex items-center gap-2 hover:text-foreground transition-colors"
             >
-              <Instagram className="h-4 w-4" />
-              Instagram
+              <Instagram className="h-4 w-4 text-[#E1306C]" />
+              <span className="font-semibold">Instagram</span>
             </a>
             <a
               href={SHOPEE_STORE_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 transition-colors hover:text-primary"
+              className="flex items-center gap-2 hover:text-foreground transition-colors"
             >
-              Shopee
-              <ExternalLink className="h-4 w-4" />
+              <span className="font-semibold">Shopee</span>
+              <ExternalLink className="h-3.5 w-3.5" />
             </a>
           </div>
+        </div>
+
+        {/* Middle row: Copyright and brief info */}
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 py-8 text-xs text-muted-foreground/60 uppercase tracking-widest font-semibold">
+          <p>&copy; {new Date().getFullYear()} TecPonto. Todos os direitos reservados.</p>
+          <p>Compre. Troque. Repare.</p>
+        </div>
+
+        {/* Bottom row: Large full width logo as watermark */}
+        <div className="pt-4 flex justify-center items-center">
+          <NavLink
+            to="/"
+            className="w-full flex justify-center opacity-[0.06] hover:opacity-[0.12] transition-opacity duration-500 select-none"
+          >
+            <img
+              src={logo}
+              alt="TecPonto"
+              className="w-full max-w-[1200px] h-auto object-contain py-4"
+            />
+          </NavLink>
         </div>
       </div>
     </footer>
