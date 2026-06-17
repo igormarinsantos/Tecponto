@@ -18,18 +18,7 @@ import shopLocation from "@/assets/shop-location.jpg";
 import spaceVideoMp4 from "@/assets/testimonial-video.mp4";
 import spaceVideoWebm from "@/assets/testimonial-video.webm";
 import { SHOPEE_STORE_URL } from "@/lib/links";
-
-import glassLayer from "@/assets/layers/01-glass.png";
-import screenLayer from "@/assets/layers/02-screen.png";
-import innerLayerImg from "@/assets/layers/03-inner-layer.png";
-import frameLayer from "@/assets/layers/04-frame.png";
-import batteryLayer from "@/assets/layers/05-battery.png";
-import boardLayer from "@/assets/layers/06-board.png";
-import cameraLayer from "@/assets/layers/07-camera.png";
-import coilLayer from "@/assets/layers/08-coil.png";
-import bottomComponentLayer from "@/assets/layers/09-bottom-component.png";
-import screwsLayer from "@/assets/layers/10-screws.png";
-import backCoverLayer from "@/assets/layers/11-back-cover.png";
+import Phone3DCanvas from "@/components/Phone3DCanvas";
 
 const modalities = [
   {
@@ -99,77 +88,7 @@ const Home = () => {
   const [modalVariant, setModalVariant] = useState<LandingVariant | undefined>(undefined);
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
 
-  const phoneRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const phone = phoneRef.current;
-    if (!phone) return;
-
-    const layers = phone.querySelectorAll<HTMLImageElement>(".layer");
-    
-    let targetX = 0;
-    let targetY = 0;
-    let currentX = 0;
-    let currentY = 0;
-    let rAFId = 0;
-    let time = 0;
-
-    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-    const handleMouseMove = (event: MouseEvent) => {
-      targetX = (event.clientX / window.innerWidth - 0.5) * 2;
-      targetY = (event.clientY / window.innerHeight - 0.5) * 2;
-    };
-
-    if (!reduceMotion) {
-      window.addEventListener("mousemove", handleMouseMove, { passive: true });
-
-      const animateParallax = () => {
-        const isMobile = window.innerWidth < 900;
-        
-        if (isMobile) {
-          time += 0.015;
-          currentX = Math.sin(time) * 0.3;
-          currentY = Math.cos(time * 0.8) * 0.3;
-        } else {
-          currentX += (targetX - currentX) * 0.08;
-          currentY += (targetY - currentY) * 0.08;
-        }
-
-        phone.style.transform = `
-          rotateY(${currentX * 15}deg)
-          rotateX(${-currentY * 15}deg)
-        `;
-
-        layers.forEach((layer) => {
-          const depth = Number(layer.getAttribute("data-depth") || 0);
-          const moveX = currentX * depth * 160;
-          const moveY = currentY * depth * 160;
-          const moveZ = depth * 220;
-
-          layer.style.transform = `
-            translate3d(${moveX}px, ${moveY}px, ${moveZ}px)
-          `;
-        });
-
-        rAFId = requestAnimationFrame(animateParallax);
-      };
-
-      animateParallax();
-    } else {
-      // Fallback estático com profundidade 3D para quem prefere movimento reduzido
-      layers.forEach((layer) => {
-        const depth = Number(layer.getAttribute("data-depth") || 0);
-        const moveZ = depth * 220;
-        layer.style.transform = `translate3d(0px, 0px, ${moveZ}px)`;
-      });
-    }
-
-    return () => {
-      window.removeEventListener("mousemove", handleMouseMove);
-      cancelAnimationFrame(rAFId);
-    };
-  }, []);
+  // Parallax is now handled internally in R3F Phone3DCanvas
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -265,27 +184,15 @@ const Home = () => {
 
             </div>
 
-            {/* Showcase Visual com Mockup de Celular Explodido em 3D */}
+            {/* Showcase Visual com Modelo 3D Interativo */}
             <div className="flex justify-center lg:justify-end items-center">
               <motion.div 
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.6, delay: 0.15 }}
-                className="relative w-full max-w-[380px] md:max-w-[420px] aspect-square flex items-center justify-center py-6"
+                className="relative w-full max-w-[380px] md:max-w-[420px] aspect-square flex items-center justify-center py-6 z-10"
               >
-                <div ref={phoneRef} className="phone-3d" id="phone3d">
-                  <img src={backCoverLayer} className="layer layer-shadow" data-depth="0.06" alt="Tampa traseira" />
-                  <img src={batteryLayer} className="layer" data-depth="0.08" alt="Bateria" />
-                  <img src={bottomComponentLayer} className="layer" data-depth="0.09" alt="Componentes inferiores" />
-                  <img src={frameLayer} className="layer layer-shadow" data-depth="0.10" alt="Estrutura" />
-                  <img src={coilLayer} className="layer" data-depth="0.11" alt="Bobina de carregamento" />
-                  <img src={innerLayerImg} className="layer" data-depth="0.12" alt="Camada interna" />
-                  <img src={boardLayer} className="layer" data-depth="0.13" alt="Placa mãe" />
-                  <img src={cameraLayer} className="layer" data-depth="0.15" alt="Câmeras" />
-                  <img src={screenLayer} className="layer layer-shadow" data-depth="0.16" alt="Tela/Display" />
-                  <img src={glassLayer} className="layer" data-depth="0.20" alt="Vidro frontal" />
-                  <img src={screwsLayer} className="layer" data-depth="0.22" alt="Parafusos" />
-                </div>
+                <Phone3DCanvas />
               </motion.div>
             </div>
           </div>

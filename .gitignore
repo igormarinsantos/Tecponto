@@ -22,3 +22,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# 3D Model source files
+*.zip
+src/assets/model/
