@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { CheckCheck, ExternalLink, Send, X } from "lucide-react";
+import { CheckCheck, ExternalLink, Send, X, RotateCcw, ArrowLeft } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import whatsappAssistant from "@/assets/whatsapp-assistant.png";
 import { buildWhatsAppUrl, qualificationFlow, type QualificationField, type QualificationValues } from "@/lib/qualification";
@@ -170,14 +170,86 @@ const WhatsAppQualificationModal = ({ isOpen, onClose, variant }: WhatsAppQualif
   const visibleMessages = messages.slice(0, visibleMessageCount);
   const canAnswer = visibleMessageCount >= messages.length && !isTyping;
 
+  const STORAGE_KEY = "tecponto_chat_state";
+
+  // Load state on mount/open
   useEffect(() => {
     if (!isOpen) return;
+
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        setSelectedVariant(parsed.selectedVariant ?? null);
+        setValues(parsed.values ?? {});
+        setNeedsClearerIntent(parsed.needsClearerIntent ?? false);
+        setVisibleMessageCount(parsed.visibleMessageCount ?? 0);
+        setDraft(parsed.draft ?? "");
+        return;
+      }
+    } catch (e) {
+      console.error("Error loading chat state", e);
+    }
+
+    // Default if no saved state
     setSelectedVariant(variant ?? null);
     setValues({});
     setDraft("");
     setNeedsClearerIntent(false);
     setVisibleMessageCount(0);
   }, [isOpen, variant]);
+
+  // Save state to localStorage on changes
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const stateToSave = {
+      selectedVariant,
+      values,
+      needsClearerIntent,
+      visibleMessageCount,
+      draft,
+    };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(stateToSave));
+  }, [isOpen, selectedVariant, values, needsClearerIntent, visibleMessageCount, draft]);
+
+  const resetChat = () => {
+    localStorage.removeItem(STORAGE_KEY);
+    setSelectedVariant(variant ?? null);
+    setValues({});
+    setDraft("");
+    setNeedsClearerIntent(false);
+    setVisibleMessageCount(0);
+    setIsTyping(true);
+  };
+
+  const canGoBack = Boolean(selectedVariant);
+
+  const goBack = () => {
+    if (!canAnswer) return;
+
+    if (selectedVariant && activeFields.length > 0) {
+      const answeredFields = activeFields.filter((f) => values[f.id]);
+      if (answeredFields.length > 0) {
+        const lastField = answeredFields[answeredFields.length - 1];
+        setValues((current) => {
+          const updated = { ...current };
+          delete updated[lastField.id];
+          return updated;
+        });
+        setVisibleMessageCount((prev) => Math.max(0, prev - 2));
+        return;
+      }
+    }
+
+    if (selectedVariant) {
+      setSelectedVariant(null);
+      setValues({});
+      setNeedsClearerIntent(false);
+      setVisibleMessageCount(2);
+      return;
+    }
+  };
 
   useEffect(() => {
     if (!isOpen) return;
@@ -249,11 +321,13 @@ const WhatsAppQualificationModal = ({ isOpen, onClose, variant }: WhatsAppQualif
 
     if (selectedVariant === "compre") {
       window.open(SHOPEE_STORE_URL, "_blank");
+      localStorage.removeItem(STORAGE_KEY);
       onClose();
       return;
     }
 
     window.open(buildWhatsAppUrl(selectedVariant, values), "_blank");
+    localStorage.removeItem(STORAGE_KEY);
     onClose();
   };
 
@@ -286,6 +360,16 @@ const WhatsAppQualificationModal = ({ isOpen, onClose, variant }: WhatsAppQualif
                   {isTyping ? "Digitando..." : "Atendimento online"}
                 </p>
               </div>
+              {(selectedVariant || Object.keys(values).length > 0) && (
+                <button
+                  onClick={resetChat}
+                  className="p-1.5 text-white/80 hover:text-white flex items-center gap-1 text-[11px] font-bold uppercase tracking-wider transition-colors bg-white/5 hover:bg-white/10 rounded-lg"
+                  title="Reiniciar conversa"
+                >
+                  <RotateCcw className="h-3.5 w-3.5" />
+                  <span className="hidden sm:inline">Reiniciar</span>
+                </button>
+              )}
               <button onClick={onClose} className="p-1 text-white/80 hover:text-white" aria-label="Fechar">
                 <X className="h-5 w-5" />
               </button>
@@ -350,6 +434,15 @@ const WhatsAppQualificationModal = ({ isOpen, onClose, variant }: WhatsAppQualif
                   </button>
                 ) : (
                   <div className="flex items-center gap-2">
+                    {canGoBack && (
+                      <button
+                        onClick={goBack}
+                        title="Voltar pergunta"
+                        className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-white border border-black/[0.08] text-gray-600 shadow-sm transition-all hover:bg-gray-100 active:scale-95"
+                      >
+                        <ArrowLeft className="h-4.5 w-4.5" />
+                      </button>
+                    )}
                     <div className="flex flex-1 items-center bg-white rounded-full px-4 py-2 shadow-sm border border-black/[0.04]">
                       <input
                         value={draft}
