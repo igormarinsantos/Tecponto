@@ -119,7 +119,7 @@ const heroContent: Record<LandingVariant, {
 const glassShardsList = [
   {
     src: shard1,
-    className: "absolute left-[-5%] md:left-[-18%] lg:left-[-28%] top-[-8%] w-[20%] z-20 pointer-events-none filter drop-shadow-[0_10px_15px_rgba(0,0,0,0.2)] repare-shard",
+    className: "absolute left-[-2%] md:left-[-10%] lg:left-[-15%] top-[-5%] w-[12%] z-20 pointer-events-none filter drop-shadow-[0_10px_15px_rgba(0,0,0,0.2)] repare-shard",
     depth: 0.5,
     speed: 1.2,
     phase: 0.0,
@@ -127,12 +127,12 @@ const glassShardsList = [
     ampY: 30,
     ampRot: 8,
     maxOpacity: 1,
-    centerXMultiplier: 0.78,
-    centerYMultiplier: 0.58,
+    centerXMultiplier: 0.65,
+    centerYMultiplier: 0.55,
   },
   {
     src: shard2,
-    className: "absolute right-[-8%] md:right-[-25%] lg:right-[-42%] top-[3%] w-[28%] z-20 pointer-events-none filter drop-shadow-[0_10px_15px_rgba(0,0,0,0.2)] repare-shard",
+    className: "absolute right-[-4%] md:right-[-12%] lg:right-[-20%] top-[8%] w-[15%] z-20 pointer-events-none filter drop-shadow-[0_10px_15px_rgba(0,0,0,0.2)] repare-shard",
     depth: 0.7,
     speed: 0.95,
     phase: 1.5,
@@ -140,25 +140,25 @@ const glassShardsList = [
     ampY: 38,
     ampRot: -10,
     maxOpacity: 1,
-    centerXMultiplier: -0.92,
-    centerYMultiplier: 0.47,
+    centerXMultiplier: -0.7,
+    centerYMultiplier: 0.42,
   },
   {
     src: shard3,
-    className: "absolute left-[-8%] md:left-[-22%] lg:left-[-35%] top-[20%] w-[30%] z-0 pointer-events-none filter drop-shadow-[0_8px_12px_rgba(0,0,0,0.15)] blur-[0.8px] repare-shard",
+    className: "absolute left-[-4%] md:left-[-12%] lg:left-[-18%] top-[30%] w-[16%] z-0 pointer-events-none filter drop-shadow-[0_8px_12px_rgba(0,0,0,0.15)] blur-[0.8px] repare-shard",
     depth: -0.3,
     speed: 0.75,
     phase: 3.0,
     ampX: 4,
     ampY: 28,
     ampRot: 6,
-    maxOpacity: 0.8,
-    centerXMultiplier: 0.85,
-    centerYMultiplier: 0.3,
+    maxOpacity: 0.75,
+    centerXMultiplier: 0.68,
+    centerYMultiplier: 0.2,
   },
   {
     src: shard4,
-    className: "absolute right-[-5%] md:right-[-20%] lg:right-[-30%] top-[45%] w-[20%] z-20 pointer-events-none filter drop-shadow-[0_8px_12px_rgba(0,0,0,0.2)] repare-shard",
+    className: "absolute right-[-3%] md:right-[-10%] lg:right-[-15%] top-[55%] w-[11%] z-20 pointer-events-none filter drop-shadow-[0_8px_12px_rgba(0,0,0,0.2)] repare-shard",
     depth: 0.9,
     speed: 1.35,
     phase: 4.5,
@@ -166,12 +166,12 @@ const glassShardsList = [
     ampY: 34,
     ampRot: -15,
     maxOpacity: 1,
-    centerXMultiplier: -0.8,
-    centerYMultiplier: 0.05,
+    centerXMultiplier: -0.65,
+    centerYMultiplier: -0.05,
   },
   {
     src: shard5,
-    className: "absolute left-[-4%] md:left-[-15%] lg:left-[-22%] bottom-[3%] w-[24%] z-20 pointer-events-none filter drop-shadow-[0_10px_15px_rgba(0,0,0,0.2)] repare-shard",
+    className: "absolute left-[-2%] md:left-[-8%] lg:left-[-12%] bottom-[12%] w-[13%] z-20 pointer-events-none filter drop-shadow-[0_10px_15px_rgba(0,0,0,0.2)] repare-shard",
     depth: 0.6,
     speed: 1.05,
     phase: 2.1,
@@ -179,25 +179,25 @@ const glassShardsList = [
     ampY: 32,
     ampRot: 7,
     maxOpacity: 1,
-    centerXMultiplier: 0.72,
-    centerYMultiplier: -0.47,
+    centerXMultiplier: 0.62,
+    centerYMultiplier: -0.38,
   },
   {
     src: shard6,
-    className: "absolute right-[-10%] md:right-[-30%] lg:right-[-48%] bottom-[12%] w-[32%] z-0 pointer-events-none filter drop-shadow-[0_8px_12px_rgba(0,0,0,0.15)] blur-[1.2px] repare-shard",
+    className: "absolute right-[-6%] md:right-[-15%] lg:right-[-22%] bottom-[18%] w-[18%] z-0 pointer-events-none filter drop-shadow-[0_8px_12px_rgba(0,0,0,0.15)] blur-[1.2px] repare-shard",
     depth: -0.5,
     speed: 0.85,
     phase: 0.8,
     ampX: 5,
     ampY: 42,
     ampRot: -8,
-    maxOpacity: 0.75,
-    centerXMultiplier: -0.98,
-    centerYMultiplier: -0.38,
+    maxOpacity: 0.7,
+    centerXMultiplier: -0.72,
+    centerYMultiplier: -0.32,
   },
   {
     src: shard7,
-    className: "absolute left-[20%] top-[-25%] w-[18%] z-20 pointer-events-none filter drop-shadow-[0_6px_10px_rgba(0,0,0,0.2)] repare-shard",
+    className: "absolute left-[25%] top-[-15%] w-[11%] z-20 pointer-events-none filter drop-shadow-[0_6px_10px_rgba(0,0,0,0.2)] repare-shard",
     depth: 0.4,
     speed: 1.15,
     phase: 5.2,
@@ -205,8 +205,8 @@ const glassShardsList = [
     ampY: 26,
     ampRot: 12,
     maxOpacity: 1,
-    centerXMultiplier: 0.3,
-    centerYMultiplier: 0.75,
+    centerXMultiplier: 0.25,
+    centerYMultiplier: 0.65,
   },
 ];
 
@@ -703,7 +703,7 @@ const NewHeroSection = ({ variant = "repare" }: NewHeroSectionProps) => {
                       alt={content.imageAlt} 
                       fetchPriority="high"
                       decoding="async"
-                      className="w-full max-w-[320px] md:max-w-[440px] lg:max-w-[540px] drop-shadow-3xl relative z-10 repare-phone"
+                      className="w-full max-w-[280px] md:max-w-[360px] lg:max-w-[460px] drop-shadow-3xl relative z-10 repare-phone"
                       style={{ opacity: 0, transform: 'scale(0.8) translate3d(0,0,0)' }}
                     />
                   </div>
