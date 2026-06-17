@@ -54,7 +54,7 @@ const trustPoints = [
   "Suporte de quem entende de assistência técnica",
 ];
 
-const words = ["reparar", "trocar", "comprar"];
+const words = ["REPARAR", "TROCAR", "COMPRAR"];
 
 const AnimatedCounter = ({ end, duration = 1200, suffix = "", decimals = 0 }: { end: number; duration?: number; suffix?: string; decimals?: number }) => {
   const [count, setCount] = useState(0);
@@ -132,7 +132,7 @@ const Home = () => {
                       animate={{ y: 0, opacity: 1 }}
                       exit={{ y: -28, opacity: 0 }}
                       transition={{ duration: 0.35, ease: "easeOut" }}
-                      className="absolute inset-x-0 top-0 bottom-0 flex items-center justify-center rounded-2xl bg-white text-primary transform -skew-x-3 font-black text-2xl md:text-5xl"
+                      className="absolute inset-x-0 top-0 bottom-0 flex items-center justify-center rounded-2xl bg-white text-[#25292D] transform -skew-x-3 font-black text-2xl md:text-5xl uppercase"
                     >
                       {words[currentWordIndex]}
                     </motion.span>
@@ -179,9 +179,8 @@ const Home = () => {
                   <span className="block text-[10px] md:text-[11px] text-white/75 mt-1.5 font-semibold uppercase tracking-wider">Anos de Experiência</span>
                 </div>
                 <div>
-                  <span className="block text-xl md:text-2xl font-black text-white leading-none flex items-center gap-1">
+                  <span className="block text-xl md:text-2xl font-black text-white leading-none">
                     <AnimatedCounter end={4.9} decimals={1} />
-                    <span className="text-yellow-400 text-sm md:text-lg leading-none">★</span>
                   </span>
                   <span className="block text-[10px] md:text-[11px] text-white/75 mt-1.5 font-semibold uppercase tracking-wider">Avaliação Média</span>
                 </div>
