@@ -121,7 +121,7 @@ const glassShardsList = [
     src: shard1,
     className: "absolute left-[-2%] md:left-[-10%] lg:left-[-15%] top-[-5%] w-[12%] z-20 pointer-events-none filter drop-shadow-[0_10px_15px_rgba(0,0,0,0.2)] repare-shard",
     depth: 0.5,
-    speed: 1.2,
+    speed: 4.2,
     phase: 0.0,
     ampX: 5,
     ampY: 30,
@@ -134,7 +134,7 @@ const glassShardsList = [
     src: shard2,
     className: "absolute right-[-4%] md:right-[-12%] lg:right-[-20%] top-[8%] w-[15%] z-20 pointer-events-none filter drop-shadow-[0_10px_15px_rgba(0,0,0,0.2)] repare-shard",
     depth: 0.7,
-    speed: 0.95,
+    speed: 3.3,
     phase: 1.5,
     ampX: 6,
     ampY: 38,
@@ -147,7 +147,7 @@ const glassShardsList = [
     src: shard3,
     className: "absolute left-[-4%] md:left-[-12%] lg:left-[-18%] top-[30%] w-[16%] z-0 pointer-events-none filter drop-shadow-[0_8px_12px_rgba(0,0,0,0.15)] blur-[0.8px] repare-shard",
     depth: -0.3,
-    speed: 0.75,
+    speed: 2.6,
     phase: 3.0,
     ampX: 4,
     ampY: 28,
@@ -160,7 +160,7 @@ const glassShardsList = [
     src: shard4,
     className: "absolute right-[-3%] md:right-[-10%] lg:right-[-15%] top-[55%] w-[11%] z-20 pointer-events-none filter drop-shadow-[0_8px_12px_rgba(0,0,0,0.2)] repare-shard",
     depth: 0.9,
-    speed: 1.35,
+    speed: 4.5,
     phase: 4.5,
     ampX: 7,
     ampY: 34,
@@ -173,7 +173,7 @@ const glassShardsList = [
     src: shard5,
     className: "absolute left-[-2%] md:left-[-8%] lg:left-[-12%] bottom-[12%] w-[13%] z-20 pointer-events-none filter drop-shadow-[0_10px_15px_rgba(0,0,0,0.2)] repare-shard",
     depth: 0.6,
-    speed: 1.05,
+    speed: 3.6,
     phase: 2.1,
     ampX: 6,
     ampY: 32,
@@ -186,7 +186,7 @@ const glassShardsList = [
     src: shard6,
     className: "absolute right-[-6%] md:right-[-15%] lg:right-[-22%] bottom-[18%] w-[18%] z-0 pointer-events-none filter drop-shadow-[0_8px_12px_rgba(0,0,0,0.15)] blur-[1.2px] repare-shard",
     depth: -0.5,
-    speed: 0.85,
+    speed: 2.9,
     phase: 0.8,
     ampX: 5,
     ampY: 42,
@@ -199,7 +199,7 @@ const glassShardsList = [
     src: shard7,
     className: "absolute left-[25%] top-[-15%] w-[11%] z-20 pointer-events-none filter drop-shadow-[0_6px_10px_rgba(0,0,0,0.2)] repare-shard",
     depth: 0.4,
-    speed: 1.15,
+    speed: 3.9,
     phase: 5.2,
     ampX: 4,
     ampY: 26,
@@ -280,7 +280,7 @@ const NewHeroSection = ({ variant = "repare" }: NewHeroSectionProps) => {
         // Apply interactive 3D rotation and vertical float to phone mockup
         if (phoneImg) {
           const phoneScale = 0.85 + 0.15 * burstProgress;
-          const phoneFloatY = Math.sin(time * 1.0 + 1.5) * 18;
+          const phoneFloatY = Math.sin(time * 3.5 + 1.5) * 20;
           phoneImg.style.transform = `
             rotateY(${currentX * 12}deg)
             rotateX(${-currentY * 12}deg)
@@ -703,7 +703,7 @@ const NewHeroSection = ({ variant = "repare" }: NewHeroSectionProps) => {
                       alt={content.imageAlt} 
                       fetchPriority="high"
                       decoding="async"
-                      className="w-full max-w-[280px] md:max-w-[360px] lg:max-w-[460px] drop-shadow-3xl relative z-10 repare-phone"
+                      className="w-full max-w-[320px] md:max-w-[400px] lg:max-w-[480px] drop-shadow-3xl relative z-10 repare-phone"
                       style={{ opacity: 0, transform: 'scale(0.8) translate3d(0,0,0)' }}
                     />
                   </div>
