@@ -4,8 +4,8 @@ import { MapPin, Clock, Shield, Zap, Award, CheckCircle2 } from "lucide-react";
 import reparoPhone from "@/assets/broken-phone-hero.png";
 import trocaPhone from "@/assets/troca.png";
 import comprePhone from "@/assets/compre.png";
-import handLeft from "@/assets/hand-left.png";
-import handRight from "@/assets/hand-right.png";
+import handLeft from "@/assets/hand-old-phone.png";
+import handRight from "@/assets/hand-new-phone.png";
 import { useCountdownTimer } from "@/hooks/useCountdownTimer";
 import type { LandingVariant } from "@/types/landing";
 
@@ -192,22 +192,38 @@ const NewHeroSection = ({ variant = "repare" }: NewHeroSectionProps) => {
             <div className="relative w-full py-6 md:py-12">
               {/* Left Hand Image */}
               <motion.img
-                initial={{ opacity: 0, x: -80 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.8, delay: 0.4 }}
+                initial={{ opacity: 0, x: -80, y: "-50%" }}
+                animate={{ 
+                  opacity: 1, 
+                  x: 0,
+                  y: ["-50%", "-52%", "-50%"]
+                }}
+                transition={{ 
+                  opacity: { duration: 0.8, delay: 0.4 },
+                  x: { duration: 0.8, delay: 0.4 },
+                  y: { duration: 5, repeat: Infinity, ease: "easeInOut" }
+                }}
                 src={handLeft}
                 alt="Mão entregando celular"
-                className="absolute left-[-5%] xl:left-[0%] top-1/2 -translate-y-1/2 w-[240px] xl:w-[320px] object-contain pointer-events-none hidden lg:block drop-shadow-[0_25px_25px_rgba(0,0,0,0.15)]"
+                className="absolute left-[-5%] xl:left-[0%] top-1/2 w-[240px] xl:w-[320px] object-contain pointer-events-none hidden lg:block drop-shadow-[0_25px_25px_rgba(0,0,0,0.15)]"
               />
               
               {/* Right Hand Image */}
               <motion.img
-                initial={{ opacity: 0, x: 80 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.8, delay: 0.4 }}
+                initial={{ opacity: 0, x: 80, y: "-50%" }}
+                animate={{ 
+                  opacity: 1, 
+                  x: 0,
+                  y: ["-50%", "-48%", "-50%"]
+                }}
+                transition={{ 
+                  opacity: { duration: 0.8, delay: 0.4 },
+                  x: { duration: 0.8, delay: 0.4 },
+                  y: { duration: 5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }
+                }}
                 src={handRight}
                 alt="Mão recebendo celular"
-                className="absolute right-[-5%] xl:right-[0%] top-1/2 -translate-y-1/2 w-[240px] xl:w-[320px] object-contain pointer-events-none hidden lg:block drop-shadow-[0_25px_25px_rgba(0,0,0,0.15)]"
+                className="absolute right-[-5%] xl:right-[0%] top-1/2 w-[240px] xl:w-[320px] object-contain pointer-events-none hidden lg:block drop-shadow-[0_25px_25px_rgba(0,0,0,0.15)]"
               />
 
               {/* Centered Content */}
@@ -297,6 +313,41 @@ const NewHeroSection = ({ variant = "repare" }: NewHeroSectionProps) => {
                       →
                     </motion.span>
                   </Button>
+                </motion.div>
+
+                {/* Mobile/Tablet image showcase (hidden on desktop) */}
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.8, delay: 0.8 }}
+                  className="w-full max-w-[280px] xs:max-w-[320px] aspect-[1.6] relative my-4 flex items-center justify-center lg:hidden overflow-visible select-none"
+                >
+                  {/* Left hand (old phone) */}
+                  <motion.img
+                    src={handLeft}
+                    alt="Celular antigo usado"
+                    animate={{ y: [0, -6, 0], rotate: [-2, 0, -2] }}
+                    transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
+                    className="absolute left-[-8%] w-[65%] object-contain drop-shadow-xl z-10"
+                  />
+                  
+                  {/* Swap icon */}
+                  <motion.div 
+                    animate={{ rotate: 360 }}
+                    transition={{ duration: 12, repeat: Infinity, ease: "linear" }}
+                    className="w-10 h-10 rounded-full bg-primary flex items-center justify-center border-2 border-background shadow-md z-30"
+                  >
+                    <RefreshCw className="w-4.5 h-4.5 text-white" />
+                  </motion.div>
+
+                  {/* Right hand (new phone) */}
+                  <motion.img
+                    src={handRight}
+                    alt="Celular novo premium"
+                    animate={{ y: [0, 6, 0], rotate: [2, 0, 2] }}
+                    transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 0.4 }}
+                    className="absolute right-[-8%] w-[65%] object-contain drop-shadow-2xl z-20"
+                  />
                 </motion.div>
 
                 {/* Social Proof */}
