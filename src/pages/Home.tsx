@@ -145,23 +145,29 @@ const Home = () => {
                 Assistência especializada com garantia de 90 dias, avaliação justa no seu usado e curadoria de revisados. Simples, rápido e direto pelo WhatsApp.
               </p>
 
-              <div className="mt-8 flex flex-col gap-3.5 sm:flex-row sm:items-center">
+              <div className="mt-8 flex flex-col gap-5 sm:flex-row sm:items-center">
                 <Button 
                   onClick={() => openModal("repare")} 
                   size="lg" 
-                  className="rounded-full bg-[#25292D] hover:bg-[#1f2327] px-8 py-6 font-bold uppercase text-white transition-all shadow-lg shadow-black/10"
+                  className="rounded-full bg-[#25292D] hover:bg-[#1f2327] px-8 py-6 font-bold uppercase text-white transition-all shadow-lg shadow-black/10 shrink-0"
                 >
                   Solicitar Reparo
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
-                <Button
-                  asChild
-                  size="lg"
-                  variant="outline"
-                  className="rounded-full border-2 border-white bg-transparent hover:bg-white hover:text-primary px-8 py-6 font-bold uppercase text-white transition-all cursor-pointer"
-                >
-                  <NavLink to="/contato">Nossa Localização</NavLink>
-                </Button>
+
+                {/* Micro Prova Social ao lado do Botão */}
+                <div className="flex items-center gap-3">
+                  <div className="flex -space-x-3">
+                    <img className="w-8 h-8 rounded-full border-2 border-white object-cover shadow-sm shrink-0" src={customer1} alt="Cliente TecPonto" />
+                    <img className="w-8 h-8 rounded-full border-2 border-white object-cover shadow-sm shrink-0" src={customer2} alt="Cliente TecPonto" />
+                    <img className="w-8 h-8 rounded-full border-2 border-white object-cover shadow-sm shrink-0" src={customer3} alt="Cliente TecPonto" />
+                    <img className="w-8 h-8 rounded-full border-2 border-white object-cover shadow-sm shrink-0" src={customer4} alt="Cliente TecPonto" />
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="text-sm font-black text-white leading-none">+2000 Atendimentos</span>
+                    <span className="text-[10px] text-white/80 font-bold uppercase tracking-wider mt-1">Avaliação 4.9 no Google</span>
+                  </div>
+                </div>
               </div>
 
               {/* Estatísticas de Prova Social */}
