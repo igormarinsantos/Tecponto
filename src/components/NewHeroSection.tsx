@@ -1,13 +1,23 @@
+import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { MapPin, Clock, Shield, Zap, Award, CheckCircle2, RefreshCw } from "lucide-react";
-import reparoPhone from "@/assets/broken-phone-hero.png";
+import reparoPhone from "@/assets/repare/repare-hero-phone.png";
 import trocaPhone from "@/assets/troca.png";
 import comprePhone from "@/assets/compre.png";
 import handLeft from "@/assets/hand-old-phone.png";
 import handRight from "@/assets/hand-new-phone.png";
 import { useCountdownTimer } from "@/hooks/useCountdownTimer";
 import type { LandingVariant } from "@/types/landing";
+
+// Import glass shard PNG cutouts
+import shard1 from "@/assets/repare/shard-1.png";
+import shard2 from "@/assets/repare/shard-2.png";
+import shard3 from "@/assets/repare/shard-3.png";
+import shard4 from "@/assets/repare/shard-4.png";
+import shard5 from "@/assets/repare/shard-5.png";
+import shard6 from "@/assets/repare/shard-6.png";
+import shard7 from "@/assets/repare/shard-7.png";
 
 const heroImages: Record<LandingVariant, string> = {
   repare: reparoPhone,
@@ -106,58 +116,108 @@ const heroContent: Record<LandingVariant, {
   },
 };
 
-const glassShards = [
+const glassShardsList = [
   {
-    className: "left-[6%] top-[24%] h-16 w-11",
-    clipPath: "polygon(18% 0, 100% 20%, 72% 100%, 0 76%)",
-    delay: 0,
+    src: shard1,
+    className: "absolute left-[-28%] top-[-8%] w-[20%] z-20 pointer-events-none filter drop-shadow-[0_10px_15px_rgba(0,0,0,0.2)] repare-shard",
+    depth: 0.5,
+    speed: 1.2,
+    phase: 0.0,
+    ampX: 5,
+    ampY: 30,
+    ampRot: 8,
+    maxOpacity: 1,
+    centerXMultiplier: 0.78,
+    centerYMultiplier: 0.58,
   },
   {
-    className: "left-[17%] top-[17%] h-10 w-8",
-    clipPath: "polygon(45% 0, 100% 100%, 0 78%)",
-    delay: 0.4,
+    src: shard2,
+    className: "absolute right-[-42%] top-[3%] w-[28%] z-20 pointer-events-none filter drop-shadow-[0_10px_15px_rgba(0,0,0,0.2)] repare-shard",
+    depth: 0.7,
+    speed: 0.95,
+    phase: 1.5,
+    ampX: 6,
+    ampY: 38,
+    ampRot: -10,
+    maxOpacity: 1,
+    centerXMultiplier: -0.92,
+    centerYMultiplier: 0.47,
   },
   {
-    className: "left-[36%] top-[23%] h-12 w-9",
-    clipPath: "polygon(0 18%, 82% 0, 100% 72%, 28% 100%)",
-    delay: 0.8,
+    src: shard3,
+    className: "absolute left-[-35%] top-[20%] w-[30%] z-0 pointer-events-none filter drop-shadow-[0_8px_12px_rgba(0,0,0,0.15)] blur-[0.8px] repare-shard",
+    depth: -0.3,
+    speed: 0.75,
+    phase: 3.0,
+    ampX: 4,
+    ampY: 28,
+    ampRot: 6,
+    maxOpacity: 0.8,
+    centerXMultiplier: 0.85,
+    centerYMultiplier: 0.3,
   },
   {
-    className: "left-[2%] top-[55%] h-12 w-10",
-    clipPath: "polygon(18% 8%, 100% 0, 78% 100%, 0 62%)",
-    delay: 1.1,
+    src: shard4,
+    className: "absolute right-[-30%] top-[45%] w-[20%] z-20 pointer-events-none filter drop-shadow-[0_8px_12px_rgba(0,0,0,0.2)] repare-shard",
+    depth: 0.9,
+    speed: 1.35,
+    phase: 4.5,
+    ampX: 7,
+    ampY: 34,
+    ampRot: -15,
+    maxOpacity: 1,
+    centerXMultiplier: -0.8,
+    centerYMultiplier: 0.05,
   },
   {
-    className: "left-[24%] top-[69%] h-9 w-14",
-    clipPath: "polygon(0 0, 100% 32%, 72% 100%, 12% 78%)",
-    delay: 0.2,
+    src: shard5,
+    className: "absolute left-[-22%] bottom-[3%] w-[24%] z-20 pointer-events-none filter drop-shadow-[0_10px_15px_rgba(0,0,0,0.2)] repare-shard",
+    depth: 0.6,
+    speed: 1.05,
+    phase: 2.1,
+    ampX: 6,
+    ampY: 32,
+    ampRot: 7,
+    maxOpacity: 1,
+    centerXMultiplier: 0.72,
+    centerYMultiplier: -0.47,
   },
   {
-    className: "left-[43%] top-[62%] h-14 w-10",
-    clipPath: "polygon(35% 0, 100% 48%, 54% 100%, 0 32%)",
-    delay: 0.65,
+    src: shard6,
+    className: "absolute right-[-48%] bottom-[12%] w-[32%] z-0 pointer-events-none filter drop-shadow-[0_8px_12px_rgba(0,0,0,0.15)] blur-[1.2px] repare-shard",
+    depth: -0.5,
+    speed: 0.85,
+    phase: 0.8,
+    ampX: 5,
+    ampY: 42,
+    ampRot: -8,
+    maxOpacity: 0.75,
+    centerXMultiplier: -0.98,
+    centerYMultiplier: -0.38,
+  },
+  {
+    src: shard7,
+    className: "absolute left-[20%] top-[-25%] w-[18%] z-20 pointer-events-none filter drop-shadow-[0_6px_10px_rgba(0,0,0,0.2)] repare-shard",
+    depth: 0.4,
+    speed: 1.15,
+    phase: 5.2,
+    ampX: 4,
+    ampY: 26,
+    ampRot: 12,
+    maxOpacity: 1,
+    centerXMultiplier: 0.3,
+    centerYMultiplier: 0.75,
   },
 ];
 
 const GlassShards = () => (
-  <div className="absolute inset-0 hidden md:block pointer-events-none" aria-hidden="true">
-    {glassShards.map((shard) => (
-      <motion.div
-        key={`${shard.className}-${shard.clipPath}`}
-        className={`absolute ${shard.className} border border-primary/25 bg-white/20 shadow-[0_8px_30px_rgba(255,255,255,0.25)] backdrop-blur-[2px]`}
-        style={{ clipPath: shard.clipPath }}
-        initial={{ opacity: 0, y: 10, rotate: -8 }}
-        animate={{
-          opacity: [0.22, 0.46, 0.22],
-          y: [0, -12, 0],
-          rotate: [-8, 5, -8],
-        }}
-        transition={{
-          duration: 7,
-          delay: shard.delay,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
+  <div className="absolute inset-0 pointer-events-none overflow-visible animate-pulse-slow" aria-hidden="true">
+    {glassShardsList.map((shard, index) => (
+      <img
+        key={index}
+        src={shard.src}
+        className={shard.className}
+        style={{ opacity: 0, transform: 'scale(0) translate3d(0,0,0)' }}
       />
     ))}
   </div>
@@ -169,6 +229,120 @@ type NewHeroSectionProps = {
 
 const NewHeroSection = ({ variant = "repare" }: NewHeroSectionProps) => {
   const content = heroContent[variant];
+  const repareContainerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (variant !== "repare") return;
+    const container = repareContainerRef.current;
+    if (!container) return;
+
+    const shards = container.querySelectorAll<HTMLImageElement>(".repare-shard");
+    const phoneImg = container.querySelector<HTMLImageElement>(".repare-phone");
+    
+    let targetX = 0;
+    let targetY = 0;
+    let currentX = 0;
+    let currentY = 0;
+    let rAFId = 0;
+    let time = 0;
+    let burstProgress = 0;
+
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    const handleMouseMove = (event: MouseEvent) => {
+      targetX = (event.clientX / window.innerWidth - 0.5) * 2;
+      targetY = (event.clientY / window.innerHeight - 0.5) * 2;
+    };
+
+    if (!reduceMotion) {
+      window.addEventListener("mousemove", handleMouseMove, { passive: true });
+
+      const animateParallax = () => {
+        const isMobile = window.innerWidth < 768;
+        time += 0.01;
+        
+        // Easing for entry burst (shards fly out on mount)
+        if (burstProgress < 1) {
+          burstProgress += (1 - burstProgress) * 0.035;
+          if (1 - burstProgress < 0.001) burstProgress = 1;
+        }
+
+        if (isMobile) {
+          // Automatic float on mobile
+          currentX = Math.sin(time * 0.8) * 0.2;
+          currentY = Math.cos(time * 0.6) * 0.2;
+        } else {
+          // Smooth follow client mouse position on desktop
+          currentX += (targetX - currentX) * 0.08;
+          currentY += (targetY - currentY) * 0.08;
+        }
+
+        // Apply interactive 3D rotation and vertical float to phone mockup
+        if (phoneImg) {
+          const phoneScale = 0.85 + 0.15 * burstProgress;
+          const phoneFloatY = Math.sin(time * 1.0 + 1.5) * 18;
+          phoneImg.style.transform = `
+            rotateY(${currentX * 12}deg)
+            rotateX(${-currentY * 12}deg)
+            translateY(${phoneFloatY}px)
+            scale(${phoneScale})
+          `;
+          phoneImg.style.opacity = burstProgress.toString();
+        }
+
+        // Apply 3D float, parallax and entry burst to shards
+        const containerWidth = container.clientWidth || 340;
+        const containerHeight = container.clientHeight || 600;
+
+        shards.forEach((shard, index) => {
+          const config = glassShardsList[index];
+          if (!config) return;
+
+          // Parallax movement based on mouse
+          const moveX = currentX * config.depth * 90;
+          const moveY = currentY * config.depth * 90;
+          
+          // Auto-floating oscillations
+          const floatX = Math.sin(time * config.speed + config.phase) * config.ampX;
+          const floatY = Math.cos(time * config.speed + config.phase) * config.ampY;
+          const floatRot = Math.sin(time * config.speed * 0.8 + config.phase) * config.ampRot;
+
+          // Entry burst displacement (starts at center of phone, ends at outer float position)
+          const burstX = config.centerXMultiplier * containerWidth * (1 - burstProgress);
+          const burstY = config.centerYMultiplier * containerHeight * (1 - burstProgress);
+          const shardScale = burstProgress * 1.0;
+
+          shard.style.transform = `
+            translate3d(${moveX + floatX + burstX}px, ${moveY + floatY + burstY}px, ${config.depth * 60}px)
+            rotate(${floatRot}deg)
+            scale(${shardScale})
+          `;
+          shard.style.opacity = (burstProgress * config.maxOpacity).toString();
+        });
+
+        rAFId = requestAnimationFrame(animateParallax);
+      };
+
+      animateParallax();
+    } else {
+      // Fallback
+      if (phoneImg) {
+        phoneImg.style.opacity = "1";
+        phoneImg.style.transform = "scale(1)";
+      }
+      shards.forEach((shard, index) => {
+        const config = glassShardsList[index];
+        if (!config) return;
+        shard.style.opacity = config.maxOpacity.toString();
+        shard.style.transform = "scale(1)";
+      });
+    }
+
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      cancelAnimationFrame(rAFId);
+    };
+  }, [variant]);
 
   return (
     <section id="hero" className="relative min-h-[100dvh] flex items-center bg-background overflow-hidden pt-24 md:pt-28 pb-12">
@@ -182,7 +356,6 @@ const NewHeroSection = ({ variant = "repare" }: NewHeroSectionProps) => {
             backgroundSize: '60px 60px'
           }}
         />
-        {variant === "repare" && <GlassShards />}
       </div>
 
       {/* Absolute hands for trade page (aligned to screen edges) */}
@@ -520,29 +693,45 @@ const NewHeroSection = ({ variant = "repare" }: NewHeroSectionProps) => {
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.8, delay: 0.5 }}
-                className="order-1 lg:order-2 flex justify-center lg:justify-end relative"
+                className={`order-1 lg:order-2 flex justify-center relative ${variant === "repare" ? "lg:justify-center" : "lg:justify-end"}`}
               >
-                <motion.div
-                  animate={{ y: [0, 10, 0], x: [0, -5, 0] }}
-                  transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
-                  className="absolute bottom-8 md:bottom-16 right-0 md:right-4 bg-primary/90 text-primary-foreground px-3 py-2 rounded-lg shadow-lg hidden sm:block"
-                >
-                  <div className="flex items-center gap-2">
-                    <Zap className="w-3 h-3" />
-                    <span className="text-[10px] md:text-xs font-bold">{content.floatingBadge}</span>
+                {variant === "repare" ? (
+                  <div ref={repareContainerRef} className="relative w-fit mx-auto select-none flex items-center justify-center">
+                    <GlassShards />
+                    <img 
+                      src={heroImages[variant]} 
+                      alt={content.imageAlt} 
+                      fetchPriority="high"
+                      decoding="async"
+                      className="w-full max-w-[320px] md:max-w-[440px] lg:max-w-[540px] drop-shadow-3xl relative z-10 repare-phone"
+                      style={{ opacity: 0, transform: 'scale(0.8) translate3d(0,0,0)' }}
+                    />
                   </div>
-                </motion.div>
+                ) : (
+                  <>
+                    <motion.div
+                      animate={{ y: [0, 10, 0], x: [0, -5, 0] }}
+                      transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+                      className="absolute bottom-8 md:bottom-16 right-0 md:right-4 bg-primary/90 text-primary-foreground px-3 py-2 rounded-lg shadow-lg hidden sm:block"
+                    >
+                      <div className="flex items-center gap-2">
+                        <Zap className="w-3 h-3" />
+                        <span className="text-[10px] md:text-xs font-bold">{content.floatingBadge}</span>
+                      </div>
+                    </motion.div>
 
-                {/* Phone Image */}
-                <motion.img 
-                  animate={{ y: [0, -10, 0] }}
-                  transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                  src={heroImages[variant]} 
-                  alt={content.imageAlt} 
-                  fetchPriority="high"
-                  decoding="async"
-                  className="w-full max-w-[160px] md:max-w-[220px] lg:max-w-[280px] drop-shadow-2xl relative z-10"
-                />
+                    {/* Phone Image */}
+                    <motion.img 
+                      animate={{ y: [0, -10, 0] }}
+                      transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                      src={heroImages[variant]} 
+                      alt={content.imageAlt} 
+                      fetchPriority="high"
+                      decoding="async"
+                      className="w-full max-w-[160px] md:max-w-[220px] lg:max-w-[280px] drop-shadow-2xl relative z-10"
+                    />
+                  </>
+                )}
               </motion.div>
             </div>
           )}
