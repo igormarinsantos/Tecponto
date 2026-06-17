@@ -2,23 +2,10 @@ import { useEffect, useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ChevronDown, Menu, X } from "lucide-react";
-import logo from "@/assets/logo-horizontal.png";
-import perfectPhone from "@/assets/compre.png";
-import motoboy from "@/assets/troca.png";
-import brokenPhone from "@/assets/reparo.png";
-import { SHOPEE_STORE_URL } from "@/lib/links";
+import logo from "@/assets/brand/logo-horizontal.png";
+import { SHOPEE_STORE_URL } from "@/constants/links";
+import { landingPages, navPages } from "@/features/navigation/navigation.data";
 
-const landingPages = [
-  { label: "Compre", path: SHOPEE_STORE_URL, external: true, description: "Celulares revisados e prontos para uso", image: perfectPhone },
-  { label: "Troque", path: "/troque", description: "Use seu aparelho como entrada", image: motoboy },
-  { label: "Repare", path: "/repare", description: "Conserto rápido com garantia", image: brokenPhone },
-];
-
-const navPages = [
-  { label: "Garantia", path: "/garantia" },
-  { label: "FAQ", path: "/faq" },
-  { label: "Contato", path: "/contato" },
-];
 
 const pageClass = (isTransparent: boolean) => ({ isActive }: { isActive: boolean }) =>
   `px-2.5 py-1.5 rounded-full text-[11px] font-bold uppercase tracking-wide transition-colors ${

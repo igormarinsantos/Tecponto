@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
 import { useRef } from "react";
 import { Star, ThumbsUp } from "lucide-react";
-import testimonialVideo from "@/assets/testimonial-video.webm";
+import testimonialVideo from "@/assets/media/testimonial-video.webm";
 
 const BentoTestimonials = () => {
   const ref = useRef(null);

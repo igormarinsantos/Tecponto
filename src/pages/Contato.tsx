@@ -1,5 +1,5 @@
-import WhatsAppButton from "@/components/WhatsAppButton";
-import WhatsAppChatSection from "@/components/WhatsAppChatSection";
+import WhatsAppButton from "@/features/whatsapp/WhatsAppButton";
+import WhatsAppChatSection from "@/features/whatsapp/WhatsAppChatSection";
 
 const Contato = () => {
   return (

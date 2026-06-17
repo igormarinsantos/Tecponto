@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
 import { useRef } from "react";
 import { MapPin, Phone, Clock } from "lucide-react";
-import shopLocation from "@/assets/shop-location.jpg";
+import shopLocation from "@/assets/media/shop-location.jpg";
 
 const PhysicalLocationSection = () => {
   const ref = useRef(null);

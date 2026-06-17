@@ -1,8 +1,8 @@
 import { NavLink } from "react-router-dom";
 import { ArrowRight, CheckCircle2, FileText, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import WhatsAppButton from "@/components/WhatsAppButton";
-import Footer from "@/components/Footer";
+import WhatsAppButton from "@/features/whatsapp/WhatsAppButton";
+import Footer from "@/layouts/Footer";
 
 const summaryCards = [
   "Garantia informada antes da compra ou servico",

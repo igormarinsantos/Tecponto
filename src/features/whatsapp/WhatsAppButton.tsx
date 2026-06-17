@@ -1,7 +1,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
-import WhatsAppQualificationModal from "@/components/WhatsAppQualificationModal";
-import whatsappLogo from "@/assets/whatsapp-logo.svg";
+import WhatsAppQualificationModal from "@/features/whatsapp/WhatsAppQualificationModal";
+import whatsappLogo from "@/assets/icons/whatsapp-logo.svg";
 import type { LandingVariant } from "@/types/landing";
 
 type WhatsAppButtonProps = {

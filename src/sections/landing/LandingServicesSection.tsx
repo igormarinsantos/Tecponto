@@ -7,8 +7,10 @@ import battery from "@/assets/services/battery.png";
 import internalRepair from "@/assets/services/internal-repair.png";
 import software from "@/assets/services/software.png";
 import speaker from "@/assets/services/speaker.png";
-import perfectPhone from "@/assets/perfect-phone.jpg";
-import brokenPhone from "@/assets/broken-phone-hero.png";
+import perfectPhone from "@/assets/devices/perfect-phone.jpg";
+import brokenPhone from "@/assets/devices/broken-phone-hero.png";
+import troquePremiumImg from "@/assets/devices/troque-premium-line.png";
+import troqueUsedValueImg from "@/assets/devices/troque-used-value.png";
 import type { LandingVariant } from "@/types/landing";
 
 type ServiceItem = {
@@ -52,22 +54,23 @@ const servicesByVariant: Record<LandingVariant, {
     title: "Troque com Segurança",
     subtitle: (
       <>
-        <span className="font-bold text-foreground">Seu usado pode virar entrada</span> para um celular melhor
+        <span className="font-bold text-foreground">Seu usado pode virar entrada</span> para um aparelho revisado, testado e escolhido com orientação da TecPonto
       </>
     ),
-    ctaTitle: "Quer trocar hoje?",
+    ctaTitle: "Quer descobrir quanto vale?",
     ctaDescription: (
       <>
-        <span className="font-bold text-foreground">Envie fotos do aparelho</span> e receba uma avaliação rápida
+        <span className="font-bold text-foreground">Responda rapidinho no WhatsApp</span> e receba uma pré-avaliação clara do seu aparelho
       </>
     ),
-    ctaButton: "Avaliar Meu Aparelho",
+    ctaButton: "Descobrir Valor do Meu Usado",
     services: [
-      { image: brokenPhone, title: "Avaliação do Usado", description: "Analisamos estado, modelo, bateria, tela e funcionamento geral" },
-      { image: perfectPhone, title: "Modelos Revisados", description: "Opções selecionadas para você evoluir de aparelho com confiança" },
-      { image: battery, title: "Teste de Bateria", description: "Checagem técnica para definir uma troca justa e transparente" },
-      { image: screenRepair, title: "Estado da Tela", description: "Tela, toque, manchas e estrutura entram na avaliação" },
-      { image: software, title: "Transferência Orientada", description: "Te ajudamos a preparar seus dados para a troca com mais tranquilidade" },
+      { image: brokenPhone, title: "Avaliação Honesta do Seu Usado", description: "Analisamos modelo, estado, bateria, tela e funcionamento para chegar em uma proposta justa." },
+      { image: troqueUsedValueImg, title: "Seu Usado Vira Entrada", description: "Seu aparelho atual pode abater parte do valor de um modelo melhor, sem proposta confusa." },
+      { image: troquePremiumImg, title: "Linha Premium Revisada", description: "Modelos selecionados, testados e prontos para você sair usando com confiança." },
+      { image: internalRepair, title: "Segurança Técnica", description: "A TecPonto revisa os aparelhos antes de indicar a melhor opção para sua troca." },
+      { image: perfectPhone, title: "Upgrade Sem Complicação", description: "Você manda as informações pelo WhatsApp e recebe um caminho claro para evoluir de aparelho." },
+      { image: software, title: "Transferência Orientada", description: "Te ajudamos a se preparar para trocar sem perder contatos, fotos e o que importa." },
     ],
   },
   compre: {
@@ -99,11 +102,11 @@ const scrollToWhatsApp = () => {
   element?.scrollIntoView({ behavior: "smooth" });
 };
 
-type NewServicesSectionProps = {
+type LandingServicesSectionProps = {
   variant?: LandingVariant;
 };
 
-const NewServicesSection = ({ variant = "repare" }: NewServicesSectionProps) => {
+const LandingServicesSection = ({ variant = "repare" }: LandingServicesSectionProps) => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, amount: 0.2 });
   const content = servicesByVariant[variant];
@@ -196,4 +199,4 @@ const NewServicesSection = ({ variant = "repare" }: NewServicesSectionProps) => 
   );
 };
 
-export default NewServicesSection;
+export default LandingServicesSection;

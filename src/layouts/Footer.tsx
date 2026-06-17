@@ -1,7 +1,7 @@
 import { ExternalLink, Instagram, MessageCircle } from "lucide-react";
 import { NavLink } from "react-router-dom";
-import logo from "@/assets/logo-horizontal.png";
-import { SHOPEE_STORE_URL } from "@/lib/links";
+import logo from "@/assets/brand/logo-horizontal.png";
+import { SHOPEE_STORE_URL } from "@/constants/links";
 
 const mainLinks = [
   { label: "Compre", path: SHOPEE_STORE_URL, external: true },

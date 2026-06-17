@@ -2,10 +2,10 @@ import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
 import { X, Check } from "lucide-react";
-import phoneAntes from "@/assets/phone-antes.png";
-import phoneDepois from "@/assets/phone-depois.png";
+import phoneAntes from "@/assets/devices/phone-antes.png";
+import phoneDepois from "@/assets/devices/phone-depois.png";
 
-const NewComparisonSection = () => {
+const LandingComparisonSection = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, amount: 0.3 });
   const [scrollPosition, setScrollPosition] = useState(0);
@@ -217,4 +217,4 @@ const NewComparisonSection = () => {
   );
 };
 
-export default NewComparisonSection;
+export default LandingComparisonSection;

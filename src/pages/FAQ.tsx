@@ -1,5 +1,5 @@
-import FAQSection from "@/components/FAQSection";
-import WhatsAppButton from "@/components/WhatsAppButton";
+import FAQSection from "@/sections/shared/FAQSection";
+import WhatsAppButton from "@/features/whatsapp/WhatsAppButton";
 import { Button } from "@/components/ui/button";
 import { MessageCircle } from "lucide-react";
 

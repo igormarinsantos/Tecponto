@@ -3,10 +3,10 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { MapPin, Clock, Shield, Zap, Award, CheckCircle2, RefreshCw } from "lucide-react";
 import reparoPhone from "@/assets/repare/repare-hero-phone.png";
-import trocaPhone from "@/assets/troca.png";
-import comprePhone from "@/assets/compre.png";
-import handLeft from "@/assets/hand-old-phone.png";
-import handRight from "@/assets/hand-new-phone.png";
+import trocaPhone from "@/assets/devices/troca.png";
+import comprePhone from "@/assets/devices/compre.png";
+import handLeft from "@/assets/devices/hand-old-phone.png";
+import handRight from "@/assets/devices/hand-new-phone.png";
 import { useCountdownTimer } from "@/hooks/useCountdownTimer";
 import type { LandingVariant } from "@/types/landing";
 
@@ -121,10 +121,10 @@ const glassShardsList = [
     src: shard1,
     className: "absolute left-[-2%] md:left-[-10%] lg:left-[-15%] top-[-5%] w-[12%] z-20 pointer-events-none filter drop-shadow-[0_10px_15px_rgba(0,0,0,0.2)] repare-shard",
     depth: 0.5,
-    speed: 4.2,
+    speed: 1.8,
     phase: 0.0,
     ampX: 5,
-    ampY: 30,
+    ampY: 20,
     ampRot: 8,
     maxOpacity: 1,
     centerXMultiplier: 0.65,
@@ -134,10 +134,10 @@ const glassShardsList = [
     src: shard2,
     className: "absolute right-[-4%] md:right-[-12%] lg:right-[-20%] top-[8%] w-[15%] z-20 pointer-events-none filter drop-shadow-[0_10px_15px_rgba(0,0,0,0.2)] repare-shard",
     depth: 0.7,
-    speed: 3.3,
+    speed: 1.4,
     phase: 1.5,
     ampX: 6,
-    ampY: 38,
+    ampY: 25,
     ampRot: -10,
     maxOpacity: 1,
     centerXMultiplier: -0.7,
@@ -147,10 +147,10 @@ const glassShardsList = [
     src: shard3,
     className: "absolute left-[-4%] md:left-[-12%] lg:left-[-18%] top-[30%] w-[16%] z-0 pointer-events-none filter drop-shadow-[0_8px_12px_rgba(0,0,0,0.15)] blur-[0.8px] repare-shard",
     depth: -0.3,
-    speed: 2.6,
+    speed: 1.1,
     phase: 3.0,
     ampX: 4,
-    ampY: 28,
+    ampY: 18,
     ampRot: 6,
     maxOpacity: 0.75,
     centerXMultiplier: 0.68,
@@ -160,10 +160,10 @@ const glassShardsList = [
     src: shard4,
     className: "absolute right-[-3%] md:right-[-10%] lg:right-[-15%] top-[55%] w-[11%] z-20 pointer-events-none filter drop-shadow-[0_8px_12px_rgba(0,0,0,0.2)] repare-shard",
     depth: 0.9,
-    speed: 4.5,
+    speed: 1.9,
     phase: 4.5,
     ampX: 7,
-    ampY: 34,
+    ampY: 22,
     ampRot: -15,
     maxOpacity: 1,
     centerXMultiplier: -0.65,
@@ -173,10 +173,10 @@ const glassShardsList = [
     src: shard5,
     className: "absolute left-[-2%] md:left-[-8%] lg:left-[-12%] bottom-[12%] w-[13%] z-20 pointer-events-none filter drop-shadow-[0_10px_15px_rgba(0,0,0,0.2)] repare-shard",
     depth: 0.6,
-    speed: 3.6,
+    speed: 1.5,
     phase: 2.1,
     ampX: 6,
-    ampY: 32,
+    ampY: 20,
     ampRot: 7,
     maxOpacity: 1,
     centerXMultiplier: 0.62,
@@ -186,10 +186,10 @@ const glassShardsList = [
     src: shard6,
     className: "absolute right-[-6%] md:right-[-15%] lg:right-[-22%] bottom-[18%] w-[18%] z-0 pointer-events-none filter drop-shadow-[0_8px_12px_rgba(0,0,0,0.15)] blur-[1.2px] repare-shard",
     depth: -0.5,
-    speed: 2.9,
+    speed: 1.2,
     phase: 0.8,
     ampX: 5,
-    ampY: 42,
+    ampY: 28,
     ampRot: -8,
     maxOpacity: 0.7,
     centerXMultiplier: -0.72,
@@ -199,10 +199,10 @@ const glassShardsList = [
     src: shard7,
     className: "absolute left-[25%] top-[-15%] w-[11%] z-20 pointer-events-none filter drop-shadow-[0_6px_10px_rgba(0,0,0,0.2)] repare-shard",
     depth: 0.4,
-    speed: 3.9,
+    speed: 1.7,
     phase: 5.2,
     ampX: 4,
-    ampY: 26,
+    ampY: 16,
     ampRot: 12,
     maxOpacity: 1,
     centerXMultiplier: 0.25,
@@ -223,13 +223,14 @@ const GlassShards = () => (
   </div>
 );
 
-type NewHeroSectionProps = {
+type LandingHeroSectionProps = {
   variant?: LandingVariant;
 };
 
-const NewHeroSection = ({ variant = "repare" }: NewHeroSectionProps) => {
+const LandingHeroSection = ({ variant = "repare" }: LandingHeroSectionProps) => {
   const content = heroContent[variant];
   const repareContainerRef = useRef<HTMLDivElement>(null);
+  const troqueHandsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (variant !== "repare") return;
@@ -279,7 +280,7 @@ const NewHeroSection = ({ variant = "repare" }: NewHeroSectionProps) => {
       // Apply interactive 3D rotation and vertical float to phone mockup
       if (phoneImg) {
         const phoneScale = 0.85 + 0.15 * burstProgress;
-        const phoneFloatY = Math.sin(time * 3.5 + 1.5) * 20;
+        const phoneFloatY = Math.sin(time * 1.6 + 1.5) * 12;
         phoneImg.style.transform = `
           rotateY(${currentX * 12}deg)
           rotateX(${-currentY * 12}deg)
@@ -330,6 +331,50 @@ const NewHeroSection = ({ variant = "repare" }: NewHeroSectionProps) => {
     };
   }, [variant]);
 
+  useEffect(() => {
+    if (variant !== "troque") return;
+    const container = troqueHandsRef.current;
+    if (!container) return;
+
+    const leftHand = container.querySelector<HTMLElement>(".troque-hand-left");
+    const rightHand = container.querySelector<HTMLElement>(".troque-hand-right");
+    if (!leftHand || !rightHand) return;
+
+    let targetY = 0;
+    let currentY = 0;
+    let time = 0;
+    let rAFId = 0;
+
+    const handleMouseMove = (event: MouseEvent) => {
+      targetY = (event.clientY / window.innerHeight - 0.5) * 2;
+    };
+
+    const animateHands = () => {
+      time += 0.01;
+      currentY += (targetY - currentY) * 0.07;
+
+      const idleLeftY = Math.cos(time * 1.1) * 5;
+      const idleRightY = Math.cos(time * 1.25 + 0.8) * 5;
+
+      leftHand.style.transform = `
+        translate3d(0, ${currentY * 28 + idleLeftY}px, 0)
+      `;
+      rightHand.style.transform = `
+        translate3d(0, ${currentY * -28 + idleRightY}px, 0)
+      `;
+
+      rAFId = requestAnimationFrame(animateHands);
+    };
+
+    window.addEventListener("mousemove", handleMouseMove, { passive: true });
+    animateHands();
+
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      cancelAnimationFrame(rAFId);
+    };
+  }, [variant]);
+
   return (
     <section id="hero" className="relative min-h-[100dvh] flex items-center bg-background overflow-hidden pt-24 md:pt-28 pb-12">
       {/* Decorative background elements */}
@@ -346,43 +391,45 @@ const NewHeroSection = ({ variant = "repare" }: NewHeroSectionProps) => {
 
       {/* Absolute hands for trade page (aligned to screen edges) */}
       {variant === "troque" && (
-        <>
+        <div ref={troqueHandsRef} className="absolute inset-0 pointer-events-none hidden lg:block" aria-hidden="true">
           {/* Left Hand Image */}
-          <motion.img
-            initial={{ opacity: 0, x: -100, y: "-50%" }}
-            animate={{ 
-              opacity: 1, 
-              x: 0,
-              y: ["-50%", "-52%", "-50%"]
-            }}
-            transition={{ 
-              opacity: { duration: 0.8, delay: 0.4 },
-              x: { duration: 0.8, delay: 0.4 },
-              y: { duration: 5, repeat: Infinity, ease: "easeInOut" }
-            }}
-            src={handLeft}
-            alt="Mão entregando celular antigo"
-            className="absolute left-0 top-1/2 w-[28%] min-w-[200px] max-w-[420px] object-contain pointer-events-none hidden lg:block z-10 drop-shadow-[0_20px_20px_rgba(0,0,0,0.12)]"
-          />
+          <div className="troque-hand-left absolute left-0 top-1/2 z-10 w-[28%] min-w-[200px] max-w-[420px] will-change-transform">
+            <div className="-translate-y-1/2">
+            <motion.img
+              src={handLeft}
+              alt="Mão entregando celular antigo"
+              initial={{ opacity: 0, x: -100 }}
+              animate={{ opacity: 1, x: 0, y: [0, -10, 0], rotate: [-1.5, 0.5, -1.5] }}
+              transition={{
+                opacity: { duration: 0.8, delay: 0.4 },
+                x: { duration: 0.8, delay: 0.4 },
+                y: { duration: 5, repeat: Infinity, ease: "easeInOut" },
+                rotate: { duration: 5, repeat: Infinity, ease: "easeInOut" },
+              }}
+              className="w-full object-contain drop-shadow-[0_20px_20px_rgba(0,0,0,0.12)]"
+            />
+            </div>
+          </div>
           
           {/* Right Hand Image */}
-          <motion.img
-            initial={{ opacity: 0, x: 100, y: "-50%" }}
-            animate={{ 
-              opacity: 1, 
-              x: 0,
-              y: ["-50%", "-48%", "-50%"]
-            }}
-            transition={{ 
-              opacity: { duration: 0.8, delay: 0.4 },
-              x: { duration: 0.8, delay: 0.4 },
-              y: { duration: 5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }
-            }}
-            src={handRight}
-            alt="Mão recebendo celular novo"
-            className="absolute right-0 top-1/2 w-[28%] min-w-[200px] max-w-[420px] object-contain pointer-events-none hidden lg:block z-10 drop-shadow-[0_20px_20px_rgba(0,0,0,0.12)]"
-          />
-        </>
+          <div className="troque-hand-right absolute right-0 top-1/2 z-10 w-[28%] min-w-[200px] max-w-[420px] will-change-transform">
+            <div className="-translate-y-1/2">
+            <motion.img
+              src={handRight}
+              alt="Mão recebendo celular novo"
+              initial={{ opacity: 0, x: 100 }}
+              animate={{ opacity: 1, x: 0, y: [0, 10, 0], rotate: [1.5, -0.5, 1.5] }}
+              transition={{
+                opacity: { duration: 0.8, delay: 0.4 },
+                x: { duration: 0.8, delay: 0.4 },
+                y: { duration: 5, repeat: Infinity, ease: "easeInOut", delay: 0.5 },
+                rotate: { duration: 5, repeat: Infinity, ease: "easeInOut", delay: 0.5 },
+              }}
+              className="w-full object-contain drop-shadow-[0_20px_20px_rgba(0,0,0,0.12)]"
+            />
+            </div>
+          </div>
+        </div>
       )}
 
       <div className="container mx-auto px-4 relative z-10">
@@ -687,9 +734,8 @@ const NewHeroSection = ({ variant = "repare" }: NewHeroSectionProps) => {
                     <img 
                       src={heroImages[variant]} 
                       alt={content.imageAlt} 
-                      fetchPriority="high"
                       decoding="async"
-                      className="w-full max-w-[320px] md:max-w-[400px] lg:max-w-[480px] drop-shadow-3xl relative z-10 repare-phone"
+                      className="w-full max-w-[340px] md:max-w-[460px] lg:max-w-[560px] drop-shadow-3xl relative z-10 repare-phone"
                       style={{ opacity: 0, transform: 'scale(0.8) translate3d(0,0,0)' }}
                     />
                   </div>
@@ -712,7 +758,6 @@ const NewHeroSection = ({ variant = "repare" }: NewHeroSectionProps) => {
                       transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
                       src={heroImages[variant]} 
                       alt={content.imageAlt} 
-                      fetchPriority="high"
                       decoding="async"
                       className="w-full max-w-[160px] md:max-w-[220px] lg:max-w-[280px] drop-shadow-2xl relative z-10"
                     />
@@ -727,4 +772,4 @@ const NewHeroSection = ({ variant = "repare" }: NewHeroSectionProps) => {
   );
 };
 
-export default NewHeroSection;
+export default LandingHeroSection;

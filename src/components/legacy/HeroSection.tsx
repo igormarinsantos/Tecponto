@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import brokenPhoneHero from "@/assets/broken-phone-hero.png";
-import customer1 from "@/assets/customer-1.jpg";
-import customer2 from "@/assets/customer-2.jpg";
-import customer3 from "@/assets/customer-3.jpg";
-import customer4 from "@/assets/customer-4.jpg";
+import brokenPhoneHero from "@/assets/devices/broken-phone-hero.png";
+import customer1 from "@/assets/people/customer-1.jpg";
+import customer2 from "@/assets/people/customer-2.jpg";
+import customer3 from "@/assets/people/customer-3.jpg";
+import customer4 from "@/assets/people/customer-4.jpg";
 import { ArrowRight, DollarSign, Clock, Truck, Shield, MapPin } from "lucide-react";
 
 const HeroSection = () => {

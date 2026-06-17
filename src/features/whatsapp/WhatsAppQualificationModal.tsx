@@ -1,8 +1,9 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { CheckCheck, ExternalLink, Send, X, RotateCcw, ArrowLeft } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
-import whatsappAssistant from "@/assets/whatsapp-assistant.png";
-import { buildWhatsAppUrl, qualificationFlow, type QualificationField, type QualificationValues } from "@/lib/qualification";
+import whatsappAssistant from "@/assets/people/whatsapp-assistant.png";
+import { SHOPEE_STORE_URL } from "@/constants/links";
+import { buildWhatsAppUrl, qualificationFlow, type QualificationField, type QualificationValues } from "@/features/whatsapp/qualification";
 import type { LandingVariant } from "@/types/landing";
 
 type WhatsAppQualificationModalProps = {
@@ -17,8 +18,6 @@ type ChatMessage = {
   text: string;
   label?: string;
 };
-
-const SHOPEE_STORE_URL = "https://shopee.com.br/";
 
 const initialOptions: Array<{ label: string; value: LandingVariant }> = [
   { label: "Quero comprar", value: "compre" },

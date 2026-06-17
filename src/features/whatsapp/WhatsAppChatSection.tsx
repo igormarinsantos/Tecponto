@@ -2,8 +2,8 @@ import { useRef, useState } from "react";
 import { motion, useInView } from "framer-motion";
 import { MessageCircle, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import WhatsAppQualificationModal from "@/components/WhatsAppQualificationModal";
-import whatsappLogo from "@/assets/whatsapp-logo.svg";
+import WhatsAppQualificationModal from "@/features/whatsapp/WhatsAppQualificationModal";
+import whatsappLogo from "@/assets/icons/whatsapp-logo.svg";
 import type { LandingVariant } from "@/types/landing";
 
 type WhatsAppChatSectionProps = {

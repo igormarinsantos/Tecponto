@@ -6,8 +6,8 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { ChevronRight, Check } from "lucide-react";
 import { toast } from "sonner";
-import brokenPhone from "@/assets/broken-phone-hero.png";
-import perfectPhone from "@/assets/perfect-phone.jpg";
+import brokenPhone from "@/assets/devices/broken-phone-hero.png";
+import perfectPhone from "@/assets/devices/perfect-phone.jpg";
 import { useScroll, useTransform } from "framer-motion";
 
 const QuoteTransformSection = () => {

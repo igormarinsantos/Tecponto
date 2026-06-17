@@ -1,19 +1,19 @@
-import NewHeroSection from "@/components/NewHeroSection";
-import BrandCarousel from "@/components/BrandCarousel";
-import StatsSection from "@/components/StatsSection";
-import OfferSection from "@/components/OfferSection";
-import NewServicesSection from "@/components/NewServicesSection";
-import WarrantySection from "@/components/WarrantySection";
-import DeliverySection from "@/components/DeliverySection";
-import WhatsAppChatSection from "@/components/WhatsAppChatSection";
+import LandingHeroSection from "@/sections/landing/LandingHeroSection";
+import BrandCarousel from "@/sections/shared/BrandCarousel";
+import StatsSection from "@/sections/shared/StatsSection";
+import OfferSection from "@/sections/landing/OfferSection";
+import LandingServicesSection from "@/sections/landing/LandingServicesSection";
+import WarrantySection from "@/sections/shared/WarrantySection";
+import DeliverySection from "@/sections/shared/DeliverySection";
+import WhatsAppChatSection from "@/features/whatsapp/WhatsAppChatSection";
 
-import BentoTestimonials from "@/components/BentoTestimonials";
-import InfrastructureSection from "@/components/InfrastructureSection";
-import NewComparisonSection from "@/components/NewComparisonSection";
-import FAQSection from "@/components/FAQSection";
-import FinalCTASection from "@/components/FinalCTASection";
-import Footer from "@/components/Footer";
-import WhatsAppButton from "@/components/WhatsAppButton";
+import BentoTestimonials from "@/sections/shared/BentoTestimonials";
+import InfrastructureSection from "@/sections/shared/InfrastructureSection";
+import LandingComparisonSection from "@/sections/landing/LandingComparisonSection";
+import FAQSection from "@/sections/shared/FAQSection";
+import FinalCTASection from "@/sections/landing/FinalCTASection";
+import Footer from "@/layouts/Footer";
+import WhatsAppButton from "@/features/whatsapp/WhatsAppButton";
 import type { LandingVariant } from "@/types/landing";
 
 type IndexProps = {
@@ -27,7 +27,7 @@ const Index = ({ variant = "repare" }: IndexProps) => {
       <WhatsAppButton variant={variant} />
       
       {/* Hero Section - Centered with countdown */}
-      <NewHeroSection variant={variant} />
+      <LandingHeroSection variant={variant} />
 
       {/* Brand Carousel */}
       <BrandCarousel />
@@ -36,7 +36,7 @@ const Index = ({ variant = "repare" }: IndexProps) => {
       <StatsSection />
 
       {/* Services Section - With Photos */}
-      <NewServicesSection variant={variant} />
+      <LandingServicesSection variant={variant} />
 
       {/* Warranty Section */}
       <WarrantySection variant={variant} />
@@ -55,7 +55,7 @@ const Index = ({ variant = "repare" }: IndexProps) => {
       <InfrastructureSection />
 
       {/* Comparison Section - With Before/After in middle */}
-      <NewComparisonSection />
+      <LandingComparisonSection />
 
       {/* FAQ Section */}
       <FAQSection variant={variant} />

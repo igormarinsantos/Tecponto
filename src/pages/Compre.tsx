@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { SHOPEE_STORE_URL } from "@/lib/links";
+import { SHOPEE_STORE_URL } from "@/constants/links";
 
 const Compre = () => {
   useEffect(() => {

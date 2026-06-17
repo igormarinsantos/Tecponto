@@ -1,7 +1,7 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
-import brokenPhone from "@/assets/broken-phone-hero.png";
-import perfectPhone from "@/assets/perfect-phone.jpg";
+import brokenPhone from "@/assets/devices/broken-phone-hero.png";
+import perfectPhone from "@/assets/devices/perfect-phone.jpg";
 
 const InteractiveHero = () => {
   const ref = useRef(null);

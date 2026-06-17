@@ -1,7 +1,8 @@
 import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
 import { useRef } from "react";
-import motoboyImg from "@/assets/motoboy.png";
+import motoboyImg from "@/assets/devices/motoboy.png";
+import troqueUsedValueImg from "@/assets/devices/troque-used-value.png";
 import type { LandingVariant } from "@/types/landing";
 
 type DeliverySectionProps = {
@@ -13,6 +14,7 @@ const DeliverySection = ({ variant = "repare" }: DeliverySectionProps) => {
   const isInView = useInView(ref, { once: true, amount: 0.3 });
 
   const isTroque = variant === "troque";
+  const image = isTroque ? troqueUsedValueImg : motoboyImg;
   const title = isTroque ? "Seu Usado Vale Dinheiro" : "Leva e Traz";
   const description = isTroque ? (
     <>
@@ -61,9 +63,9 @@ const DeliverySection = ({ variant = "repare" }: DeliverySectionProps) => {
               {/* Imagem do motoboy - alinhada na base do card */}
               <div className="relative flex justify-center md:justify-end items-end">
                 <img 
-                  src={motoboyImg} 
+                  src={image} 
                   alt={title}
-                  className="w-72 md:w-80 lg:w-96 h-auto object-contain self-end"
+                  className={`h-auto object-contain self-end ${isTroque ? "w-80 md:w-[420px] lg:w-[520px] p-4 md:p-0" : "w-72 md:w-80 lg:w-96"}`}
                 />
               </div>
             </div>
