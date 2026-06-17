@@ -119,7 +119,7 @@ const heroContent: Record<LandingVariant, {
 const glassShardsList = [
   {
     src: shard1,
-    className: "absolute left-[-28%] top-[-8%] w-[20%] z-20 pointer-events-none filter drop-shadow-[0_10px_15px_rgba(0,0,0,0.2)] repare-shard",
+    className: "absolute left-[-5%] md:left-[-18%] lg:left-[-28%] top-[-8%] w-[20%] z-20 pointer-events-none filter drop-shadow-[0_10px_15px_rgba(0,0,0,0.2)] repare-shard",
     depth: 0.5,
     speed: 1.2,
     phase: 0.0,
@@ -132,7 +132,7 @@ const glassShardsList = [
   },
   {
     src: shard2,
-    className: "absolute right-[-42%] top-[3%] w-[28%] z-20 pointer-events-none filter drop-shadow-[0_10px_15px_rgba(0,0,0,0.2)] repare-shard",
+    className: "absolute right-[-8%] md:right-[-25%] lg:right-[-42%] top-[3%] w-[28%] z-20 pointer-events-none filter drop-shadow-[0_10px_15px_rgba(0,0,0,0.2)] repare-shard",
     depth: 0.7,
     speed: 0.95,
     phase: 1.5,
@@ -145,7 +145,7 @@ const glassShardsList = [
   },
   {
     src: shard3,
-    className: "absolute left-[-35%] top-[20%] w-[30%] z-0 pointer-events-none filter drop-shadow-[0_8px_12px_rgba(0,0,0,0.15)] blur-[0.8px] repare-shard",
+    className: "absolute left-[-8%] md:left-[-22%] lg:left-[-35%] top-[20%] w-[30%] z-0 pointer-events-none filter drop-shadow-[0_8px_12px_rgba(0,0,0,0.15)] blur-[0.8px] repare-shard",
     depth: -0.3,
     speed: 0.75,
     phase: 3.0,
@@ -158,7 +158,7 @@ const glassShardsList = [
   },
   {
     src: shard4,
-    className: "absolute right-[-30%] top-[45%] w-[20%] z-20 pointer-events-none filter drop-shadow-[0_8px_12px_rgba(0,0,0,0.2)] repare-shard",
+    className: "absolute right-[-5%] md:right-[-20%] lg:right-[-30%] top-[45%] w-[20%] z-20 pointer-events-none filter drop-shadow-[0_8px_12px_rgba(0,0,0,0.2)] repare-shard",
     depth: 0.9,
     speed: 1.35,
     phase: 4.5,
@@ -171,7 +171,7 @@ const glassShardsList = [
   },
   {
     src: shard5,
-    className: "absolute left-[-22%] bottom-[3%] w-[24%] z-20 pointer-events-none filter drop-shadow-[0_10px_15px_rgba(0,0,0,0.2)] repare-shard",
+    className: "absolute left-[-4%] md:left-[-15%] lg:left-[-22%] bottom-[3%] w-[24%] z-20 pointer-events-none filter drop-shadow-[0_10px_15px_rgba(0,0,0,0.2)] repare-shard",
     depth: 0.6,
     speed: 1.05,
     phase: 2.1,
@@ -184,7 +184,7 @@ const glassShardsList = [
   },
   {
     src: shard6,
-    className: "absolute right-[-48%] bottom-[12%] w-[32%] z-0 pointer-events-none filter drop-shadow-[0_8px_12px_rgba(0,0,0,0.15)] blur-[1.2px] repare-shard",
+    className: "absolute right-[-10%] md:right-[-30%] lg:right-[-48%] bottom-[12%] w-[32%] z-0 pointer-events-none filter drop-shadow-[0_8px_12px_rgba(0,0,0,0.15)] blur-[1.2px] repare-shard",
     depth: -0.5,
     speed: 0.85,
     phase: 0.8,
