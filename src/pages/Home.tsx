@@ -120,7 +120,7 @@ const Home = () => {
       <section className="relative flex min-h-screen items-center overflow-hidden bg-primary py-16 md:py-20">
 
         <div className="container mx-auto px-4 relative z-10">
-          <div className="grid items-center gap-12 lg:grid-cols-[1.05fr_0.95fr] max-w-6xl mx-auto">
+          <div className="grid items-center gap-12 lg:grid-cols-[1.05fr_0.95fr] max-w-[1360px] mx-auto">
             <div className="text-left text-white">
               <h1 className="text-4xl md:text-6xl font-black leading-[1.2] tracking-tight text-white max-w-2xl min-h-[2.8em] md:min-h-[2.4em]">
                 Ajudamos você a{" "}
@@ -141,7 +141,7 @@ const Home = () => {
                 seu celular.
               </h1>
 
-              <p className="mt-6 max-w-xl text-base md:text-lg leading-relaxed text-white/85">
+              <p className="mt-6 max-w-2xl text-base md:text-lg leading-relaxed text-white/85">
                 Assistência especializada com garantia de 90 dias, avaliação justa no seu usado e curadoria de revisados. Simples, rápido e direto pelo WhatsApp.
               </p>
 

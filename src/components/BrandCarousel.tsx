@@ -14,8 +14,14 @@ const brands = [
 ];
 
 const BrandCarousel = () => {
-  // Duplicar marcas para loop infinito suave
-  const duplicatedBrands = [...brands, ...brands];
+  // Quintuplicar marcas para loop infinito suave com porcentagem exata
+  const duplicatedBrands = [
+    ...brands,
+    ...brands,
+    ...brands,
+    ...brands,
+    ...brands,
+  ];
 
   return (
     <section className="py-8 bg-muted/20 overflow-hidden">
@@ -28,12 +34,12 @@ const BrandCarousel = () => {
       <div className="relative">
         <div className="flex">
           <motion.div
-            className="flex gap-8 items-center"
+            className="flex items-center"
             animate={{
-              x: [0, -1600],
+              x: ["0%", "-20%"],
             }}
             transition={{
-              duration: 25,
+              duration: 20,
               repeat: Infinity,
               ease: "linear",
             }}
@@ -41,7 +47,7 @@ const BrandCarousel = () => {
             {duplicatedBrands.map((brand, index) => (
               <div
                 key={`${brand.name}-${index}`}
-                className="flex items-center justify-center min-w-[120px] h-16 px-4 py-2"
+                className="flex items-center justify-center flex-shrink-0 w-[140px] md:w-[180px] h-16 px-4"
               >
                 <img
                   src={brand.logo}

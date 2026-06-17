@@ -71,7 +71,7 @@ const Index = ({ variant = "repare" }: IndexProps) => {
       </section>
 
       {/* Offer Banner - Fixed at Bottom (after footer) */}
-      <OfferSection />
+      {variant !== "troque" && <OfferSection />}
     </div>
   );
 };
