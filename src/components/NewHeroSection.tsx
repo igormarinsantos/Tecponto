@@ -254,89 +254,75 @@ const NewHeroSection = ({ variant = "repare" }: NewHeroSectionProps) => {
       targetY = (event.clientY / window.innerHeight - 0.5) * 2;
     };
 
-    if (!reduceMotion) {
-      window.addEventListener("mousemove", handleMouseMove, { passive: true });
+    window.addEventListener("mousemove", handleMouseMove, { passive: true });
 
-      const animateParallax = () => {
-        const isMobile = window.innerWidth < 768;
-        time += 0.01;
-        
-        // Easing for entry burst (shards fly out on mount)
-        if (burstProgress < 1) {
-          burstProgress += (1 - burstProgress) * 0.035;
-          if (1 - burstProgress < 0.001) burstProgress = 1;
-        }
-
-        if (isMobile) {
-          // Automatic float on mobile
-          currentX = Math.sin(time * 0.8) * 0.2;
-          currentY = Math.cos(time * 0.6) * 0.2;
-        } else {
-          // Smooth follow client mouse position on desktop
-          currentX += (targetX - currentX) * 0.08;
-          currentY += (targetY - currentY) * 0.08;
-        }
-
-        // Apply interactive 3D rotation and vertical float to phone mockup
-        if (phoneImg) {
-          const phoneScale = 0.85 + 0.15 * burstProgress;
-          const phoneFloatY = Math.sin(time * 3.5 + 1.5) * 20;
-          phoneImg.style.transform = `
-            rotateY(${currentX * 12}deg)
-            rotateX(${-currentY * 12}deg)
-            translateY(${phoneFloatY}px)
-            scale(${phoneScale})
-          `;
-          phoneImg.style.opacity = burstProgress.toString();
-        }
-
-        // Apply 3D float, parallax and entry burst to shards
-        const containerWidth = container.clientWidth || 340;
-        const containerHeight = container.clientHeight || 600;
-
-        shards.forEach((shard, index) => {
-          const config = glassShardsList[index];
-          if (!config) return;
-
-          // Parallax movement based on mouse
-          const moveX = currentX * config.depth * 90;
-          const moveY = currentY * config.depth * 90;
-          
-          // Auto-floating oscillations
-          const floatX = Math.sin(time * config.speed + config.phase) * config.ampX;
-          const floatY = Math.cos(time * config.speed + config.phase) * config.ampY;
-          const floatRot = Math.sin(time * config.speed * 0.8 + config.phase) * config.ampRot;
-
-          // Entry burst displacement (starts at center of phone, ends at outer float position)
-          const burstX = config.centerXMultiplier * containerWidth * (1 - burstProgress);
-          const burstY = config.centerYMultiplier * containerHeight * (1 - burstProgress);
-          const shardScale = burstProgress * 1.0;
-
-          shard.style.transform = `
-            translate3d(${moveX + floatX + burstX}px, ${moveY + floatY + burstY}px, ${config.depth * 60}px)
-            rotate(${floatRot}deg)
-            scale(${shardScale})
-          `;
-          shard.style.opacity = (burstProgress * config.maxOpacity).toString();
-        });
-
-        rAFId = requestAnimationFrame(animateParallax);
-      };
-
-      animateParallax();
-    } else {
-      // Fallback
-      if (phoneImg) {
-        phoneImg.style.opacity = "1";
-        phoneImg.style.transform = "scale(1)";
+    const animateParallax = () => {
+      const isMobile = window.innerWidth < 768;
+      time += 0.01;
+      
+      // Easing for entry burst (shards fly out on mount)
+      if (burstProgress < 1) {
+        burstProgress += (1 - burstProgress) * 0.035;
+        if (1 - burstProgress < 0.001) burstProgress = 1;
       }
+
+      if (isMobile) {
+        // Automatic float on mobile
+        currentX = Math.sin(time * 0.8) * 0.2;
+        currentY = Math.cos(time * 0.6) * 0.2;
+      } else {
+        // Smooth follow client mouse position on desktop
+        currentX += (targetX - currentX) * 0.08;
+        currentY += (targetY - currentY) * 0.08;
+      }
+
+      // Apply interactive 3D rotation and vertical float to phone mockup
+      if (phoneImg) {
+        const phoneScale = 0.85 + 0.15 * burstProgress;
+        const phoneFloatY = Math.sin(time * 3.5 + 1.5) * 20;
+        phoneImg.style.transform = `
+          rotateY(${currentX * 12}deg)
+          rotateX(${-currentY * 12}deg)
+          translateY(${phoneFloatY}px)
+          scale(${phoneScale})
+        `;
+        phoneImg.style.opacity = burstProgress.toString();
+      }
+
+      // Apply 3D float, parallax and entry burst to shards
+      const containerWidth = container.clientWidth || 340;
+      const containerHeight = container.clientHeight || 600;
+
       shards.forEach((shard, index) => {
         const config = glassShardsList[index];
         if (!config) return;
-        shard.style.opacity = config.maxOpacity.toString();
-        shard.style.transform = "scale(1)";
+
+        // Parallax movement based on mouse
+        const moveX = currentX * config.depth * 90;
+        const moveY = currentY * config.depth * 90;
+        
+        // Auto-floating oscillations
+        const floatX = Math.sin(time * config.speed + config.phase) * config.ampX;
+        const floatY = Math.cos(time * config.speed + config.phase) * config.ampY;
+        const floatRot = Math.sin(time * config.speed * 0.8 + config.phase) * config.ampRot;
+
+        // Entry burst displacement (starts at center of phone, ends at outer float position)
+        const burstX = config.centerXMultiplier * containerWidth * (1 - burstProgress);
+        const burstY = config.centerYMultiplier * containerHeight * (1 - burstProgress);
+        const shardScale = burstProgress * 1.0;
+
+        shard.style.transform = `
+          translate3d(${moveX + floatX + burstX}px, ${moveY + floatY + burstY}px, ${config.depth * 60}px)
+          rotate(${floatRot}deg)
+          scale(${shardScale})
+        `;
+        shard.style.opacity = (burstProgress * config.maxOpacity).toString();
       });
-    }
+
+      rAFId = requestAnimationFrame(animateParallax);
+    };
+
+    animateParallax();
 
     return () => {
       window.removeEventListener("mousemove", handleMouseMove);
