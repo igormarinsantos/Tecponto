@@ -185,47 +185,52 @@ const NewHeroSection = ({ variant = "repare" }: NewHeroSectionProps) => {
         {variant === "repare" && <GlassShards />}
       </div>
 
+      {/* Absolute hands for trade page (aligned to screen edges) */}
+      {variant === "troque" && (
+        <>
+          {/* Left Hand Image */}
+          <motion.img
+            initial={{ opacity: 0, x: -100, y: "-50%" }}
+            animate={{ 
+              opacity: 1, 
+              x: 0,
+              y: ["-50%", "-52%", "-50%"]
+            }}
+            transition={{ 
+              opacity: { duration: 0.8, delay: 0.4 },
+              x: { duration: 0.8, delay: 0.4 },
+              y: { duration: 5, repeat: Infinity, ease: "easeInOut" }
+            }}
+            src={handLeft}
+            alt="Mão entregando celular antigo"
+            className="absolute left-0 top-1/2 w-[28%] min-w-[200px] max-w-[420px] object-contain pointer-events-none hidden lg:block z-10 drop-shadow-[0_20px_20px_rgba(0,0,0,0.12)]"
+          />
+          
+          {/* Right Hand Image */}
+          <motion.img
+            initial={{ opacity: 0, x: 100, y: "-50%" }}
+            animate={{ 
+              opacity: 1, 
+              x: 0,
+              y: ["-50%", "-48%", "-50%"]
+            }}
+            transition={{ 
+              opacity: { duration: 0.8, delay: 0.4 },
+              x: { duration: 0.8, delay: 0.4 },
+              y: { duration: 5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }
+            }}
+            src={handRight}
+            alt="Mão recebendo celular novo"
+            className="absolute right-0 top-1/2 w-[28%] min-w-[200px] max-w-[420px] object-contain pointer-events-none hidden lg:block z-10 drop-shadow-[0_20px_20px_rgba(0,0,0,0.12)]"
+          />
+        </>
+      )}
+
       <div className="container mx-auto px-4 relative z-10">
         <div className="max-w-[1360px] mx-auto">
           {/* Two Column Layout */}
           {variant === "troque" ? (
             <div className="relative w-full py-6 md:py-12">
-              {/* Left Hand Image */}
-              <motion.img
-                initial={{ opacity: 0, x: -80, y: "-50%" }}
-                animate={{ 
-                  opacity: 1, 
-                  x: 0,
-                  y: ["-50%", "-52%", "-50%"]
-                }}
-                transition={{ 
-                  opacity: { duration: 0.8, delay: 0.4 },
-                  x: { duration: 0.8, delay: 0.4 },
-                  y: { duration: 5, repeat: Infinity, ease: "easeInOut" }
-                }}
-                src={handLeft}
-                alt="Mão entregando celular"
-                className="absolute left-[-5%] xl:left-[0%] top-1/2 w-[42%] xl:w-[48%] max-w-[620px] object-contain pointer-events-none hidden lg:block drop-shadow-[0_25px_25px_rgba(0,0,0,0.15)]"
-              />
-              
-              {/* Right Hand Image */}
-              <motion.img
-                initial={{ opacity: 0, x: 80, y: "-50%" }}
-                animate={{ 
-                  opacity: 1, 
-                  x: 0,
-                  y: ["-50%", "-48%", "-50%"]
-                }}
-                transition={{ 
-                  opacity: { duration: 0.8, delay: 0.4 },
-                  x: { duration: 0.8, delay: 0.4 },
-                  y: { duration: 5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }
-                }}
-                src={handRight}
-                alt="Mão recebendo celular"
-                className="absolute right-[-5%] xl:right-[0%] top-1/2 w-[42%] xl:w-[48%] max-w-[620px] object-contain pointer-events-none hidden lg:block drop-shadow-[0_25px_25px_rgba(0,0,0,0.15)]"
-              />
-
               {/* Centered Content */}
               <div className="flex flex-col items-center text-center max-w-4xl mx-auto relative z-20">
                 {/* Badges Row */}
