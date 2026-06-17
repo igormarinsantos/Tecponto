@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { NavLink } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowRight, CheckCircle2, PlayCircle, RefreshCw, ShieldCheck, ShoppingBag, Smartphone, Wrench } from "lucide-react";
@@ -14,7 +14,6 @@ import customer1 from "@/assets/customer-1.jpg";
 import customer2 from "@/assets/customer-2.jpg";
 import customer3 from "@/assets/customer-3.jpg";
 import customer4 from "@/assets/customer-4.jpg";
-import deviceMockupImage from "@/assets/perfect-phone.jpg";
 import shopLocation from "@/assets/shop-location.jpg";
 import spaceVideoMp4 from "@/assets/testimonial-video.mp4";
 import spaceVideoWebm from "@/assets/testimonial-video.webm";
@@ -87,17 +86,70 @@ const Home = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalVariant, setModalVariant] = useState<LandingVariant | undefined>(undefined);
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+
+  const phoneRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const handleGlobalMouseMove = (e: MouseEvent) => {
-      const x = e.clientX / window.innerWidth - 0.5;
-      const y = e.clientY / window.innerHeight - 0.5;
-      setMousePos({ x, y });
+    const phone = phoneRef.current;
+    if (!phone) return;
+
+    const layers = phone.querySelectorAll<HTMLImageElement>(".layer");
+    
+    let targetX = 0;
+    let targetY = 0;
+    let currentX = 0;
+    let currentY = 0;
+    let rAFId = 0;
+    let time = 0;
+
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    const handleMouseMove = (event: MouseEvent) => {
+      targetX = (event.clientX / window.innerWidth - 0.5) * 2;
+      targetY = (event.clientY / window.innerHeight - 0.5) * 2;
     };
 
-    window.addEventListener("mousemove", handleGlobalMouseMove);
-    return () => window.removeEventListener("mousemove", handleGlobalMouseMove);
+    if (!reduceMotion) {
+      window.addEventListener("mousemove", handleMouseMove, { passive: true });
+
+      const animateParallax = () => {
+        const isMobile = window.innerWidth < 900;
+        
+        if (isMobile) {
+          time += 0.015;
+          currentX = Math.sin(time) * 0.3;
+          currentY = Math.cos(time * 0.8) * 0.3;
+        } else {
+          currentX += (targetX - currentX) * 0.08;
+          currentY += (targetY - currentY) * 0.08;
+        }
+
+        phone.style.transform = `
+          rotateY(${currentX * 7}deg)
+          rotateX(${-currentY * 7}deg)
+        `;
+
+        layers.forEach((layer) => {
+          const depth = Number(layer.getAttribute("data-depth") || 0);
+          const moveX = currentX * depth * 90;
+          const moveY = currentY * depth * 90;
+          const moveZ = depth * 90;
+
+          layer.style.transform = `
+            translate3d(${moveX}px, ${moveY}px, ${moveZ}px)
+          `;
+        });
+
+        rAFId = requestAnimationFrame(animateParallax);
+      };
+
+      animateParallax();
+    }
+
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      cancelAnimationFrame(rAFId);
+    };
   }, []);
 
   useEffect(() => {
@@ -117,7 +169,7 @@ const Home = () => {
       <WhatsAppButton />
       <WhatsAppQualificationModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} variant={modalVariant} />
       
-      <section className="relative flex min-h-screen items-center overflow-hidden bg-primary py-16 md:py-20">
+      <section className="relative flex min-h-screen items-center overflow-hidden bg-[#FF4B00] py-16 md:py-20">
 
         <div className="container mx-auto px-4 relative z-10">
           <div className="grid items-center gap-12 lg:grid-cols-[1.05fr_0.95fr] max-w-[1360px] mx-auto">
@@ -194,113 +246,26 @@ const Home = () => {
 
             </div>
 
-            {/* Showcase Visual com Mockup de Celular e Pílulas Flutuantes Interativas */}
+            {/* Showcase Visual com Mockup de Celular Explodido em 3D */}
             <div className="flex justify-center lg:justify-end items-center">
               <motion.div 
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.6, delay: 0.15 }}
-                className="relative w-full max-w-[380px] md:max-w-[420px] aspect-[4/5] flex items-center justify-center py-6"
+                className="relative w-full max-w-[380px] md:max-w-[420px] aspect-[3/4] flex items-center justify-center py-6"
               >
-                {/* 3D Tilt Interaction Wrapper (Standard div to avoid Framer Motion override conflict) */}
-                <div
-                  style={{
-                    transform: `perspective(1000px) rotateX(${-mousePos.y * 35}deg) rotateY(${mousePos.x * 35}deg)`,
-                    transition: "transform 0.3s cubic-bezier(0.16, 1, 0.3, 1)",
-                    transformStyle: "preserve-3d"
-                  }}
-                  className="relative w-full h-full flex items-center justify-center cursor-pointer"
-                >
-                  {/* Orbe de luz de fundo decorativo */}
-                  <div className="absolute w-[85%] h-[85%] rounded-full bg-white/10 blur-[60px] pointer-events-none" style={{ transform: "translateZ(-10px)" }} />
-
-                  {/* Mockup do Dispositivo (Smartphone) */}
-                  <div 
-                    style={{
-                      transform: "translateZ(30px)",
-                      transformStyle: "preserve-3d"
-                    }}
-                    className="relative w-[65%] max-w-[260px] rounded-[2.8rem] p-2.5 bg-white/15 backdrop-blur-md border border-white/20 shadow-2xl overflow-hidden aspect-[9/19]"
-                  >
-                    <div 
-                      style={{ transform: "translateZ(15px)" }}
-                      className="w-full h-full rounded-[2.3rem] overflow-hidden border border-white/10 bg-zinc-950"
-                    >
-                      <img
-                        src={deviceMockupImage}
-                        alt="Celular TecPonto"
-                        className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
-                      />
-                    </div>
-                  </div>
-
-                  {/* Floating Pill: Repare */}
-                  <div 
-                    className="absolute top-[18%] -left-[2%]" 
-                    style={{ transform: "translateZ(75px)", transformStyle: "preserve-3d" }}
-                  >
-                    <motion.button
-                      onClick={() => openModal("repare")}
-                      animate={{ y: [0, -8, 0] }}
-                      transition={{
-                        repeat: Infinity,
-                        duration: 3.2,
-                        ease: "easeInOut"
-                      }}
-                      className="flex items-center gap-2 px-4 py-2.5 rounded-full bg-white/15 backdrop-blur-md border border-white/25 shadow-lg hover:bg-white/25 hover:scale-105 active:scale-95 transition-all text-white font-bold text-sm"
-                    >
-                      <div className="w-6 h-6 rounded-full bg-primary flex items-center justify-center shrink-0">
-                        <Wrench className="w-3.5 h-3.5 text-white" />
-                      </div>
-                      <span>Repare</span>
-                    </motion.button>
-                  </div>
-
-                  {/* Floating Pill: Troque */}
-                  <div 
-                    className="absolute top-[45%] -right-[5%]" 
-                    style={{ transform: "translateZ(90px)", transformStyle: "preserve-3d" }}
-                  >
-                    <motion.button
-                      onClick={() => openModal("troque")}
-                      animate={{ y: [0, -10, 0] }}
-                      transition={{
-                        repeat: Infinity,
-                        duration: 3.8,
-                        ease: "easeInOut",
-                        delay: 0.4
-                      }}
-                      className="flex items-center gap-2 px-4 py-2.5 rounded-full bg-white/15 backdrop-blur-md border border-white/25 shadow-lg hover:bg-white/25 hover:scale-105 active:scale-95 transition-all text-white font-bold text-sm"
-                    >
-                      <div className="w-6 h-6 rounded-full bg-emerald-500 flex items-center justify-center shrink-0">
-                        <RefreshCw className="w-3.5 h-3.5 text-white" />
-                      </div>
-                      <span>Troque</span>
-                    </motion.button>
-                  </div>
-
-                  {/* Floating Pill: Compre */}
-                  <div 
-                    className="absolute bottom-[22%] -left-[6%]" 
-                    style={{ transform: "translateZ(65px)", transformStyle: "preserve-3d" }}
-                  >
-                    <motion.button
-                      onClick={() => openModal("compre")}
-                      animate={{ y: [0, -7, 0] }}
-                      transition={{
-                        repeat: Infinity,
-                        duration: 3.5,
-                        ease: "easeInOut",
-                        delay: 0.2
-                      }}
-                      className="flex items-center gap-2 px-4 py-2.5 rounded-full bg-white/15 backdrop-blur-md border border-white/25 shadow-lg hover:bg-white/25 hover:scale-105 active:scale-95 transition-all text-white font-bold text-sm"
-                    >
-                      <div className="w-6 h-6 rounded-full bg-sky-500 flex items-center justify-center shrink-0">
-                        <ShoppingBag className="w-3.5 h-3.5 text-white" />
-                      </div>
-                      <span>Compre</span>
-                    </motion.button>
-                  </div>
+                <div ref={phoneRef} className="phone-3d" id="phone3d">
+                  <img src="/layers/01-glass.png" className="layer" data-depth="0.20" alt="Vidro frontal" />
+                  <img src="/layers/02-screen.png" className="layer" data-depth="0.16" alt="Tela/Display" />
+                  <img src="/layers/03-inner-layer.png" className="layer" data-depth="0.12" alt="Camada interna" />
+                  <img src="/layers/04-frame.png" className="layer" data-depth="0.10" alt="Estrutura" />
+                  <img src="/layers/05-battery.png" className="layer" data-depth="0.08" alt="Bateria" />
+                  <img src="/layers/06-board.png" className="layer" data-depth="0.13" alt="Placa mãe" />
+                  <img src="/layers/07-camera.png" className="layer" data-depth="0.15" alt="Câmeras" />
+                  <img src="/layers/08-coil.png" className="layer" data-depth="0.11" alt="Bobina de carregamento" />
+                  <img src="/layers/09-bottom-component.png" className="layer" data-depth="0.09" alt="Componentes inferiores" />
+                  <img src="/layers/10-screws.png" className="layer" data-depth="0.22" alt="Parafusos" />
+                  <img src="/layers/11-back-cover.png" className="layer" data-depth="0.06" alt="Tampa traseira" />
                 </div>
               </motion.div>
             </div>
