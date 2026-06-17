@@ -395,7 +395,7 @@ const Home = () => {
                 Seu navegador nao suporta video.
               </video>
               <div
-                className={`pointer-events-none absolute hidden items-center gap-2 rounded-full bg-background/95 px-4 py-2 text-xs font-bold uppercase text-foreground shadow-strong backdrop-blur transition-opacity duration-150 md:inline-flex ${
+                className={`pointer-events-none absolute hidden items-center gap-2 rounded-full bg-background/95 px-4 py-2 text-xs font-bold uppercase text-foreground shadow-strong backdrop-blur transition-opacity duration-200 md:inline-flex ${
                   videoHover ? "opacity-100" : "opacity-0"
                 }`}
                 style={{
