@@ -19,6 +19,18 @@ import spaceVideoMp4 from "@/assets/testimonial-video.mp4";
 import spaceVideoWebm from "@/assets/testimonial-video.webm";
 import { SHOPEE_STORE_URL } from "@/lib/links";
 
+import glassLayer from "@/assets/layers/01-glass.png";
+import screenLayer from "@/assets/layers/02-screen.png";
+import innerLayerImg from "@/assets/layers/03-inner-layer.png";
+import frameLayer from "@/assets/layers/04-frame.png";
+import batteryLayer from "@/assets/layers/05-battery.png";
+import boardLayer from "@/assets/layers/06-board.png";
+import cameraLayer from "@/assets/layers/07-camera.png";
+import coilLayer from "@/assets/layers/08-coil.png";
+import bottomComponentLayer from "@/assets/layers/09-bottom-component.png";
+import screwsLayer from "@/assets/layers/10-screws.png";
+import backCoverLayer from "@/assets/layers/11-back-cover.png";
+
 const modalities = [
   {
     title: "Compre",
@@ -125,15 +137,15 @@ const Home = () => {
         }
 
         phone.style.transform = `
-          rotateY(${currentX * 7}deg)
-          rotateX(${-currentY * 7}deg)
+          rotateY(${currentX * 15}deg)
+          rotateX(${-currentY * 15}deg)
         `;
 
         layers.forEach((layer) => {
           const depth = Number(layer.getAttribute("data-depth") || 0);
-          const moveX = currentX * depth * 90;
-          const moveY = currentY * depth * 90;
-          const moveZ = depth * 90;
+          const moveX = currentX * depth * 160;
+          const moveY = currentY * depth * 160;
+          const moveZ = depth * 220;
 
           layer.style.transform = `
             translate3d(${moveX}px, ${moveY}px, ${moveZ}px)
@@ -144,6 +156,13 @@ const Home = () => {
       };
 
       animateParallax();
+    } else {
+      // Fallback estático com profundidade 3D para quem prefere movimento reduzido
+      layers.forEach((layer) => {
+        const depth = Number(layer.getAttribute("data-depth") || 0);
+        const moveZ = depth * 220;
+        layer.style.transform = `translate3d(0px, 0px, ${moveZ}px)`;
+      });
     }
 
     return () => {
@@ -252,20 +271,20 @@ const Home = () => {
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.6, delay: 0.15 }}
-                className="relative w-full max-w-[380px] md:max-w-[420px] aspect-[3/4] flex items-center justify-center py-6"
+                className="relative w-full max-w-[380px] md:max-w-[420px] aspect-square flex items-center justify-center py-6"
               >
                 <div ref={phoneRef} className="phone-3d" id="phone3d">
-                  <img src="/layers/01-glass.png" className="layer" data-depth="0.20" alt="Vidro frontal" />
-                  <img src="/layers/02-screen.png" className="layer" data-depth="0.16" alt="Tela/Display" />
-                  <img src="/layers/03-inner-layer.png" className="layer" data-depth="0.12" alt="Camada interna" />
-                  <img src="/layers/04-frame.png" className="layer" data-depth="0.10" alt="Estrutura" />
-                  <img src="/layers/05-battery.png" className="layer" data-depth="0.08" alt="Bateria" />
-                  <img src="/layers/06-board.png" className="layer" data-depth="0.13" alt="Placa mãe" />
-                  <img src="/layers/07-camera.png" className="layer" data-depth="0.15" alt="Câmeras" />
-                  <img src="/layers/08-coil.png" className="layer" data-depth="0.11" alt="Bobina de carregamento" />
-                  <img src="/layers/09-bottom-component.png" className="layer" data-depth="0.09" alt="Componentes inferiores" />
-                  <img src="/layers/10-screws.png" className="layer" data-depth="0.22" alt="Parafusos" />
-                  <img src="/layers/11-back-cover.png" className="layer" data-depth="0.06" alt="Tampa traseira" />
+                  <img src={backCoverLayer} className="layer layer-shadow" data-depth="0.06" alt="Tampa traseira" />
+                  <img src={batteryLayer} className="layer" data-depth="0.08" alt="Bateria" />
+                  <img src={bottomComponentLayer} className="layer" data-depth="0.09" alt="Componentes inferiores" />
+                  <img src={frameLayer} className="layer layer-shadow" data-depth="0.10" alt="Estrutura" />
+                  <img src={coilLayer} className="layer" data-depth="0.11" alt="Bobina de carregamento" />
+                  <img src={innerLayerImg} className="layer" data-depth="0.12" alt="Camada interna" />
+                  <img src={boardLayer} className="layer" data-depth="0.13" alt="Placa mãe" />
+                  <img src={cameraLayer} className="layer" data-depth="0.15" alt="Câmeras" />
+                  <img src={screenLayer} className="layer layer-shadow" data-depth="0.16" alt="Tela/Display" />
+                  <img src={glassLayer} className="layer" data-depth="0.20" alt="Vidro frontal" />
+                  <img src={screwsLayer} className="layer" data-depth="0.22" alt="Parafusos" />
                 </div>
               </motion.div>
             </div>
