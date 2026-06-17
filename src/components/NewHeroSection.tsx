@@ -4,6 +4,8 @@ import { MapPin, Clock, Shield, Zap, Award, CheckCircle2 } from "lucide-react";
 import reparoPhone from "@/assets/broken-phone-hero.png";
 import trocaPhone from "@/assets/troca.png";
 import comprePhone from "@/assets/compre.png";
+import handLeft from "@/assets/hand-left.png";
+import handRight from "@/assets/hand-right.png";
 import { useCountdownTimer } from "@/hooks/useCountdownTimer";
 import type { LandingVariant } from "@/types/landing";
 
@@ -186,160 +188,308 @@ const NewHeroSection = ({ variant = "repare" }: NewHeroSectionProps) => {
       <div className="container mx-auto px-4 relative z-10">
         <div className="max-w-7xl mx-auto">
           {/* Two Column Layout */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-12 items-center">
-            {/* Left Column - Text Content */}
-            <div className="flex flex-col items-center lg:items-start text-center lg:text-left order-2 lg:order-1">
-              {/* Badges Row */}
-              <motion.div
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6 }}
-                className="flex flex-wrap items-center gap-2 md:gap-3 mb-4 md:mb-6 justify-center lg:justify-start"
-              >
-                <div className="inline-flex items-center gap-1.5 md:gap-2 bg-card/80 backdrop-blur-sm px-3 py-1.5 md:px-4 md:py-2 rounded-full border border-border/50">
-                  <MapPin className="w-3 h-3 text-primary" />
-                  <span className="text-[10px] md:text-xs font-medium text-foreground uppercase">Guarulhos, SP</span>
-                </div>
-                
-                <div className="inline-flex items-center gap-1.5 md:gap-2 bg-primary text-primary-foreground px-3 py-1.5 md:px-4 md:py-2 rounded-full">
-                  <Clock className="w-3 h-3" />
-                  <span className="text-[10px] md:text-xs font-semibold uppercase">{content.eyebrow}</span>
-                  <span className="text-[10px] md:text-xs opacity-70">|</span>
-                  <HeroCountdown />
-                </div>
-              </motion.div>
-
-              {/* Main Heading */}
-              <motion.h1
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.2 }}
-                className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-foreground mb-3 md:mb-4 leading-tight tracking-tight"
-              >
-                {content.title}{" "}
-                <span className="text-primary relative">
-                  {content.highlight}
-                </span>
-              </motion.h1>
-
-              {/* Description */}
-              <motion.p
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
+          {variant === "troque" ? (
+            <div className="relative w-full py-6 md:py-12">
+              {/* Left Hand Image */}
+              <motion.img
+                initial={{ opacity: 0, x: -80 }}
+                animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.8, delay: 0.4 }}
-                className="text-sm md:text-base lg:text-lg text-muted-foreground mb-4 md:mb-6 max-w-lg"
-              >
-                {content.description}
-              </motion.p>
+                src={handLeft}
+                alt="Mão entregando celular"
+                className="absolute left-[-5%] xl:left-[0%] top-1/2 -translate-y-1/2 w-[240px] xl:w-[320px] object-contain pointer-events-none hidden lg:block drop-shadow-[0_25px_25px_rgba(0,0,0,0.15)]"
+              />
+              
+              {/* Right Hand Image */}
+              <motion.img
+                initial={{ opacity: 0, x: 80 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8, delay: 0.4 }}
+                src={handRight}
+                alt="Mão recebendo celular"
+                className="absolute right-[-5%] xl:right-[0%] top-1/2 -translate-y-1/2 w-[240px] xl:w-[320px] object-contain pointer-events-none hidden lg:block drop-shadow-[0_25px_25px_rgba(0,0,0,0.15)]"
+              />
 
-              {/* Feature Pills */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.5 }}
-                className="flex flex-wrap gap-2 md:gap-3 mb-5 md:mb-6 justify-center lg:justify-start"
-              >
-                {content.features.map((feature, index) => (
-                  <motion.div
-                    key={feature.text}
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.4, delay: 0.6 + index * 0.1 }}
-                    className="flex items-center gap-1.5 bg-card/60 backdrop-blur-sm px-3 py-1.5 rounded-full border border-border/30"
-                  >
-                    <feature.icon className="w-3.5 h-3.5 text-primary" />
-                    <span className="text-[11px] md:text-xs font-medium text-foreground">{feature.text}</span>
-                  </motion.div>
-                ))}
-              </motion.div>
-
-              {/* CTA Button */}
-              <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.7 }}
-                className="mb-5 md:mb-6"
-              >
-                <Button
-                  size="lg"
-                  onClick={scrollToWhatsApp}
-                  className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold px-6 md:px-8 py-5 md:py-6 text-sm md:text-base rounded-full uppercase shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/30 transition-all duration-300 hover:-translate-y-0.5 group"
+              {/* Centered Content */}
+              <div className="flex flex-col items-center text-center max-w-2xl mx-auto relative z-20">
+                {/* Badges Row */}
+                <motion.div
+                  initial={{ opacity: 0, y: -20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6 }}
+                  className="flex flex-wrap items-center gap-2 md:gap-3 mb-4 md:mb-6 justify-center"
                 >
-                  <span>Solicitar Orçamento Grátis</span>
-                  <motion.span
-                    animate={{ x: [0, 4, 0] }}
-                    transition={{ duration: 1.5, repeat: Infinity }}
-                    className="ml-2"
-                  >
-                    →
-                  </motion.span>
-                </Button>
-              </motion.div>
-
-              {/* Social Proof */}
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.8, delay: 0.9 }}
-                className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3 md:gap-4"
-              >
-                <div className="flex -space-x-2">
-                  {[
-                    "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop",
-                    "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop",
-                    "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop",
-                    "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop",
-                  ].map((src, i) => (
-                    <img 
-                      key={i}
-                      src={src} 
-                      alt={`Cliente satisfeito ${i + 1}`}
-                      loading="lazy"
-                      decoding="async"
-                      className="w-8 h-8 md:w-10 md:h-10 rounded-full border-2 border-background object-cover"
-                    />
-                  ))}
-                </div>
-                <div className="flex flex-col items-center sm:items-start">
-                  <span className="text-xs md:text-sm font-bold text-foreground">+2000 Clientes Atendidos</span>
-                  <div className="flex items-center gap-1">
-                    <CheckCircle2 className="w-3 h-3 text-green-500" />
-                    <span className="text-[10px] md:text-xs text-muted-foreground">Avaliação 4.9/5 no Google</span>
+                  <div className="inline-flex items-center gap-1.5 md:gap-2 bg-card/80 backdrop-blur-sm px-3 py-1.5 md:px-4 md:py-2 rounded-full border border-border/50">
+                    <MapPin className="w-3 h-3 text-primary" />
+                    <span className="text-[10px] md:text-xs font-medium text-foreground uppercase">Guarulhos, SP</span>
                   </div>
-                </div>
+                  
+                  <div className="inline-flex items-center gap-1.5 md:gap-2 bg-primary text-primary-foreground px-3 py-1.5 md:px-4 md:py-2 rounded-full">
+                    <Clock className="w-3 h-3" />
+                    <span className="text-[10px] md:text-xs font-semibold uppercase">{content.eyebrow}</span>
+                    <span className="text-[10px] md:text-xs opacity-70">|</span>
+                    <HeroCountdown />
+                  </div>
+                </motion.div>
+
+                {/* Main Heading */}
+                <motion.h1
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: 0.2 }}
+                  className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-foreground mb-3 md:mb-4 leading-tight tracking-tight"
+                >
+                  {content.title}{" "}
+                  <span className="text-primary relative block sm:inline">
+                    {content.highlight}
+                  </span>
+                </motion.h1>
+
+                {/* Description */}
+                <motion.p
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: 0.4 }}
+                  className="text-sm md:text-base lg:text-lg text-muted-foreground mb-4 md:mb-6 max-w-lg"
+                >
+                  {content.description}
+                </motion.p>
+
+                {/* Feature Pills */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.5 }}
+                  className="flex flex-wrap gap-2 md:gap-3 mb-5 md:mb-6 justify-center"
+                >
+                  {content.features.map((feature, index) => (
+                    <motion.div
+                      key={feature.text}
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ duration: 0.4, delay: 0.6 + index * 0.1 }}
+                      className="flex items-center gap-1.5 bg-card/60 backdrop-blur-sm px-3 py-1.5 rounded-full border border-border/30"
+                    >
+                      <feature.icon className="w-3.5 h-3.5 text-primary" />
+                      <span className="text-[11px] md:text-xs font-medium text-foreground">{feature.text}</span>
+                    </motion.div>
+                  ))}
+                </motion.div>
+
+                {/* CTA Button */}
+                <motion.div
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: 0.7 }}
+                  className="mb-5 md:mb-6"
+                >
+                  <Button
+                    size="lg"
+                    onClick={scrollToWhatsApp}
+                    className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold px-6 md:px-8 py-5 md:py-6 text-sm md:text-base rounded-full uppercase shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/30 transition-all duration-300 hover:-translate-y-0.5 group"
+                  >
+                    <span>Solicitar Orçamento Grátis</span>
+                    <motion.span
+                      animate={{ x: [0, 4, 0] }}
+                      transition={{ duration: 1.5, repeat: Infinity }}
+                      className="ml-2"
+                    >
+                      →
+                    </motion.span>
+                  </Button>
+                </motion.div>
+
+                {/* Social Proof */}
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.8, delay: 0.9 }}
+                  className="flex flex-col sm:flex-row items-center justify-center gap-3 md:gap-4"
+                >
+                  <div className="flex -space-x-2">
+                    {[
+                      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop",
+                      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop",
+                      "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop",
+                      "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop",
+                    ].map((src, i) => (
+                      <img 
+                        key={i}
+                        src={src} 
+                        alt={`Cliente satisfeito ${i + 1}`}
+                        loading="lazy"
+                        decoding="async"
+                        className="w-8 h-8 md:w-10 md:h-10 rounded-full border-2 border-background object-cover"
+                      />
+                    ))}
+                  </div>
+                  <div className="flex flex-col items-center sm:items-start">
+                    <span className="text-xs md:text-sm font-bold text-foreground">+2000 Clientes Atendidos</span>
+                    <div className="flex items-center gap-1">
+                      <CheckCircle2 className="w-3 h-3 text-green-500" />
+                      <span className="text-[10px] md:text-xs text-muted-foreground">Avaliação 4.9/5 no Google</span>
+                    </div>
+                  </div>
+                </motion.div>
+              </div>
+            </div>
+          ) : (
+            /* Two Column Layout */
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-12 items-center">
+              {/* Left Column - Text Content */}
+              <div className="flex flex-col items-center lg:items-start text-center lg:text-left order-2 lg:order-1">
+                {/* Badges Row */}
+                <motion.div
+                  initial={{ opacity: 0, y: -20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6 }}
+                  className="flex flex-wrap items-center gap-2 md:gap-3 mb-4 md:mb-6 justify-center lg:justify-start"
+                >
+                  <div className="inline-flex items-center gap-1.5 md:gap-2 bg-card/80 backdrop-blur-sm px-3 py-1.5 md:px-4 md:py-2 rounded-full border border-border/50">
+                    <MapPin className="w-3 h-3 text-primary" />
+                    <span className="text-[10px] md:text-xs font-medium text-foreground uppercase">Guarulhos, SP</span>
+                  </div>
+                  
+                  <div className="inline-flex items-center gap-1.5 md:gap-2 bg-primary text-primary-foreground px-3 py-1.5 md:px-4 md:py-2 rounded-full">
+                    <Clock className="w-3 h-3" />
+                    <span className="text-[10px] md:text-xs font-semibold uppercase">{content.eyebrow}</span>
+                    <span className="text-[10px] md:text-xs opacity-70">|</span>
+                    <HeroCountdown />
+                  </div>
+                </motion.div>
+
+                {/* Main Heading */}
+                <motion.h1
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: 0.2 }}
+                  className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-foreground mb-3 md:mb-4 leading-tight tracking-tight"
+                >
+                  {content.title}{" "}
+                  <span className="text-primary relative">
+                    {content.highlight}
+                  </span>
+                </motion.h1>
+
+                {/* Description */}
+                <motion.p
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: 0.4 }}
+                  className="text-sm md:text-base lg:text-lg text-muted-foreground mb-4 md:mb-6 max-w-lg"
+                >
+                  {content.description}
+                </motion.p>
+
+                {/* Feature Pills */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.5 }}
+                  className="flex flex-wrap gap-2 md:gap-3 mb-5 md:mb-6 justify-center lg:justify-start"
+                >
+                  {content.features.map((feature, index) => (
+                    <motion.div
+                      key={feature.text}
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ duration: 0.4, delay: 0.6 + index * 0.1 }}
+                      className="flex items-center gap-1.5 bg-card/60 backdrop-blur-sm px-3 py-1.5 rounded-full border border-border/30"
+                    >
+                      <feature.icon className="w-3.5 h-3.5 text-primary" />
+                      <span className="text-[11px] md:text-xs font-medium text-foreground">{feature.text}</span>
+                    </motion.div>
+                  ))}
+                </motion.div>
+
+                {/* CTA Button */}
+                <motion.div
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: 0.7 }}
+                  className="mb-5 md:mb-6"
+                >
+                  <Button
+                    size="lg"
+                    onClick={scrollToWhatsApp}
+                    className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold px-6 md:px-8 py-5 md:py-6 text-sm md:text-base rounded-full uppercase shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/30 transition-all duration-300 hover:-translate-y-0.5 group"
+                  >
+                    <span>Solicitar Orçamento Grátis</span>
+                    <motion.span
+                      animate={{ x: [0, 4, 0] }}
+                      transition={{ duration: 1.5, repeat: Infinity }}
+                      className="ml-2"
+                    >
+                      →
+                    </motion.span>
+                  </Button>
+                </motion.div>
+
+                {/* Social Proof */}
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.8, delay: 0.9 }}
+                  className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3 md:gap-4"
+                >
+                  <div className="flex -space-x-2">
+                    {[
+                      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop",
+                      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop",
+                      "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop",
+                      "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop",
+                    ].map((src, i) => (
+                      <img 
+                        key={i}
+                        src={src} 
+                        alt={`Cliente satisfeito ${i + 1}`}
+                        loading="lazy"
+                        decoding="async"
+                        className="w-8 h-8 md:w-10 md:h-10 rounded-full border-2 border-background object-cover"
+                      />
+                    ))}
+                  </div>
+                  <div className="flex flex-col items-center sm:items-start">
+                    <span className="text-xs md:text-sm font-bold text-foreground">+2000 Clientes Atendidos</span>
+                    <div className="flex items-center gap-1">
+                      <CheckCircle2 className="w-3 h-3 text-green-500" />
+                      <span className="text-[10px] md:text-xs text-muted-foreground">Avaliação 4.9/5 no Google</span>
+                    </div>
+                  </div>
+                </motion.div>
+              </div>
+
+              {/* Right Column - Phone Image */}
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.8, delay: 0.5 }}
+                className="order-1 lg:order-2 flex justify-center lg:justify-end relative"
+              >
+                <motion.div
+                  animate={{ y: [0, 10, 0], x: [0, -5, 0] }}
+                  transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+                  className="absolute bottom-8 md:bottom-16 right-0 md:right-4 bg-primary/90 text-primary-foreground px-3 py-2 rounded-lg shadow-lg hidden sm:block"
+                >
+                  <div className="flex items-center gap-2">
+                    <Zap className="w-3 h-3" />
+                    <span className="text-[10px] md:text-xs font-bold">{content.floatingBadge}</span>
+                  </div>
+                </motion.div>
+
+                {/* Phone Image */}
+                <motion.img 
+                  animate={{ y: [0, -10, 0] }}
+                  transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                  src={heroImages[variant]} 
+                  alt={content.imageAlt} 
+                  fetchPriority="high"
+                  decoding="async"
+                  className="w-full max-w-[160px] md:max-w-[220px] lg:max-w-[280px] drop-shadow-2xl relative z-10"
+                />
               </motion.div>
             </div>
-
-            {/* Right Column - Phone Image */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.8, delay: 0.5 }}
-              className="order-1 lg:order-2 flex justify-center lg:justify-end relative"
-            >
-              <motion.div
-                animate={{ y: [0, 10, 0], x: [0, -5, 0] }}
-                transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
-                className="absolute bottom-8 md:bottom-16 right-0 md:right-4 bg-primary/90 text-primary-foreground px-3 py-2 rounded-lg shadow-lg hidden sm:block"
-              >
-                <div className="flex items-center gap-2">
-                  <Zap className="w-3 h-3" />
-                  <span className="text-[10px] md:text-xs font-bold">{content.floatingBadge}</span>
-                </div>
-              </motion.div>
-
-              {/* Phone Image */}
-              <motion.img 
-                animate={{ y: [0, -10, 0] }}
-                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                src={heroImages[variant]} 
-                alt={content.imageAlt} 
-                fetchPriority="high"
-                decoding="async"
-                className="w-full max-w-[160px] md:max-w-[220px] lg:max-w-[280px] drop-shadow-2xl relative z-10"
-              />
-            </motion.div>
-          </div>
+          )}
         </div>
       </div>
     </section>
