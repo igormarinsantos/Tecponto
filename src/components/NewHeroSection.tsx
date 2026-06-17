@@ -205,7 +205,7 @@ const NewHeroSection = ({ variant = "repare" }: NewHeroSectionProps) => {
                 }}
                 src={handLeft}
                 alt="Mão entregando celular"
-                className="absolute left-[-5%] xl:left-[0%] top-1/2 w-[240px] xl:w-[320px] object-contain pointer-events-none hidden lg:block drop-shadow-[0_25px_25px_rgba(0,0,0,0.15)]"
+                className="absolute left-[-5%] xl:left-[0%] top-1/2 w-[42%] xl:w-[48%] max-w-[620px] object-contain pointer-events-none hidden lg:block drop-shadow-[0_25px_25px_rgba(0,0,0,0.15)]"
               />
               
               {/* Right Hand Image */}
@@ -223,7 +223,7 @@ const NewHeroSection = ({ variant = "repare" }: NewHeroSectionProps) => {
                 }}
                 src={handRight}
                 alt="Mão recebendo celular"
-                className="absolute right-[-5%] xl:right-[0%] top-1/2 w-[240px] xl:w-[320px] object-contain pointer-events-none hidden lg:block drop-shadow-[0_25px_25px_rgba(0,0,0,0.15)]"
+                className="absolute right-[-5%] xl:right-[0%] top-1/2 w-[42%] xl:w-[48%] max-w-[620px] object-contain pointer-events-none hidden lg:block drop-shadow-[0_25px_25px_rgba(0,0,0,0.15)]"
               />
 
               {/* Centered Content */}
@@ -328,7 +328,7 @@ const NewHeroSection = ({ variant = "repare" }: NewHeroSectionProps) => {
                     alt="Celular antigo usado"
                     animate={{ y: [0, -6, 0], rotate: [-2, 0, -2] }}
                     transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
-                    className="absolute left-[-8%] w-[65%] object-contain drop-shadow-xl z-10"
+                    className="absolute left-[-8%] w-[80%] object-contain drop-shadow-xl z-10"
                   />
                   
                   {/* Swap icon */}
@@ -346,7 +346,7 @@ const NewHeroSection = ({ variant = "repare" }: NewHeroSectionProps) => {
                     alt="Celular novo premium"
                     animate={{ y: [0, 6, 0], rotate: [2, 0, 2] }}
                     transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 0.4 }}
-                    className="absolute right-[-8%] w-[65%] object-contain drop-shadow-2xl z-20"
+                    className="absolute right-[-8%] w-[80%] object-contain drop-shadow-2xl z-20"
                   />
                 </motion.div>
 
