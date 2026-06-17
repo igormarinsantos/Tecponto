@@ -41,10 +41,10 @@ const Index = ({ variant = "repare" }: IndexProps) => {
       <NewServicesSection variant={variant} />
 
       {/* Warranty Section */}
-      <WarrantySection />
+      <WarrantySection variant={variant} />
 
       {/* Delivery Section */}
-      <DeliverySection />
+      <DeliverySection variant={variant} />
 
       {/* WhatsApp Chat Simulation */}
       <WhatsAppChatSection variant={variant} />
