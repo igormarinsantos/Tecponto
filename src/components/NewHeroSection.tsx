@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { MapPin, Clock, Shield, Zap, Award, CheckCircle2 } from "lucide-react";
-import reparoPhone from "@/assets/reparo.png";
+import reparoPhone from "@/assets/broken-phone-hero.png";
 import trocaPhone from "@/assets/troca.png";
 import comprePhone from "@/assets/compre.png";
 import { useCountdownTimer } from "@/hooks/useCountdownTimer";
