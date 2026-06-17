@@ -14,10 +14,10 @@ const mainLinks = [
 
 const Footer = () => {
   return (
-    <footer className="border-t border-border bg-background py-12 md:py-16">
+    <footer className="bg-background py-12 md:py-16">
       <div className="container mx-auto px-4 max-w-[1360px]">
         {/* Top row: Navigation and Socials */}
-        <div className="flex flex-col md:flex-row items-center justify-between gap-8 pb-10 border-b border-border/60">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-8 pb-10">
           {/* Navigation links */}
           <nav className="flex flex-wrap justify-center md:justify-start gap-x-8 gap-y-3 text-sm font-semibold text-muted-foreground">
             {mainLinks.map((item) =>
@@ -77,9 +77,8 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* Middle row: Copyright and brief info */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 py-8 text-xs text-muted-foreground/60 uppercase tracking-widest font-semibold">
-          <p>&copy; {new Date().getFullYear()} TecPonto. Todos os direitos reservados.</p>
+        {/* Middle row: brief info */}
+        <div className="flex justify-center py-8 text-xs text-muted-foreground/60 uppercase tracking-widest font-semibold">
           <p>Compre. Troque. Repare.</p>
         </div>
 
