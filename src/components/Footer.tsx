@@ -77,11 +77,6 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* Middle row: brief info */}
-        <div className="flex justify-center py-8 text-xs text-muted-foreground/60 uppercase tracking-widest font-semibold">
-          <p>Compre. Troque. Repare.</p>
-        </div>
-
         {/* Bottom row: Large full width logo as watermark */}
         <div className="pt-4 flex justify-center items-center">
           <NavLink
