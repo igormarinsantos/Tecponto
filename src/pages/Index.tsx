@@ -27,9 +27,7 @@ const Index = ({ variant = "repare" }: IndexProps) => {
       <WhatsAppButton variant={variant} />
       
       {/* Hero Section - Centered with countdown */}
-      <section id="hero" className="pt-20">
-        <NewHeroSection variant={variant} />
-      </section>
+      <NewHeroSection variant={variant} />
 
       {/* Brand Carousel */}
       <BrandCarousel />

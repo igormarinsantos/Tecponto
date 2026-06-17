@@ -171,7 +171,7 @@ const NewHeroSection = ({ variant = "repare" }: NewHeroSectionProps) => {
   const content = heroContent[variant];
 
   return (
-    <section id="hero" className="relative min-h-[100dvh] flex items-center bg-background overflow-hidden py-6 md:py-12">
+    <section id="hero" className="relative min-h-[100dvh] flex items-center bg-background overflow-hidden pt-24 md:pt-28 pb-12">
       {/* Decorative background elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {/* Grid pattern */}
