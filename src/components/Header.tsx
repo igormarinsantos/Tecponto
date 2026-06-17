@@ -3,7 +3,6 @@ import { NavLink, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ChevronDown, Menu, X } from "lucide-react";
 import logo from "@/assets/logo-horizontal.png";
-import shopeeLogo from "@/assets/shopee-logo.svg";
 import perfectPhone from "@/assets/compre.png";
 import motoboy from "@/assets/troca.png";
 import brokenPhone from "@/assets/reparo.png";
@@ -196,12 +195,11 @@ const Header = () => {
               className={`font-bold uppercase ${
                 isHomeTop
                   ? "border-white/55 bg-white/10 text-white hover:bg-white hover:text-primary"
-                  : "border-[#ee4d2d]/30 text-[#ee4d2d] hover:bg-[#ee4d2d]/10 hover:text-[#ee4d2d]"
+                  : "border-primary/30 text-primary hover:bg-primary/10 hover:text-primary"
               }`}
             >
               <a href={SHOPEE_STORE_URL} target="_blank" rel="noopener noreferrer">
-                <img src={shopeeLogo} alt="" className="mr-2 h-4 w-4" />
-                Loja Shopee
+                Nossa Loja
               </a>
             </Button>
             <Button
@@ -275,11 +273,10 @@ const Header = () => {
               <Button
                 asChild
                 variant="outline"
-                className="border-[#ee4d2d]/30 text-[#ee4d2d] w-full font-bold uppercase hover:bg-[#ee4d2d]/10 hover:text-[#ee4d2d] mt-2"
+                className="border-primary/30 text-primary w-full font-bold uppercase hover:bg-primary/10 hover:text-primary mt-2"
               >
                 <a href={SHOPEE_STORE_URL} target="_blank" rel="noopener noreferrer">
-                  <img src={shopeeLogo} alt="" className="mr-2 h-4 w-4" />
-                  Acessar loja Shopee
+                  Nossa Loja
                 </a>
               </Button>
 
