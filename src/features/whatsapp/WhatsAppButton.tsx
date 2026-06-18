@@ -13,7 +13,7 @@ const WhatsAppButton = ({ variant }: WhatsAppButtonProps) => {
   const [offerVisible, setOfferVisible] = useState(false);
   const lastScrollY = useRef(0);
   const animationFrame = useRef<number | null>(null);
-  const shouldAvoidOfferBanner = Boolean(variant);
+  const shouldAvoidOfferBanner = Boolean(variant && variant !== "troque");
 
   useEffect(() => {
     const updateVisibility = () => {
@@ -53,8 +53,8 @@ const WhatsAppButton = ({ variant }: WhatsAppButtonProps) => {
         transition={{ duration: 0.25, delay: isOpen ? 0 : 1 }}
         whileHover={{ scale: 1.06 }}
         whileTap={{ scale: 0.94 }}
-        style={{ bottom: shouldAvoidOfferBanner && offerVisible ? "6.5rem" : "1.5rem" }}
-        className="fixed right-3 md:right-6 z-40 w-14 h-14 md:w-16 md:h-16 bg-[#25D366] hover:bg-[#20BA5A] rounded-full flex items-center justify-center group transition-all duration-300 shadow-strong"
+        style={{ bottom: shouldAvoidOfferBanner && offerVisible ? "7rem" : "2rem" }}
+        className="fixed right-5 md:right-8 z-40 w-14 h-14 md:w-16 md:h-16 bg-[#25D366] hover:bg-[#20BA5A] rounded-full flex items-center justify-center group transition-all duration-300 shadow-strong"
         aria-label="Abrir conversa no WhatsApp"
       >
         <img src={whatsappLogo} alt="WhatsApp" className="w-8 h-8 md:w-9 md:h-9 invert group-hover:scale-110 transition-transform" />

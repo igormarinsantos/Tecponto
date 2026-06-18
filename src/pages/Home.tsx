@@ -107,7 +107,7 @@ const Home = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentWordIndex((prev) => (prev + 1) % words.length);
-    }, 2500);
+    }, 4000);
     return () => clearInterval(interval);
   }, []);
 
@@ -135,7 +135,7 @@ const Home = () => {
 
         <div className="container mx-auto px-4 relative z-10">
           <div className="grid items-center gap-12 lg:grid-cols-[1.05fr_0.95fr] max-w-[1360px] mx-auto">
-            <div className="text-left text-white">
+            <div className="p-2 text-left text-white">
               <h1 className="text-4xl md:text-6xl font-black leading-[1.2] tracking-tight text-white max-w-2xl min-h-[2.8em] md:min-h-[2.4em]">
                 Ajudamos você a{" "}
                 <span className="inline-block relative h-[1.25em] w-[140px] md:w-[220px] overflow-hidden align-middle mx-1 md:mx-2">
@@ -145,7 +145,7 @@ const Home = () => {
                       initial={{ y: 28, opacity: 0 }}
                       animate={{ y: 0, opacity: 1 }}
                       exit={{ y: -28, opacity: 0 }}
-                      transition={{ duration: 0.35, ease: "easeOut" }}
+                      transition={{ duration: 0.55, ease: "easeOut" }}
                       className="absolute inset-x-0 top-0 bottom-0 flex items-center justify-center rounded-2xl bg-white text-[#25292D] transform -skew-x-3 font-black text-2xl md:text-5xl uppercase"
                     >
                       {words[currentWordIndex]}
@@ -228,7 +228,7 @@ const Home = () => {
                       initial={{ opacity: 0, y: 24, scale: 0.94 }}
                       animate={{ opacity: 1, y: 0, scale: 1 }}
                       exit={{ opacity: 0, y: -24, scale: 0.96 }}
-                      transition={{ duration: 0.45, ease: "easeOut" }}
+                      transition={{ duration: 0.7, ease: "easeOut" }}
                       className="ml-auto max-h-[480px] w-full object-contain object-right drop-shadow-[0_28px_38px_rgba(0,0,0,0.22)] md:max-h-[590px]"
                     />
                   </AnimatePresence>

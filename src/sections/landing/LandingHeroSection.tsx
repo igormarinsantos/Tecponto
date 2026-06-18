@@ -1,13 +1,14 @@
 import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { MapPin, Clock, Shield, Zap, Award, CheckCircle2, RefreshCw } from "lucide-react";
+import { ArrowRight, Clock, PlayCircle, RefreshCw, Shield, ShieldCheck, ShoppingBag, Star, Wrench, Zap, type LucideIcon } from "lucide-react";
 import reparoPhone from "@/assets/repare/repare-hero-phone.png";
 import trocaPhone from "@/assets/devices/troca.png";
 import comprePhone from "@/assets/devices/compre.png";
 import handLeft from "@/assets/devices/hand-old-phone.png";
 import handRight from "@/assets/devices/hand-new-phone.png";
 import { useCountdownTimer } from "@/hooks/useCountdownTimer";
+import { SHOPEE_STORE_URL } from "@/constants/links";
 import type { LandingVariant } from "@/types/landing";
 
 // Import glass shard PNG cutouts
@@ -61,19 +62,18 @@ const heroContent: Record<LandingVariant, {
 }> = {
   repare: {
     eyebrow: "10% OFF Novos Clientes",
-    title: "Seu celular",
-    highlight: "quebrou?",
+    title: "Seu celular resolvido",
+    highlight: "sem enrolação.",
     description: (
       <>
-        <span className="font-bold text-foreground">Conserto rápido</span>,{" "}
-        <span className="font-bold text-foreground">garantia de 90 dias</span> e{" "}
-        <span className="font-bold text-foreground">atendimento especializado</span> que você merece
+        <span className="font-bold text-foreground">Repare com garantia</span> e{" "}
+        <span className="font-bold text-foreground">atendimento rápido</span>. Receba seu orçamento direto pelo WhatsApp.
       </>
     ),
     features: [
-      { icon: Zap, text: "Reparo Rápido" },
-      { icon: Shield, text: "90 Dias Garantia" },
-      { icon: Award, text: "Peças Originais" },
+      { icon: ShieldCheck, text: "90 dias de garantia" },
+      { icon: Zap, text: "Atendimento ágil" },
+      { icon: Wrench, text: "Peças de qualidade" },
     ],
     floatingBadge: "Reparo em 2h",
     imageAlt: "Celular quebrado - Conserto profissional",
@@ -81,17 +81,17 @@ const heroContent: Record<LandingVariant, {
   troque: {
     eyebrow: "Avaliação rápida do seu usado",
     title: "Troque seu celular",
-    highlight: "sem enrolação",
+    highlight: "com segurança.",
     description: (
       <>
-        <span className="font-bold text-foreground">Avaliamos seu aparelho</span>,{" "}
-        <span className="font-bold text-foreground">aceitamos como entrada</span> e te ajudamos a sair com um modelo melhor
+        <span className="font-bold text-foreground">Avaliação clara do seu usado</span>,{" "}
+        <span className="font-bold text-foreground">modelos revisados</span> e negociação sem complicação.
       </>
     ),
     features: [
       { icon: Zap, text: "Avaliação Rápida" },
-      { icon: Shield, text: "Troca Segura" },
-      { icon: Award, text: "Modelos Selecionados" },
+      { icon: ShieldCheck, text: "Troca segura" },
+      { icon: Star, text: "Linha revisada" },
     ],
     floatingBadge: "Troca facilitada",
     imageAlt: "Celular para troca - Avaliação TecPonto",
@@ -99,7 +99,7 @@ const heroContent: Record<LandingVariant, {
   compre: {
     eyebrow: "Celulares revisados e com garantia",
     title: "Compre seu próximo",
-    highlight: "celular",
+    highlight: "celular.",
     description: (
       <>
         <span className="font-bold text-foreground">Aparelhos selecionados</span>,{" "}
@@ -108,8 +108,8 @@ const heroContent: Record<LandingVariant, {
     ),
     features: [
       { icon: Zap, text: "Pronta Entrega" },
-      { icon: Shield, text: "Garantia TecPonto" },
-      { icon: Award, text: "Curadoria Técnica" },
+      { icon: ShieldCheck, text: "Garantia TecPonto" },
+      { icon: Star, text: "Curadoria Técnica" },
     ],
     floatingBadge: "Compra segura",
     imageAlt: "Celular revisado para venda - TecPonto",
@@ -222,6 +222,200 @@ const GlassShards = () => (
     ))}
   </div>
 );
+
+const modalityTabs = [
+  { variant: "repare" as const, label: "Reparo", href: "/repare", icon: Wrench },
+  { variant: "troque" as const, label: "Troca", href: "/troque", icon: RefreshCw },
+  { variant: "compre" as const, label: "Compra", href: SHOPEE_STORE_URL, icon: ShoppingBag, external: true },
+];
+
+const ctaLabels: Record<LandingVariant, string> = {
+  repare: "Solicitar reparo",
+  troque: "Iniciar avaliação",
+  compre: "Ver loja Shopee",
+};
+
+const statCards: Record<LandingVariant, Array<{ value: string; label: string; icon: LucideIcon }>> = {
+  repare: [
+    { value: "90", label: "dias de garantia", icon: ShieldCheck },
+    { value: "8+", label: "anos de experiência", icon: Star },
+    { value: "4.9", label: "avaliação média", icon: Zap },
+  ],
+  troque: [
+    { value: "5min", label: "pré-avaliação", icon: Zap },
+    { value: "8+", label: "anos de experiência", icon: Star },
+    { value: "4.9", label: "avaliação média", icon: ShieldCheck },
+  ],
+  compre: [
+    { value: "100%", label: "revisados", icon: ShieldCheck },
+    { value: "8+", label: "anos de experiência", icon: Star },
+    { value: "4.9", label: "avaliação média", icon: Zap },
+  ],
+};
+
+const customerAvatars = [
+  "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop",
+  "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop",
+  "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop",
+  "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop",
+];
+
+type HeroConversionContentProps = {
+  variant: LandingVariant;
+  content: (typeof heroContent)[LandingVariant];
+  align?: "left" | "center";
+};
+
+const HeroConversionContent = ({ variant, content, align = "left" }: HeroConversionContentProps) => {
+  const isCentered = align === "center";
+  const selectedStats = statCards[variant];
+
+  return (
+    <>
+      <motion.div
+        initial={{ opacity: 0, y: -18 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.55 }}
+        className={`mb-4 flex flex-col gap-3 ${isCentered ? "items-center" : "items-center lg:items-start"}`}
+      >
+        <div className="inline-flex items-center gap-2 rounded-full bg-[#25292D]/90 px-3.5 py-2 text-[11px] font-bold text-white shadow-soft">
+          <ShieldCheck className="h-3.5 w-3.5 text-white" />
+          <span>Assistência técnica • Troca • Acessórios</span>
+        </div>
+
+        <div className="inline-flex rounded-full bg-[#25292D] p-1 shadow-strong">
+          {modalityTabs.map((tab) => {
+            const Icon = tab.icon;
+            const isActive = tab.variant === variant;
+            return (
+              <a
+                key={tab.variant}
+                href={tab.href}
+                target={tab.external ? "_blank" : undefined}
+                rel={tab.external ? "noopener noreferrer" : undefined}
+                className={`flex min-w-[96px] items-center justify-center gap-2 rounded-full px-4 py-2.5 text-sm font-bold transition-all ${
+                  isActive ? "bg-white text-primary shadow-soft" : "text-white/85 hover:text-white"
+                }`}
+              >
+                <Icon className="h-4 w-4" />
+                {tab.label}
+              </a>
+            );
+          })}
+        </div>
+      </motion.div>
+
+      <motion.h1
+        initial={{ opacity: 0, y: 28 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.75, delay: 0.12 }}
+        className={`mb-3 max-w-3xl text-4xl font-black leading-[0.98] tracking-tight text-white md:text-6xl lg:text-7xl ${
+          isCentered ? "text-center" : "text-center lg:text-left"
+        }`}
+      >
+        {content.title}{" "}
+        <span className="block text-white">{content.highlight}</span>
+      </motion.h1>
+
+      <motion.div
+        initial={{ opacity: 0, y: 24 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.7, delay: 0.22 }}
+        className={`mb-5 max-w-2xl ${isCentered ? "text-center" : "text-center lg:text-left"}`}
+      >
+        <p className="mb-2 text-xl font-black text-white md:text-2xl">
+          {variant === "troque" ? "Seu usado pode virar entrada." : variant === "compre" ? "Compre revisado e com garantia." : "Repare com garantia e atendimento rápido."}
+        </p>
+        <p className="text-base leading-relaxed text-white/90 md:text-lg [&_span]:text-white">{content.description}</p>
+      </motion.div>
+
+      <motion.div
+        initial={{ opacity: 0, y: 24 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.7, delay: 0.32 }}
+        className={`mb-5 flex flex-col gap-3 sm:flex-row ${isCentered ? "justify-center" : "justify-center lg:justify-start"}`}
+      >
+        <Button
+          size="lg"
+          onClick={variant === "compre" ? undefined : scrollToWhatsApp}
+          asChild={variant === "compre"}
+          className="h-14 rounded-xl bg-white px-7 text-base font-black text-[#25292D] shadow-strong transition-all hover:-translate-y-0.5 hover:bg-white/95"
+        >
+          {variant === "compre" ? (
+            <a href={SHOPEE_STORE_URL} target="_blank" rel="noopener noreferrer">
+              <ShoppingBag className="mr-2 h-5 w-5 text-primary" />
+              {ctaLabels[variant]}
+              <ArrowRight className="ml-4 h-5 w-5" />
+            </a>
+          ) : (
+            <>
+              <img src="/favicon.ico" alt="" className="mr-2 h-5 w-5 rounded-full" />
+              {ctaLabels[variant]}
+              <ArrowRight className="ml-4 h-5 w-5" />
+            </>
+          )}
+        </Button>
+
+        <Button
+          size="lg"
+          variant="outline"
+          onClick={scrollToWhatsApp}
+          className="h-14 rounded-xl border-white/30 bg-[#25292D]/35 px-7 text-base font-black text-white backdrop-blur hover:bg-[#25292D]/45 hover:text-white"
+        >
+          <PlayCircle className="mr-2 h-5 w-5" />
+          Como funciona
+        </Button>
+      </motion.div>
+
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.7, delay: 0.42 }}
+        className={`mb-6 flex flex-col gap-3 sm:flex-row sm:items-center ${isCentered ? "justify-center" : "justify-center lg:justify-start"}`}
+      >
+        <div className="flex -space-x-2">
+          {customerAvatars.map((src, index) => (
+            <img
+              key={src}
+              src={src}
+              alt={`Cliente TecPonto ${index + 1}`}
+              loading="lazy"
+              decoding="async"
+              className="h-9 w-9 rounded-full border-2 border-background object-cover"
+            />
+          ))}
+        </div>
+        <div className={`${isCentered ? "text-center sm:text-left" : "text-center sm:text-left"}`}>
+          <p className="text-sm font-black text-white">+2.000 atendimentos</p>
+          <div className="flex items-center justify-center gap-1 text-xs font-bold text-white sm:justify-start">
+            <span>Avaliação 4.9 no Google</span>
+            <span className="text-[#FFD33D]">★★★★★</span>
+          </div>
+        </div>
+      </motion.div>
+
+      <motion.div
+        initial={{ opacity: 0, y: 18 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.65, delay: 0.5 }}
+        className={`grid max-w-2xl grid-cols-3 gap-3 ${isCentered ? "mx-auto" : "mx-auto lg:mx-0"}`}
+      >
+        {selectedStats.map((stat) => {
+          const Icon = stat.icon;
+          return (
+            <div key={stat.label} className="rounded-2xl bg-white/10 p-3 text-white backdrop-blur">
+              <div className="mb-2 flex h-8 w-8 items-center justify-center rounded-full bg-white/15">
+                <Icon className="h-4 w-4" />
+              </div>
+              <div className="text-2xl font-black leading-none md:text-3xl">{stat.value}</div>
+              <div className="mt-1 text-[11px] font-semibold leading-tight text-white/80">{stat.label}</div>
+            </div>
+          );
+        })}
+      </motion.div>
+    </>
+  );
+};
 
 type LandingHeroSectionProps = {
   variant?: LandingVariant;
@@ -376,7 +570,7 @@ const LandingHeroSection = ({ variant = "repare" }: LandingHeroSectionProps) => 
   }, [variant]);
 
   return (
-    <section id="hero" className="relative min-h-[100dvh] flex items-center bg-background overflow-hidden pt-24 md:pt-28 pb-12">
+    <section id="hero" className="relative min-h-[100dvh] flex items-center overflow-hidden bg-[#FF4B00] pt-24 md:pt-28 pb-12">
       {/* Decorative background elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {/* Grid pattern */}
@@ -439,92 +633,7 @@ const LandingHeroSection = ({ variant = "repare" }: LandingHeroSectionProps) => 
             <div className="relative w-full py-6 md:py-12">
               {/* Centered Content */}
               <div className="flex flex-col items-center text-center max-w-4xl mx-auto relative z-20">
-                {/* Badges Row */}
-                <motion.div
-                  initial={{ opacity: 0, y: -20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6 }}
-                  className="flex flex-wrap items-center gap-2 md:gap-3 mb-4 md:mb-6 justify-center"
-                >
-                  <div className="inline-flex items-center gap-1.5 md:gap-2 bg-card/80 backdrop-blur-sm px-3 py-1.5 md:px-4 md:py-2 rounded-full border border-border/50">
-                    <MapPin className="w-3 h-3 text-primary" />
-                    <span className="text-[10px] md:text-xs font-medium text-foreground uppercase">Guarulhos, SP</span>
-                  </div>
-                  
-                  <div className="inline-flex items-center gap-1.5 md:gap-2 bg-primary text-primary-foreground px-3 py-1.5 md:px-4 md:py-2 rounded-full">
-                    <Clock className="w-3 h-3" />
-                    <span className="text-[10px] md:text-xs font-semibold uppercase">{content.eyebrow}</span>
-                    <span className="text-[10px] md:text-xs opacity-70">|</span>
-                    <HeroCountdown />
-                  </div>
-                </motion.div>
-
-                {/* Main Heading */}
-                <motion.h1
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.8, delay: 0.2 }}
-                  className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-foreground mb-3 md:mb-4 leading-tight tracking-tight"
-                >
-                  {content.title}{" "}
-                  <span className="text-primary relative block sm:inline">
-                    {content.highlight}
-                  </span>
-                </motion.h1>
-
-                {/* Description */}
-                <motion.p
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.8, delay: 0.4 }}
-                  className="text-sm md:text-base lg:text-lg text-muted-foreground mb-4 md:mb-6 max-w-2xl"
-                >
-                  {content.description}
-                </motion.p>
-
-                {/* Feature Pills */}
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 0.5 }}
-                  className="flex flex-wrap gap-2 md:gap-3 mb-5 md:mb-6 justify-center"
-                >
-                  {content.features.map((feature, index) => (
-                    <motion.div
-                      key={feature.text}
-                      initial={{ opacity: 0, scale: 0.8 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      transition={{ duration: 0.4, delay: 0.6 + index * 0.1 }}
-                      className="flex items-center gap-1.5 bg-card/60 backdrop-blur-sm px-3 py-1.5 rounded-full border border-border/30"
-                    >
-                      <feature.icon className="w-3.5 h-3.5 text-primary" />
-                      <span className="text-[11px] md:text-xs font-medium text-foreground">{feature.text}</span>
-                    </motion.div>
-                  ))}
-                </motion.div>
-
-                {/* CTA Button */}
-                <motion.div
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.8, delay: 0.7 }}
-                  className="mb-5 md:mb-6"
-                >
-                  <Button
-                    size="lg"
-                    onClick={scrollToWhatsApp}
-                    className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold px-6 md:px-8 py-5 md:py-6 text-sm md:text-base rounded-full uppercase shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/30 transition-all duration-300 hover:-translate-y-0.5 group"
-                  >
-                    <span>Solicitar Orçamento Grátis</span>
-                    <motion.span
-                      animate={{ x: [0, 4, 0] }}
-                      transition={{ duration: 1.5, repeat: Infinity }}
-                      className="ml-2"
-                    >
-                      →
-                    </motion.span>
-                  </Button>
-                </motion.div>
+                <HeroConversionContent variant={variant} content={content} align="center" />
 
                 {/* Mobile/Tablet image showcase (hidden on desktop) */}
                 <motion.div
@@ -561,38 +670,7 @@ const LandingHeroSection = ({ variant = "repare" }: LandingHeroSectionProps) => 
                   />
                 </motion.div>
 
-                {/* Social Proof */}
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.8, delay: 0.9 }}
-                  className="flex flex-col sm:flex-row items-center justify-center gap-3 md:gap-4"
-                >
-                  <div className="flex -space-x-2">
-                    {[
-                      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop",
-                      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop",
-                      "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop",
-                      "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop",
-                    ].map((src, i) => (
-                      <img 
-                        key={i}
-                        src={src} 
-                        alt={`Cliente satisfeito ${i + 1}`}
-                        loading="lazy"
-                        decoding="async"
-                        className="w-8 h-8 md:w-10 md:h-10 rounded-full border-2 border-background object-cover"
-                      />
-                    ))}
-                  </div>
-                  <div className="flex flex-col items-center sm:items-start">
-                    <span className="text-xs md:text-sm font-bold text-foreground">+2000 Clientes Atendidos</span>
-                    <div className="flex items-center gap-1">
-                      <CheckCircle2 className="w-3 h-3 text-green-500" />
-                      <span className="text-[10px] md:text-xs text-muted-foreground">Avaliação 4.9/5 no Google</span>
-                    </div>
-                  </div>
-                </motion.div>
+
               </div>
             </div>
           ) : (
@@ -600,125 +678,7 @@ const LandingHeroSection = ({ variant = "repare" }: LandingHeroSectionProps) => 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-12 items-center">
               {/* Left Column - Text Content */}
               <div className="flex flex-col items-center lg:items-start text-center lg:text-left order-2 lg:order-1">
-                {/* Badges Row */}
-                <motion.div
-                  initial={{ opacity: 0, y: -20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6 }}
-                  className="flex flex-wrap items-center gap-2 md:gap-3 mb-4 md:mb-6 justify-center lg:justify-start"
-                >
-                  <div className="inline-flex items-center gap-1.5 md:gap-2 bg-card/80 backdrop-blur-sm px-3 py-1.5 md:px-4 md:py-2 rounded-full border border-border/50">
-                    <MapPin className="w-3 h-3 text-primary" />
-                    <span className="text-[10px] md:text-xs font-medium text-foreground uppercase">Guarulhos, SP</span>
-                  </div>
-                  
-                  <div className="inline-flex items-center gap-1.5 md:gap-2 bg-primary text-primary-foreground px-3 py-1.5 md:px-4 md:py-2 rounded-full">
-                    <Clock className="w-3 h-3" />
-                    <span className="text-[10px] md:text-xs font-semibold uppercase">{content.eyebrow}</span>
-                    <span className="text-[10px] md:text-xs opacity-70">|</span>
-                    <HeroCountdown />
-                  </div>
-                </motion.div>
-
-                {/* Main Heading */}
-                <motion.h1
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.8, delay: 0.2 }}
-                  className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-foreground mb-3 md:mb-4 leading-tight tracking-tight"
-                >
-                  {content.title}{" "}
-                  <span className="text-primary relative">
-                    {content.highlight}
-                  </span>
-                </motion.h1>
-
-                {/* Description */}
-                <motion.p
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.8, delay: 0.4 }}
-                  className="text-sm md:text-base lg:text-lg text-muted-foreground mb-4 md:mb-6 max-w-2xl"
-                >
-                  {content.description}
-                </motion.p>
-
-                {/* Feature Pills */}
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 0.5 }}
-                  className="flex flex-wrap gap-2 md:gap-3 mb-5 md:mb-6 justify-center lg:justify-start"
-                >
-                  {content.features.map((feature, index) => (
-                    <motion.div
-                      key={feature.text}
-                      initial={{ opacity: 0, scale: 0.8 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      transition={{ duration: 0.4, delay: 0.6 + index * 0.1 }}
-                      className="flex items-center gap-1.5 bg-card/60 backdrop-blur-sm px-3 py-1.5 rounded-full border border-border/30"
-                    >
-                      <feature.icon className="w-3.5 h-3.5 text-primary" />
-                      <span className="text-[11px] md:text-xs font-medium text-foreground">{feature.text}</span>
-                    </motion.div>
-                  ))}
-                </motion.div>
-
-                {/* CTA Button */}
-                <motion.div
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.8, delay: 0.7 }}
-                  className="mb-5 md:mb-6"
-                >
-                  <Button
-                    size="lg"
-                    onClick={scrollToWhatsApp}
-                    className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold px-6 md:px-8 py-5 md:py-6 text-sm md:text-base rounded-full uppercase shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/30 transition-all duration-300 hover:-translate-y-0.5 group"
-                  >
-                    <span>Solicitar Orçamento Grátis</span>
-                    <motion.span
-                      animate={{ x: [0, 4, 0] }}
-                      transition={{ duration: 1.5, repeat: Infinity }}
-                      className="ml-2"
-                    >
-                      →
-                    </motion.span>
-                  </Button>
-                </motion.div>
-
-                {/* Social Proof */}
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.8, delay: 0.9 }}
-                  className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3 md:gap-4"
-                >
-                  <div className="flex -space-x-2">
-                    {[
-                      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop",
-                      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop",
-                      "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop",
-                      "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop",
-                    ].map((src, i) => (
-                      <img 
-                        key={i}
-                        src={src} 
-                        alt={`Cliente satisfeito ${i + 1}`}
-                        loading="lazy"
-                        decoding="async"
-                        className="w-8 h-8 md:w-10 md:h-10 rounded-full border-2 border-background object-cover"
-                      />
-                    ))}
-                  </div>
-                  <div className="flex flex-col items-center sm:items-start">
-                    <span className="text-xs md:text-sm font-bold text-foreground">+2000 Clientes Atendidos</span>
-                    <div className="flex items-center gap-1">
-                      <CheckCircle2 className="w-3 h-3 text-green-500" />
-                      <span className="text-[10px] md:text-xs text-muted-foreground">Avaliação 4.9/5 no Google</span>
-                    </div>
-                  </div>
-                </motion.div>
+                <HeroConversionContent variant={variant} content={content} align="left" />
               </div>
 
               {/* Right Column - Phone Image */}
@@ -730,6 +690,8 @@ const LandingHeroSection = ({ variant = "repare" }: LandingHeroSectionProps) => 
               >
                 {variant === "repare" ? (
                   <div ref={repareContainerRef} className="relative w-fit mx-auto select-none flex items-center justify-center">
+                    <div className="pointer-events-none absolute inset-[-8%] z-0 rounded-full bg-[#FFB088]/45 blur-3xl" aria-hidden="true" />
+                    <div className="pointer-events-none absolute inset-[8%] z-0 rounded-full bg-white/20 blur-2xl" aria-hidden="true" />
                     <GlassShards />
                     <img 
                       src={heroImages[variant]} 
@@ -741,6 +703,8 @@ const LandingHeroSection = ({ variant = "repare" }: LandingHeroSectionProps) => 
                   </div>
                 ) : (
                   <>
+                    <div className="pointer-events-none absolute inset-[8%] z-0 rounded-full bg-[#FFB088]/45 blur-3xl" aria-hidden="true" />
+                    <div className="pointer-events-none absolute inset-[22%] z-0 rounded-full bg-white/20 blur-2xl" aria-hidden="true" />
                     <motion.div
                       animate={{ y: [0, 10, 0], x: [0, -5, 0] }}
                       transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
