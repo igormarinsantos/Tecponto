@@ -209,7 +209,7 @@ const Home = () => {
             </div>
 
             {/* Showcase visual sincronizado com a palavra da hero */}
-            <div className="flex min-h-[360px] items-center justify-end md:min-h-[500px] lg:min-h-[620px]">
+            <div className="flex min-h-[360px] items-center justify-end md:min-h-[500px] lg:-mr-16 lg:min-h-[620px] xl:-mr-24 2xl:-mr-28">
               <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
@@ -218,7 +218,7 @@ const Home = () => {
               >
                 <motion.div
                   style={{ y: heroVisualY }}
-                  className="flex h-full w-full items-center justify-end will-change-transform"
+                  className="flex h-full w-full items-center justify-end pr-6 will-change-transform md:pr-8 lg:pr-12 xl:pr-14"
                 >
                   <AnimatePresence mode="wait">
                     <motion.img
@@ -229,7 +229,7 @@ const Home = () => {
                       animate={{ opacity: 1, y: 0, scale: 1 }}
                       exit={{ opacity: 0, y: -24, scale: 0.96 }}
                       transition={{ duration: 0.45, ease: "easeOut" }}
-                      className="ml-auto max-h-[480px] w-full object-contain object-right drop-shadow-[0_28px_38px_rgba(0,0,0,0.22)] md:max-h-[600px]"
+                      className="ml-auto max-h-[480px] w-full object-contain object-right drop-shadow-[0_28px_38px_rgba(0,0,0,0.22)] md:max-h-[590px]"
                     />
                   </AnimatePresence>
                 </motion.div>
