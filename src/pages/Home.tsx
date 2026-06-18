@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import type { PointerEvent } from "react";
 import { NavLink } from "react-router-dom";
 import { AnimatePresence, motion, useMotionValue, useSpring } from "framer-motion";
-import { ArrowRight, CheckCircle2, PlayCircle, RefreshCw, ShieldCheck, ShoppingBag, Smartphone, Wrench } from "lucide-react";
+import { ArrowRight, PlayCircle, RefreshCw, ShieldCheck, ShoppingBag, Smartphone, Star, Wrench, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Footer from "@/layouts/Footer";
 import WhatsAppButton from "@/features/whatsapp/WhatsAppButton";
@@ -18,6 +18,7 @@ import customer1 from "@/assets/people/customer-1.jpg";
 import customer2 from "@/assets/people/customer-2.jpg";
 import customer3 from "@/assets/people/customer-3.jpg";
 import customer4 from "@/assets/people/customer-4.jpg";
+import whatsappLogo from "@/assets/icons/whatsapp-logo.svg";
 import shopLocation from "@/assets/media/shop-location.jpg";
 import spaceVideoMp4 from "@/assets/media/testimonial-video.mp4";
 import spaceVideoWebm from "@/assets/media/testimonial-video.webm";
@@ -57,12 +58,40 @@ const trustPoints = [
   "Suporte de quem entende de assistência técnica",
 ];
 
-const words = ["REPARAR", "TROCAR", "COMPRAR"];
-
 const heroVisuals = [
   { image: homeHeroRepare, alt: "Celular quebrado para reparo TecPonto" },
   { image: homeHeroTroque, alt: "Celular para troca TecPonto" },
   { image: homeHeroCompre, alt: "Celular para compra TecPonto" },
+];
+
+const heroModes = [
+  {
+    label: "Reparo",
+    variant: "repare" as const,
+    icon: Wrench,
+    title: "Seu celular resolvido sem enrolação.",
+    lead: "Repare com garantia e atendimento rápido.",
+    description: "Consertamos seu celular com agilidade, peças de qualidade e garantia de 90 dias. Receba seu orçamento direto pelo WhatsApp.",
+    cta: "Solicitar reparo",
+  },
+  {
+    label: "Troca",
+    variant: "troque" as const,
+    icon: RefreshCw,
+    title: "Seu usado vale mais na troca.",
+    lead: "Troque com avaliação clara e segura.",
+    description: "Avalie seu aparelho, use como entrada e evolua para um celular revisado com orientação da equipe TecPonto.",
+    cta: "Iniciar avaliação",
+  },
+  {
+    label: "Compra",
+    variant: "compre" as const,
+    icon: ShoppingBag,
+    title: "Compre seu próximo celular com confiança.",
+    lead: "Aparelhos revisados e prontos para uso.",
+    description: "Encontre celulares selecionados pela TecPonto, testados pela assistência e disponíveis na nossa loja Shopee.",
+    cta: "Acessar loja",
+  },
 ];
 
 const AnimatedCounter = ({ end, duration = 1200, suffix = "", decimals = 0 }: { end: number; duration?: number; suffix?: string; decimals?: number }) => {
@@ -96,6 +125,7 @@ const Home = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalVariant, setModalVariant] = useState<LandingVariant | undefined>(undefined);
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
+  const currentHeroMode = heroModes[currentWordIndex];
   const heroPointerY = useMotionValue(0);
   const heroVisualY = useSpring(heroPointerY, {
     stiffness: 70,
@@ -106,7 +136,7 @@ const Home = () => {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentWordIndex((prev) => (prev + 1) % words.length);
+      setCurrentWordIndex((prev) => (prev + 1) % heroModes.length);
     }, 4000);
     return () => clearInterval(interval);
   }, []);
@@ -136,73 +166,126 @@ const Home = () => {
         <div className="container mx-auto px-4 relative z-10">
           <div className="grid items-center gap-12 lg:grid-cols-[1.05fr_0.95fr] max-w-[1360px] mx-auto">
             <div className="p-2 text-left text-white">
-              <h1 className="text-4xl md:text-6xl font-black leading-[1.2] tracking-tight text-white max-w-2xl min-h-[2.8em] md:min-h-[2.4em]">
-                Ajudamos você a{" "}
-                <span className="inline-block relative h-[1.25em] w-[140px] md:w-[220px] overflow-hidden align-middle mx-1 md:mx-2">
-                  <AnimatePresence mode="wait">
-                    <motion.span
-                      key={words[currentWordIndex]}
-                      initial={{ y: 28, opacity: 0 }}
-                      animate={{ y: 0, opacity: 1 }}
-                      exit={{ y: -28, opacity: 0 }}
-                      transition={{ duration: 0.55, ease: "easeOut" }}
-                      className="absolute inset-x-0 top-0 bottom-0 flex items-center justify-center rounded-2xl bg-white text-[#25292D] transform -skew-x-3 font-black text-2xl md:text-5xl uppercase"
+              <div className="mb-6 inline-flex rounded-full bg-[#25292D] p-1">
+                {heroModes.map((mode, index) => {
+                  const Icon = mode.icon;
+                  const isActive = index === currentWordIndex;
+                  return (
+                    <button
+                      key={mode.label}
+                      type="button"
+                      onClick={() => setCurrentWordIndex(index)}
+                      className={`flex min-w-[96px] items-center justify-center gap-2 rounded-full px-4 py-2.5 text-sm font-black transition-all ${
+                        isActive ? "bg-white text-primary" : "text-white/85 hover:text-white"
+                      }`}
                     >
-                      {words[currentWordIndex]}
-                    </motion.span>
-                  </AnimatePresence>
-                </span>{" "}
-                seu celular.
-              </h1>
+                      <Icon className="h-4 w-4" />
+                      {mode.label}
+                    </button>
+                  );
+                })}
+              </div>
 
-              <p className="mt-6 max-w-2xl text-base md:text-lg leading-relaxed text-white/85">
-                Assistência especializada com garantia de 90 dias, avaliação justa no seu usado e curadoria de revisados. Simples, rápido e direto pelo WhatsApp.
-              </p>
-
-              <div className="mt-8 flex flex-col gap-5 sm:flex-row sm:items-center">
-                <Button 
-                  onClick={() => openModal("repare")} 
-                  size="lg" 
-                  className="rounded-full bg-[#25292D] hover:bg-[#1f2327] px-8 py-6 font-bold uppercase text-white transition-all shadow-lg shadow-black/10 shrink-0"
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={currentHeroMode.label}
+                  initial={{ opacity: 0, y: 22 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -18 }}
+                  transition={{ duration: 0.55, ease: "easeOut" }}
                 >
-                  Solicitar Reparo
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Button>
+                  <h1 className="max-w-3xl text-4xl font-black leading-[0.98] tracking-tight text-white md:text-6xl lg:text-7xl">
+                    {currentHeroMode.title}
+                  </h1>
 
-                {/* Micro Prova Social ao lado do Botão */}
-                <div className="flex items-center gap-3">
-                  <div className="flex -space-x-3">
-                    <img className="w-8 h-8 rounded-full border-2 border-white object-cover shadow-sm shrink-0" src={customer1} alt="Cliente TecPonto" />
-                    <img className="w-8 h-8 rounded-full border-2 border-white object-cover shadow-sm shrink-0" src={customer2} alt="Cliente TecPonto" />
-                    <img className="w-8 h-8 rounded-full border-2 border-white object-cover shadow-sm shrink-0" src={customer3} alt="Cliente TecPonto" />
-                    <img className="w-8 h-8 rounded-full border-2 border-white object-cover shadow-sm shrink-0" src={customer4} alt="Cliente TecPonto" />
-                  </div>
-                  <div className="flex flex-col">
-                    <span className="text-sm font-black text-white leading-none">+2000 Atendimentos</span>
-                    <span className="text-[10px] text-white/80 font-bold uppercase tracking-wider mt-1">Avaliação 4.9 no Google</span>
+                  <p className="mt-5 max-w-2xl text-xl font-black leading-tight text-white md:text-2xl">
+                    {currentHeroMode.lead}
+                  </p>
+
+                  <p className="mt-3 max-w-2xl text-base leading-relaxed text-white/90 md:text-lg">
+                    {currentHeroMode.description}
+                  </p>
+                </motion.div>
+              </AnimatePresence>
+
+              <div className="mt-7 flex flex-col gap-4 sm:flex-row sm:items-center">
+                {currentHeroMode.variant === "compre" ? (
+                  <Button
+                    asChild
+                    size="lg"
+                    className="h-14 rounded-xl bg-white px-7 text-base font-black uppercase text-[#25292D] transition-all hover:-translate-y-0.5 hover:bg-white/95"
+                  >
+                    <a href={SHOPEE_STORE_URL} target="_blank" rel="noopener noreferrer">
+                      <ShoppingBag className="mr-2 h-5 w-5 text-primary" />
+                      {currentHeroMode.cta}
+                      <ArrowRight className="ml-5 h-5 w-5" />
+                    </a>
+                  </Button>
+                ) : (
+                  <Button
+                    onClick={() => openModal(currentHeroMode.variant)}
+                    size="lg"
+                    className="h-14 rounded-xl bg-white px-7 text-base font-black uppercase text-[#25292D] transition-all hover:-translate-y-0.5 hover:bg-white/95"
+                  >
+                    <img src={whatsappLogo} alt="" className="mr-2 h-5 w-5" />
+                    {currentHeroMode.cta}
+                    <ArrowRight className="ml-5 h-5 w-5" />
+                  </Button>
+                )}
+
+                <Button
+                  onClick={() => document.getElementById("modalidades")?.scrollIntoView({ behavior: "smooth" })}
+                  size="lg"
+                  variant="outline"
+                  className="h-14 rounded-xl border-white/55 bg-white/10 px-7 text-base font-black uppercase text-white backdrop-blur hover:bg-white hover:text-primary"
+                >
+                  <PlayCircle className="mr-2 h-5 w-5" />
+                  Como funciona
+                </Button>
+              </div>
+
+              <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center">
+                <div className="flex -space-x-3">
+                  <img className="h-9 w-9 rounded-full border-2 border-white object-cover shadow-sm" src={customer1} alt="Cliente TecPonto" />
+                  <img className="h-9 w-9 rounded-full border-2 border-white object-cover shadow-sm" src={customer2} alt="Cliente TecPonto" />
+                  <img className="h-9 w-9 rounded-full border-2 border-white object-cover shadow-sm" src={customer3} alt="Cliente TecPonto" />
+                  <img className="h-9 w-9 rounded-full border-2 border-white object-cover shadow-sm" src={customer4} alt="Cliente TecPonto" />
+                </div>
+                <div>
+                  <p className="text-sm font-black leading-none text-white">+2.000 atendimentos</p>
+                  <div className="mt-1 flex items-center gap-1 text-xs font-bold text-white">
+                    Avaliação 4.9 no Google <span className="text-[#FFD33D]">★★★★★</span>
                   </div>
                 </div>
               </div>
 
-              {/* Estatísticas de Prova Social */}
-              <div className="mt-8 grid grid-cols-3 gap-2 md:gap-4">
-                <div>
-                  <span className="block text-xl md:text-2xl font-black text-white leading-none">
-                    <AnimatedCounter end={1000} suffix="+" />
+              <div className="mt-7 grid max-w-2xl grid-cols-3 gap-3 md:gap-5">
+                <div className="rounded-2xl bg-white/10 p-3 text-white backdrop-blur">
+                  <div className="mb-2 flex h-9 w-9 items-center justify-center rounded-full bg-white/15">
+                    <ShieldCheck className="h-4 w-4" />
+                  </div>
+                  <span className="block text-3xl font-black leading-none">
+                    <AnimatedCounter end={90} />
                   </span>
-                  <span className="block text-[10px] md:text-[11px] text-white/75 mt-1.5 font-semibold uppercase tracking-wider">Clientes Satisfeitos</span>
+                  <span className="mt-1 block text-[11px] font-semibold leading-tight text-white/80">dias de garantia</span>
                 </div>
-                <div>
-                  <span className="block text-xl md:text-2xl font-black text-white leading-none">
+                <div className="rounded-2xl bg-white/10 p-3 text-white backdrop-blur">
+                  <div className="mb-2 flex h-9 w-9 items-center justify-center rounded-full bg-white/15">
+                    <Star className="h-4 w-4" />
+                  </div>
+                  <span className="block text-3xl font-black leading-none">
                     <AnimatedCounter end={8} suffix="+" />
                   </span>
-                  <span className="block text-[10px] md:text-[11px] text-white/75 mt-1.5 font-semibold uppercase tracking-wider">Anos de Experiência</span>
+                  <span className="mt-1 block text-[11px] font-semibold leading-tight text-white/80">anos de experiência</span>
                 </div>
-                <div>
-                  <span className="block text-xl md:text-2xl font-black text-white leading-none">
+                <div className="rounded-2xl bg-white/10 p-3 text-white backdrop-blur">
+                  <div className="mb-2 flex h-9 w-9 items-center justify-center rounded-full bg-white/15">
+                    <Zap className="h-4 w-4" />
+                  </div>
+                  <span className="block text-3xl font-black leading-none">
                     <AnimatedCounter end={4.9} decimals={1} />
                   </span>
-                  <span className="block text-[10px] md:text-[11px] text-white/75 mt-1.5 font-semibold uppercase tracking-wider">Avaliação Média</span>
+                  <span className="mt-1 block text-[11px] font-semibold leading-tight text-white/80">avaliação média</span>
                 </div>
               </div>
 
@@ -218,8 +301,13 @@ const Home = () => {
               >
                 <motion.div
                   style={{ y: heroVisualY }}
-                  className="flex h-full w-full items-center justify-end pr-6 will-change-transform md:pr-8 lg:pr-12 xl:pr-14"
+                  className="relative flex h-full w-full items-center justify-end pr-6 will-change-transform md:pr-8 lg:pr-12 xl:pr-14"
                 >
+                  <div
+                    className="pointer-events-none absolute right-[2%] top-1/2 z-0 h-[66%] w-[78%] -translate-y-1/2 rounded-full opacity-70 blur-3xl"
+                    style={{ background: "radial-gradient(circle, rgba(255, 220, 185, 0.78) 0%, rgba(255, 178, 116, 0.42) 42%, rgba(255, 178, 116, 0) 74%)" }}
+                    aria-hidden="true"
+                  />
                   <AnimatePresence mode="wait">
                     <motion.img
                       key={heroVisuals[currentWordIndex].alt}
@@ -229,7 +317,7 @@ const Home = () => {
                       animate={{ opacity: 1, y: 0, scale: 1 }}
                       exit={{ opacity: 0, y: -24, scale: 0.96 }}
                       transition={{ duration: 0.7, ease: "easeOut" }}
-                      className="ml-auto max-h-[480px] w-full object-contain object-right drop-shadow-[0_28px_38px_rgba(0,0,0,0.22)] md:max-h-[590px]"
+                      className="relative z-10 ml-auto max-h-[480px] w-full object-contain object-right drop-shadow-[0_28px_38px_rgba(0,0,0,0.22)] md:max-h-[590px]"
                     />
                   </AnimatePresence>
                 </motion.div>
