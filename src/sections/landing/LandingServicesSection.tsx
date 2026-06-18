@@ -8,9 +8,11 @@ import internalRepair from "@/assets/services/internal-repair.png";
 import software from "@/assets/services/software.png";
 import speaker from "@/assets/services/speaker.png";
 import perfectPhone from "@/assets/devices/perfect-phone.jpg";
-import brokenPhone from "@/assets/devices/broken-phone-hero.png";
-import troquePremiumImg from "@/assets/devices/troque-premium-line.png";
-import troqueUsedValueImg from "@/assets/devices/troque-used-value.png";
+import troqueUsedAssessmentImg from "@/assets/devices/troque-used-assessment.png";
+import troqueUsedEntryImg from "@/assets/devices/troque-used-entry.png";
+import troquePremiumReviewedImg from "@/assets/devices/troque-premium-reviewed.png";
+import troqueTechnicalSecurityImg from "@/assets/devices/troque-technical-security.png";
+import troqueUpgradeImg from "@/assets/devices/troque-upgrade.png";
 import type { LandingVariant } from "@/types/landing";
 
 type ServiceItem = {
@@ -65,12 +67,11 @@ const servicesByVariant: Record<LandingVariant, {
     ),
     ctaButton: "Descobrir Valor do Meu Usado",
     services: [
-      { image: brokenPhone, title: "Avaliação Honesta do Seu Usado", description: "Analisamos modelo, estado, bateria, tela e funcionamento para chegar em uma proposta justa." },
-      { image: troqueUsedValueImg, title: "Seu Usado Vira Entrada", description: "Seu aparelho atual pode abater parte do valor de um modelo melhor, sem proposta confusa." },
-      { image: troquePremiumImg, title: "Linha Premium Revisada", description: "Modelos selecionados, testados e prontos para você sair usando com confiança." },
-      { image: internalRepair, title: "Segurança Técnica", description: "A TecPonto revisa os aparelhos antes de indicar a melhor opção para sua troca." },
-      { image: perfectPhone, title: "Upgrade Sem Complicação", description: "Você manda as informações pelo WhatsApp e recebe um caminho claro para evoluir de aparelho." },
-      { image: software, title: "Transferência Orientada", description: "Te ajudamos a se preparar para trocar sem perder contatos, fotos e o que importa." },
+      { image: troqueUsedAssessmentImg, title: "Avaliação Honesta do Seu Usado", description: "Analisamos modelo, estado, bateria, tela e funcionamento para chegar em uma proposta justa." },
+      { image: troqueUsedEntryImg, title: "Seu Usado Vira Entrada", description: "Seu aparelho atual pode abater parte do valor de um modelo melhor, sem proposta confusa." },
+      { image: troquePremiumReviewedImg, title: "Linha Premium Revisada", description: "Modelos selecionados, testados e prontos para você sair usando com confiança." },
+      { image: troqueTechnicalSecurityImg, title: "Segurança Técnica", description: "A TecPonto revisa os aparelhos antes de indicar a melhor opção para sua troca." },
+      { image: troqueUpgradeImg, title: "Upgrade Sem Complicação", description: "Você manda as informações pelo WhatsApp e recebe um caminho claro para evoluir de aparelho." },
     ],
   },
   compre: {

@@ -1,6 +1,7 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
+import type { PointerEvent } from "react";
 import { NavLink } from "react-router-dom";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useMotionValue, useSpring } from "framer-motion";
 import { ArrowRight, CheckCircle2, PlayCircle, RefreshCw, ShieldCheck, ShoppingBag, Smartphone, Wrench } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Footer from "@/layouts/Footer";
@@ -10,6 +11,9 @@ import type { LandingVariant } from "@/types/landing";
 import brokenPhone from "@/assets/devices/reparo.png";
 import perfectPhone from "@/assets/devices/compre.png";
 import motoboy from "@/assets/devices/troca.png";
+import homeHeroCompre from "@/assets/devices/home-hero-compre.png";
+import homeHeroRepare from "@/assets/devices/home-hero-repare.png";
+import homeHeroTroque from "@/assets/devices/home-hero-troque.png";
 import customer1 from "@/assets/people/customer-1.jpg";
 import customer2 from "@/assets/people/customer-2.jpg";
 import customer3 from "@/assets/people/customer-3.jpg";
@@ -18,18 +22,6 @@ import shopLocation from "@/assets/media/shop-location.jpg";
 import spaceVideoMp4 from "@/assets/media/testimonial-video.mp4";
 import spaceVideoWebm from "@/assets/media/testimonial-video.webm";
 import { SHOPEE_STORE_URL } from "@/constants/links";
-
-import glassLayer from "@/assets/layers/01-glass.png";
-import screenLayer from "@/assets/layers/02-screen.png";
-import innerLayerImg from "@/assets/layers/03-inner-layer.png";
-import frameLayer from "@/assets/layers/04-frame.png";
-import batteryLayer from "@/assets/layers/05-battery.png";
-import boardLayer from "@/assets/layers/06-board.png";
-import cameraLayer from "@/assets/layers/07-camera.png";
-import coilLayer from "@/assets/layers/08-coil.png";
-import bottomComponentLayer from "@/assets/layers/09-bottom-component.png";
-import screwsLayer from "@/assets/layers/10-screws.png";
-import backCoverLayer from "@/assets/layers/11-back-cover.png";
 
 const modalities = [
   {
@@ -67,6 +59,12 @@ const trustPoints = [
 
 const words = ["REPARAR", "TROCAR", "COMPRAR"];
 
+const heroVisuals = [
+  { image: homeHeroRepare, alt: "Celular quebrado para reparo TecPonto" },
+  { image: homeHeroTroque, alt: "Celular para troca TecPonto" },
+  { image: homeHeroCompre, alt: "Celular para compra TecPonto" },
+];
+
 const AnimatedCounter = ({ end, duration = 1200, suffix = "", decimals = 0 }: { end: number; duration?: number; suffix?: string; decimals?: number }) => {
   const [count, setCount] = useState(0);
 
@@ -98,78 +96,13 @@ const Home = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalVariant, setModalVariant] = useState<LandingVariant | undefined>(undefined);
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
+  const heroPointerY = useMotionValue(0);
+  const heroVisualY = useSpring(heroPointerY, {
+    stiffness: 70,
+    damping: 18,
+    mass: 0.8,
+  });
 
-  const phoneRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const phone = phoneRef.current;
-    if (!phone) return;
-
-    const layers = phone.querySelectorAll<HTMLImageElement>(".layer");
-    
-    let targetX = 0;
-    let targetY = 0;
-    let currentX = 0;
-    let currentY = 0;
-    let rAFId = 0;
-    let time = 0;
-
-    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-    const handleMouseMove = (event: MouseEvent) => {
-      targetX = (event.clientX / window.innerWidth - 0.5) * 2;
-      targetY = (event.clientY / window.innerHeight - 0.5) * 2;
-    };
-
-    if (!reduceMotion) {
-      window.addEventListener("mousemove", handleMouseMove, { passive: true });
-
-      const animateParallax = () => {
-        const isMobile = window.innerWidth < 900;
-        
-        if (isMobile) {
-          time += 0.015;
-          currentX = Math.sin(time) * 0.3;
-          currentY = Math.cos(time * 0.8) * 0.3;
-        } else {
-          currentX += (targetX - currentX) * 0.08;
-          currentY += (targetY - currentY) * 0.08;
-        }
-
-        phone.style.transform = `
-          rotateY(${currentX * 15}deg)
-          rotateX(${-currentY * 15}deg)
-        `;
-
-        layers.forEach((layer) => {
-          const depth = Number(layer.getAttribute("data-depth") || 0);
-          const moveX = currentX * depth * 160;
-          const moveY = currentY * depth * 160;
-          const moveZ = depth * 220;
-
-          layer.style.transform = `
-            translate3d(${moveX}px, ${moveY}px, ${moveZ}px)
-          `;
-        });
-
-        rAFId = requestAnimationFrame(animateParallax);
-      };
-
-      animateParallax();
-    } else {
-      // Fallback estático com profundidade 3D para quem prefere movimento reduzido
-      layers.forEach((layer) => {
-        const depth = Number(layer.getAttribute("data-depth") || 0);
-        const moveZ = depth * 220;
-        layer.style.transform = `translate3d(0px, 0px, ${moveZ}px)`;
-      });
-    }
-
-    return () => {
-      window.removeEventListener("mousemove", handleMouseMove);
-      cancelAnimationFrame(rAFId);
-    };
-  }, []);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -183,12 +116,22 @@ const Home = () => {
     setIsModalOpen(true);
   };
 
+  const handleHeroPointerMove = (event: PointerEvent<HTMLElement>) => {
+    const rect = event.currentTarget.getBoundingClientRect();
+    const pointerY = (event.clientY - rect.top) / rect.height;
+    heroPointerY.set((pointerY - 0.5) * 96);
+  };
+
   return (
     <main className="min-h-screen bg-background">
       <WhatsAppButton />
       <WhatsAppQualificationModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} variant={modalVariant} />
       
-      <section className="relative flex min-h-screen items-center overflow-hidden bg-[#FF4B00] py-16 md:py-20">
+      <section
+        className="relative m-[10px] flex min-h-[calc(100dvh-20px)] items-center overflow-hidden rounded-[30px] bg-[#FF4B00] py-16 md:py-20"
+        onPointerMove={handleHeroPointerMove}
+        onPointerLeave={() => heroPointerY.set(0)}
+      >
 
         <div className="container mx-auto px-4 relative z-10">
           <div className="grid items-center gap-12 lg:grid-cols-[1.05fr_0.95fr] max-w-[1360px] mx-auto">
@@ -265,27 +208,31 @@ const Home = () => {
 
             </div>
 
-            {/* Showcase Visual com Mockup de Celular Explodido em 3D */}
-            <div className="flex justify-center lg:justify-end items-center">
-              <motion.div 
+            {/* Showcase visual sincronizado com a palavra da hero */}
+            <div className="flex min-h-[360px] items-center justify-end md:min-h-[500px] lg:min-h-[620px]">
+              <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.6, delay: 0.15 }}
-                className="relative w-full max-w-[380px] md:max-w-[420px] aspect-square flex items-center justify-center py-6"
+                className="relative flex aspect-square w-full max-w-[500px] items-center justify-end py-6 md:max-w-[620px]"
               >
-                <div ref={phoneRef} className="phone-3d" id="phone3d">
-                  <img src={backCoverLayer} className="layer layer-shadow" data-depth="0.06" alt="Tampa traseira" />
-                  <img src={batteryLayer} className="layer" data-depth="0.08" alt="Bateria" />
-                  <img src={bottomComponentLayer} className="layer" data-depth="0.09" alt="Componentes inferiores" />
-                  <img src={frameLayer} className="layer layer-shadow" data-depth="0.10" alt="Estrutura" />
-                  <img src={coilLayer} className="layer" data-depth="0.11" alt="Bobina de carregamento" />
-                  <img src={innerLayerImg} className="layer" data-depth="0.12" alt="Camada interna" />
-                  <img src={boardLayer} className="layer" data-depth="0.13" alt="Placa mãe" />
-                  <img src={cameraLayer} className="layer" data-depth="0.15" alt="Câmeras" />
-                  <img src={screenLayer} className="layer layer-shadow" data-depth="0.16" alt="Tela/Display" />
-                  <img src={glassLayer} className="layer" data-depth="0.20" alt="Vidro frontal" />
-                  <img src={screwsLayer} className="layer" data-depth="0.22" alt="Parafusos" />
-                </div>
+                <motion.div
+                  style={{ y: heroVisualY }}
+                  className="flex h-full w-full items-center justify-end will-change-transform"
+                >
+                  <AnimatePresence mode="wait">
+                    <motion.img
+                      key={heroVisuals[currentWordIndex].alt}
+                      src={heroVisuals[currentWordIndex].image}
+                      alt={heroVisuals[currentWordIndex].alt}
+                      initial={{ opacity: 0, y: 24, scale: 0.94 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: -24, scale: 0.96 }}
+                      transition={{ duration: 0.45, ease: "easeOut" }}
+                      className="ml-auto max-h-[480px] w-full object-contain object-right drop-shadow-[0_28px_38px_rgba(0,0,0,0.22)] md:max-h-[600px]"
+                    />
+                  </AnimatePresence>
+                </motion.div>
               </motion.div>
             </div>
           </div>

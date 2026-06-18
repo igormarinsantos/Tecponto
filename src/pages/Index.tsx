@@ -55,7 +55,7 @@ const Index = ({ variant = "repare" }: IndexProps) => {
       <InfrastructureSection />
 
       {/* Comparison Section - With Before/After in middle */}
-      <LandingComparisonSection />
+      <LandingComparisonSection variant={variant} />
 
       {/* FAQ Section */}
       <FAQSection variant={variant} />

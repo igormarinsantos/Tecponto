@@ -4,8 +4,32 @@ import { useRef, useState, useEffect } from "react";
 import { X, Check } from "lucide-react";
 import phoneAntes from "@/assets/devices/phone-antes.png";
 import phoneDepois from "@/assets/devices/phone-depois.png";
+import type { LandingVariant } from "@/types/landing";
 
-const LandingComparisonSection = () => {
+type LandingComparisonSectionProps = {
+  variant?: LandingVariant;
+};
+
+const tradeComparisonRows = [
+  {
+    other: "Avaliação pouco clara do usado",
+    tecponto: "Pré-avaliação objetiva pelo WhatsApp",
+  },
+  {
+    other: "Proposta confusa na hora da troca",
+    tecponto: "Seu usado pode entrar como parte do pagamento",
+  },
+  {
+    other: "Aparelhos sem histórico de revisão",
+    tecponto: "Modelos selecionados e conferidos pela equipe",
+  },
+  {
+    other: "Atendimento sem orientação sobre próximo aparelho",
+    tecponto: "Indicação de opções conforme seu uso e orçamento",
+  },
+];
+
+const LandingComparisonSection = ({ variant = "repare" }: LandingComparisonSectionProps) => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, amount: 0.3 });
   const [scrollPosition, setScrollPosition] = useState(0);
@@ -56,6 +80,61 @@ const LandingComparisonSection = () => {
       }
     };
   }, []);
+
+  if (variant === "troque") {
+    return (
+      <section ref={ref} className="py-20 bg-background">
+        <div className="container mx-auto px-4">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-12"
+          >
+            <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
+              Por Que Trocar com a TecPonto?
+            </h2>
+            <p className="text-xl text-muted-foreground">
+              Compare e entenda a diferença na hora de usar seu celular como entrada
+            </p>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="mx-auto max-w-5xl overflow-hidden rounded-2xl border border-border bg-card shadow-soft"
+          >
+            <div className="grid grid-cols-2 border-b border-border bg-muted/30">
+              <div className="px-4 py-5 text-center text-sm font-bold uppercase text-muted-foreground md:text-base">
+                Outras Lojas
+              </div>
+              <div className="border-l border-border px-4 py-5 text-center text-sm font-bold uppercase text-primary md:text-base">
+                TecPonto
+              </div>
+            </div>
+
+            {tradeComparisonRows.map((row, index) => (
+              <div key={row.tecponto} className={`grid grid-cols-2 ${index > 0 ? "border-t border-border" : ""}`}>
+                <div className="flex items-center gap-3 px-4 py-5 md:px-6">
+                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-destructive/10">
+                    <X className="h-4 w-4 text-destructive" />
+                  </div>
+                  <span className="text-sm leading-relaxed text-muted-foreground md:text-base">{row.other}</span>
+                </div>
+                <div className="flex items-center gap-3 border-l border-border bg-primary/5 px-4 py-5 md:px-6">
+                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary/10">
+                    <Check className="h-4 w-4 text-primary" />
+                  </div>
+                  <span className="text-sm font-medium leading-relaxed text-foreground md:text-base">{row.tecponto}</span>
+                </div>
+              </div>
+            ))}
+          </motion.div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section ref={ref} className="py-20 bg-background">

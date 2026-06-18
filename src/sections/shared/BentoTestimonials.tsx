@@ -1,155 +1,84 @@
-import { motion } from "framer-motion";
-import { useInView } from "framer-motion";
+import { motion, useInView } from "framer-motion";
+import { Play } from "lucide-react";
 import { useRef } from "react";
-import { Star, ThumbsUp } from "lucide-react";
 import testimonialVideo from "@/assets/media/testimonial-video.webm";
+
+const storyVideos = [
+  {
+    title: "Marina Alves",
+    description: "Depoimento em formato story",
+    video: testimonialVideo,
+  },
+  {
+    title: "Lucas Ribeiro",
+    description: "Depoimento em formato story",
+    video: testimonialVideo,
+  },
+  {
+    title: "Camila Santos",
+    description: "Depoimento em formato story",
+    video: testimonialVideo,
+  },
+];
 
 const BentoTestimonials = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, amount: 0.2 });
 
   return (
-    <section ref={ref} id="testimonials" className="py-12 md:py-20 bg-background">
+    <section ref={ref} id="testimonials" className="bg-background py-12 md:py-20">
       <div className="container mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
-          className="text-center mb-8 md:mb-12"
+          className="mb-8 text-center md:mb-12"
         >
-          <h2 className="text-2xl md:text-4xl lg:text-5xl font-bold text-foreground mb-2 md:mb-4">
-            O Que Nossos Clientes Dizem
+          <h2 className="mb-2 text-2xl font-bold text-foreground md:mb-4 md:text-4xl lg:text-5xl">
+            Avaliações em vídeo
           </h2>
-          <p className="text-base md:text-xl text-muted-foreground">
-            Avaliações reais de clientes satisfeitos
+          <p className="text-base text-muted-foreground md:text-xl">
+            Histórias reais de quem já foi atendido pela TecPonto
           </p>
         </motion.div>
 
-        {/* Bento Grid Layout - Mobile First */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 max-w-7xl mx-auto">
-          {/* Video Testimonial - Square on desktop */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            className="md:col-span-1 lg:col-span-1 lg:row-span-2 rounded-2xl overflow-hidden shadow-strong relative group aspect-square md:aspect-auto"
-          >
-            <video
-              className="w-full h-full object-cover"
-              loop
-              muted
-              playsInline
-              preload="metadata"
-              onMouseEnter={(e) => e.currentTarget.muted = false}
-              onMouseLeave={(e) => e.currentTarget.muted = true}
-              onTouchStart={(e) => e.currentTarget.muted = false}
-              onTouchEnd={(e) => e.currentTarget.muted = true}
+        <div className="-mx-4 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-4 md:mx-auto md:grid md:max-w-5xl md:grid-cols-3 md:overflow-visible md:px-0 md:pb-0">
+          {storyVideos.map((story, index) => (
+            <motion.article
+              key={story.title}
+              initial={{ opacity: 0, y: 24 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+              className="group relative aspect-[9/16] w-[78vw] max-w-[320px] shrink-0 snap-center overflow-hidden rounded-2xl border border-border bg-[#25292D] shadow-strong md:w-full md:max-w-none"
             >
-              <source src={testimonialVideo} type="video/webm" />
-            </video>
-            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-3 md:p-4">
-              <p className="text-white font-bold text-sm md:text-base">
-                Depoimento em vídeo
-              </p>
-              <p className="text-white/70 text-xs">Toque para ouvir</p>
-            </div>
-          </motion.div>
+              <video
+                className="h-full w-full object-cover"
+                loop
+                muted
+                playsInline
+                preload="metadata"
+                controls
+                onMouseEnter={(event) => {
+                  event.currentTarget.muted = false;
+                  event.currentTarget.play().catch(() => undefined);
+                }}
+                onMouseLeave={(event) => {
+                  event.currentTarget.muted = true;
+                }}
+              >
+                <source src={story.video} type="video/webm" />
+                Seu navegador não suporta vídeo.
+              </video>
 
-          {/* Google Rating */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="md:col-span-1 lg:col-span-2 bg-card rounded-2xl p-4 md:p-6 shadow-soft border border-border"
-          >
-            <div className="flex items-center gap-3 md:gap-4 mb-4 md:mb-6">
-              <div className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-background flex items-center justify-center flex-shrink-0">
-                <svg className="w-8 h-8 md:w-10 md:h-10" viewBox="0 0 24 24">
-                  <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                  <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                  <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
-                  <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-                </svg>
-              </div>
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2 mb-1 flex-wrap">
-                  <span className="text-3xl md:text-4xl font-bold text-foreground">4.9</span>
-                  <div className="flex gap-0.5">
-                    {Array.from({ length: 5 }).map((_, i) => (
-                      <Star key={i} className="w-4 h-4 md:w-5 md:h-5 text-primary fill-primary" />
-                    ))}
-                  </div>
+              <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/35 to-transparent p-5 text-white">
+                <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-white/20 backdrop-blur">
+                  <Play className="h-4 w-4 fill-white text-white" />
                 </div>
-                <p className="text-xs md:text-sm text-muted-foreground">250+ avaliações no Google</p>
+                <h3 className="text-lg font-bold">{story.title}</h3>
+                <p className="mt-1 text-sm text-white/75">{story.description}</p>
               </div>
-            </div>
-            <div className="bg-background p-3 md:p-4 rounded-xl">
-              <p className="text-sm md:text-base text-muted-foreground mb-2">
-                <span className="font-bold text-foreground">"Excelente atendimento!"</span> Trocaram a tela do meu iPhone em menos de 2 horas.
-              </p>
-              <p className="font-semibold text-foreground text-xs md:text-sm">Carlos Santos</p>
-            </div>
-          </motion.div>
-
-          {/* Facebook Card */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.5, delay: 0.3 }}
-            className="bg-[#1877f2] text-white rounded-2xl p-4 md:p-6 shadow-soft"
-          >
-            <div className="flex items-center gap-2 md:gap-3 mb-3 md:mb-4">
-              <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-white flex items-center justify-center flex-shrink-0">
-                <svg className="w-6 h-6 md:w-8 md:h-8" fill="#1877f2" viewBox="0 0 24 24">
-                  <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-                </svg>
-              </div>
-              <div>
-                <p className="font-bold text-base md:text-lg">Facebook</p>
-                <div className="flex gap-0.5">
-                  {Array.from({ length: 5 }).map((_, i) => (
-                    <Star key={i} className="w-3 h-3 md:w-4 md:h-4 fill-white" />
-                  ))}
-                </div>
-              </div>
-            </div>
-            <p className="text-xs md:text-sm mb-2 md:mb-3">
-              <span className="font-bold">"Muito bom!"</span> Resolveram o problema da bateria rapidinho.
-            </p>
-            <p className="font-semibold text-xs md:text-sm">Ana Paula</p>
-          </motion.div>
-
-          {/* Reclame Aqui Card */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.5, delay: 0.4 }}
-            className="bg-[#22c55e] text-white rounded-2xl p-4 md:p-6 shadow-soft"
-          >
-            <div className="flex items-center gap-2 md:gap-3 mb-3 md:mb-4">
-              <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-white flex items-center justify-center flex-shrink-0">
-                <ThumbsUp className="w-5 h-5 md:w-6 md:h-6 text-[#22c55e]" />
-              </div>
-              <div>
-                <p className="font-bold text-base md:text-lg">Reclame Aqui</p>
-                <p className="text-xs md:text-sm opacity-90">Ótima reputação</p>
-              </div>
-            </div>
-            <div className="bg-white/10 rounded-lg p-2 md:p-3 mb-2 md:mb-3">
-              <div className="flex justify-between items-center mb-1 md:mb-2">
-                <span className="text-xs md:text-sm font-semibold">Nota</span>
-                <span className="text-xl md:text-2xl font-bold">9.2</span>
-              </div>
-              <div className="flex gap-0.5">
-                {Array.from({ length: 5 }).map((_, i) => (
-                  <Star key={i} className="w-3 h-3 md:w-4 md:h-4 fill-white" />
-                ))}
-              </div>
-            </div>
-            <p className="text-[10px] md:text-xs opacity-80">
-              <span className="font-bold">Respostas rápidas</span> e soluções eficientes
-            </p>
-          </motion.div>
+            </motion.article>
+          ))}
         </div>
       </div>
     </section>

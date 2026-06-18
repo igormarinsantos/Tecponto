@@ -39,10 +39,10 @@ const Header = () => {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 border-b transition-all duration-200 ${
+      className={`fixed z-50 border-b transition-all duration-200 ${
         isHomeTop
-          ? "border-transparent bg-transparent shadow-none"
-          : `border-border bg-background/95 shadow-soft backdrop-blur-sm ${isScrolled ? "mx-4 mt-4 rounded-2xl" : ""}`
+          ? "left-[10px] right-[10px] top-[10px] border-transparent bg-transparent shadow-none"
+          : `left-0 right-0 top-0 border-border bg-background/95 shadow-soft backdrop-blur-sm ${isScrolled ? "mx-4 mt-4 rounded-2xl" : ""}`
       }`}
     >
       <nav className="container mx-auto px-4 py-3">
