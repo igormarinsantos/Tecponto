@@ -47,7 +47,7 @@ const WarrantySection = ({ variant = "repare" }: WarrantySectionProps) => {
             <img 
               src={image} 
               alt={title}
-              className={`object-contain ${isTroque ? "w-64 md:w-80 lg:w-96 h-auto block" : "w-48 h-48 md:w-64 md:h-64"}`}
+              className={`object-contain ${isTroque ? "w-64 scale-x-[-1] md:w-80 md:scale-x-100 lg:w-96 h-auto block" : "w-48 h-48 md:w-64 md:h-64"}`}
             />
           </div>
 
