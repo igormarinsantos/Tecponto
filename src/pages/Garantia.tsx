@@ -13,7 +13,6 @@ import {
 import { Button } from "@/components/ui/button";
 import WhatsAppButton from "@/features/whatsapp/WhatsAppButton";
 import Footer from "@/layouts/Footer";
-import warrantyBadge from "@/assets/services/warranty.png";
 
 const summaryItems = [
   {
@@ -100,13 +99,13 @@ const Garantia = () => {
       <WhatsAppButton />
 
       <section className="overflow-hidden pb-12 pt-10 md:pb-20 md:pt-16">
-        <div className="container mx-auto grid max-w-6xl items-center gap-8 px-4 lg:grid-cols-[1fr_320px] lg:gap-16">
-          <div className="text-center lg:text-left">
+        <div className="container mx-auto max-w-5xl px-4">
+          <div className="text-center">
             <p className="text-sm font-bold uppercase text-primary">Política de garantia</p>
             <h1 className="mt-3 text-4xl font-bold leading-tight text-foreground md:text-6xl">
               Segurança antes, durante e depois do atendimento.
             </h1>
-            <p className="mx-auto mt-5 max-w-3xl text-base leading-relaxed text-muted-foreground md:text-lg lg:mx-0">
+            <p className="mx-auto mt-5 max-w-3xl text-base leading-relaxed text-muted-foreground md:text-lg">
               Consulte a cobertura, os prazos, as situações que podem invalidar a garantia e o caminho para solicitar uma análise.
             </p>
             <div className="mt-6 inline-flex items-center gap-2 rounded-full border border-border bg-background px-4 py-2 text-xs font-bold uppercase text-muted-foreground">
@@ -115,13 +114,6 @@ const Garantia = () => {
             </div>
           </div>
 
-          <div className="mx-auto w-full max-w-[260px] lg:max-w-[300px]">
-            <img
-              src={warrantyBadge}
-              alt="Garantia TecPonto de até 90 dias"
-              className="h-auto w-full object-contain"
-            />
-          </div>
         </div>
       </section>
 
