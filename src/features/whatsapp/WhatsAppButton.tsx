@@ -1,6 +1,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import WhatsAppQualificationModal from "@/features/whatsapp/WhatsAppQualificationModal";
+import { LANDING_QUALIFICATION_EVENT } from "@/features/whatsapp/landingQualification";
 import whatsappLogo from "@/assets/icons/whatsapp-logo.svg";
 import type { LandingVariant } from "@/types/landing";
 
@@ -15,6 +16,11 @@ const WhatsAppButton = ({ variant }: WhatsAppButtonProps) => {
   const animationFrame = useRef<number | null>(null);
   const shouldAvoidOfferBanner = Boolean(variant && variant !== "troque");
 
+  useEffect(() => {
+    const openQualification = () => setIsOpen(true);
+    window.addEventListener(LANDING_QUALIFICATION_EVENT, openQualification);
+    return () => window.removeEventListener(LANDING_QUALIFICATION_EVENT, openQualification);
+  }, []);
   useEffect(() => {
     const updateVisibility = () => {
       animationFrame.current = null;

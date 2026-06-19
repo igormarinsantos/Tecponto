@@ -3,6 +3,7 @@ import { useInView } from "framer-motion";
 import { useRef } from "react";
 import type { LandingVariant } from "@/types/landing";
 import { getLandingContent } from "@/content/landingContent";
+import { openLandingQualification } from "@/features/whatsapp/landingQualification";
 
 type WarrantySectionProps = {
   variant?: LandingVariant;
@@ -43,10 +44,7 @@ const WarrantySection = ({ variant = "repare" }: WarrantySectionProps) => {
               {content.description}
             </p>
             <button
-              onClick={() => {
-                const element = document.getElementById("whatsapp-chat");
-                element?.scrollIntoView({ behavior: "smooth" });
-              }}
+              onClick={openLandingQualification}
               className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold px-6 py-3 rounded-full transition-all hover:scale-105 uppercase text-sm"
             >
               {content.buttonText}

@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Tag, Clock } from "lucide-react";
 import { useCountdownTimer } from "@/hooks/useCountdownTimer";
+import { openLandingQualification } from "@/features/whatsapp/landingQualification";
 
 const OfferSection = () => {
   const timeLeft = useCountdownTimer();
@@ -36,11 +37,6 @@ const OfferSection = () => {
       }
     };
   }, []);
-
-  const scrollToQuote = () => {
-    const quoteSection = document.getElementById("whatsapp-chat");
-    quoteSection?.scrollIntoView({ behavior: "smooth" });
-  };
 
   return (
     <AnimatePresence>
@@ -88,7 +84,7 @@ const OfferSection = () => {
 
           <Button
             size="sm"
-            onClick={scrollToQuote}
+            onClick={openLandingQualification}
             className="bg-primary-foreground text-primary hover:bg-primary-foreground/90 font-bold text-sm md:text-sm px-3 md:px-6 h-9 md:h-10 hover:scale-105 transition-base whitespace-nowrap uppercase w-full sm:w-auto"
           >
             Aproveitar Agora

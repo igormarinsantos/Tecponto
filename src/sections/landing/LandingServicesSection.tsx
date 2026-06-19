@@ -5,14 +5,10 @@ import { Button } from "@/components/ui/button";
 import type { LandingVariant } from "@/types/landing";
 import { getLandingContent } from "@/content/landingContent";
 import type { LandingServiceItem } from "@/content/landingContent";
+import { openLandingQualification } from "@/features/whatsapp/landingQualification";
 
 type ServiceCardItem = LandingServiceItem & {
   isCTA?: boolean;
-};
-
-const scrollToWhatsApp = () => {
-  const element = document.getElementById("whatsapp-chat");
-  element?.scrollIntoView({ behavior: "smooth" });
 };
 
 type LandingServicesSectionProps = {
@@ -56,7 +52,7 @@ const LandingServicesSection = ({ variant = "repare" }: LandingServicesSectionPr
             >
               {service.isCTA ? (
                 <div
-                  onClick={scrollToWhatsApp}
+                  onClick={openLandingQualification}
                   className="relative flex h-full cursor-pointer flex-col items-center justify-center overflow-hidden rounded-2xl border-2 border-primary/20 bg-gradient-to-br from-primary/10 via-primary/5 to-primary/10 p-6 text-center shadow-soft transition-base hover:shadow-strong md:p-8"
                 >
                   <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-base" />
@@ -74,7 +70,7 @@ const LandingServicesSection = ({ variant = "repare" }: LandingServicesSectionPr
                 </div>
               ) : (
                 <div
-                  onClick={scrollToWhatsApp}
+                  onClick={openLandingQualification}
                   className="relative h-full cursor-pointer overflow-hidden rounded-2xl border border-border bg-card shadow-soft transition-base hover:shadow-strong"
                 >
                   <div className="relative h-40 overflow-hidden bg-gradient-to-br from-primary/5 to-primary/10 md:h-48">

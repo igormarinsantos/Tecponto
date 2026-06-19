@@ -11,6 +11,7 @@ import customer4 from "@/assets/people/customer-4.jpg";
 import { useCountdownTimer } from "@/hooks/useCountdownTimer";
 import type { LandingVariant } from "@/types/landing";
 import { getLandingContent } from "@/content/landingContent";
+import { openLandingQualification } from "@/features/whatsapp/landingQualification";
 
 // Import glass shard PNG cutouts
 import shard1 from "@/assets/repare/shard-1.png";
@@ -22,11 +23,6 @@ import shard6 from "@/assets/repare/shard-6.png";
 import shard7 from "@/assets/repare/shard-7.png";
 
 const heroCustomers = [customer1, customer2, customer3, customer4];
-
-const scrollToWhatsApp = () => {
-  const element = document.getElementById("whatsapp-chat");
-  element?.scrollIntoView({ behavior: "smooth" });
-};
 
 const HeroCountdown = () => {
   const timeLeft = useCountdownTimer();
@@ -437,7 +433,7 @@ const LandingHeroSection = ({ variant = "repare" }: LandingHeroSectionProps) => 
                 >
                   <Button
                     size="lg"
-                    onClick={scrollToWhatsApp}
+                    onClick={openLandingQualification}
                     className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold px-6 md:px-8 py-5 md:py-6 text-sm md:text-base rounded-full uppercase shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/30 transition-all duration-300 hover:-translate-y-0.5 group"
                   >
                     <span>Solicitar Orçamento Grátis</span>
@@ -576,7 +572,7 @@ const LandingHeroSection = ({ variant = "repare" }: LandingHeroSectionProps) => 
                 >
                   <Button
                     size="lg"
-                    onClick={scrollToWhatsApp}
+                    onClick={openLandingQualification}
                     className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold px-6 md:px-8 py-5 md:py-6 text-sm md:text-base rounded-full uppercase shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/30 transition-all duration-300 hover:-translate-y-0.5 group"
                   >
                     <span>Solicitar Orçamento Grátis</span>

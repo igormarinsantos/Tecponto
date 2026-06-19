@@ -4,6 +4,7 @@ import { Bike, Shield, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { LandingVariant } from "@/types/landing";
 import { getLandingContent } from "@/content/landingContent";
+import { openLandingQualification } from "@/features/whatsapp/landingQualification";
 
 type FinalCTASectionProps = {
   variant?: LandingVariant;
@@ -14,11 +15,6 @@ const FinalCTASection = ({ variant = "repare" }: FinalCTASectionProps) => {
   const isInView = useInView(ref, { once: true, amount: 0.5 });
   const content = getLandingContent(variant).finalCta;
   const icons = [Zap, Shield, Bike];
-
-  const scrollToWhatsApp = () => {
-    const element = document.getElementById("whatsapp-chat");
-    element?.scrollIntoView({ behavior: "smooth" });
-  };
 
   return (
     <section ref={ref} className="relative overflow-hidden py-14 md:py-20" style={{ backgroundColor: "#25292D" }}>
@@ -38,7 +34,7 @@ const FinalCTASection = ({ variant = "repare" }: FinalCTASectionProps) => {
 
           <Button
             size="lg"
-            onClick={scrollToWhatsApp}
+            onClick={openLandingQualification}
             className="h-[52px] w-full max-w-sm rounded-full bg-primary px-6 py-5 text-sm font-bold uppercase text-primary-foreground hover:bg-primary/90 md:w-auto md:px-12 md:py-6 md:text-lg"
           >
             {content.button}
