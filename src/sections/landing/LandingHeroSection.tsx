@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { MapPin, Clock, Shield, Zap, Award, CheckCircle2, RefreshCw } from "lucide-react";
+import { MapPin, Clock, Shield, Zap, Award, CheckCircle2 } from "lucide-react";
 import reparoPhone from "@/assets/repare/repare-hero-phone.png";
 import trocaPhone from "@/assets/devices/troca.png";
 import comprePhone from "@/assets/devices/compre.png";
@@ -534,16 +534,6 @@ const LandingHeroSection = ({ variant = "repare" }: LandingHeroSectionProps) => 
                     transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
                     className="absolute left-[-8%] w-[80%] object-contain drop-shadow-xl z-10"
                   />
-                  
-                  {/* Swap icon */}
-                  <motion.div 
-                    animate={{ rotate: 360 }}
-                    transition={{ duration: 12, repeat: Infinity, ease: "linear" }}
-                    className="w-10 h-10 rounded-full bg-primary flex items-center justify-center border-2 border-background shadow-md z-30"
-                  >
-                    <RefreshCw className="w-4.5 h-4.5 text-white" />
-                  </motion.div>
-
                   {/* Right hand (new phone) */}
                   <motion.img
                     src={handRight}
