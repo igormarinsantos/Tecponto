@@ -89,7 +89,7 @@ const OfferSection = () => {
           <Button
             size="sm"
             onClick={scrollToQuote}
-            className="bg-primary-foreground text-primary hover:bg-primary-foreground/90 font-bold text-xs md:text-sm px-3 md:px-6 h-8 md:h-10 hover:scale-105 transition-base whitespace-nowrap uppercase w-full sm:w-auto"
+            className="bg-primary-foreground text-primary hover:bg-primary-foreground/90 font-bold text-sm md:text-sm px-3 md:px-6 h-9 md:h-10 hover:scale-105 transition-base whitespace-nowrap uppercase w-full sm:w-auto"
           >
             Aproveitar Agora
           </Button>
