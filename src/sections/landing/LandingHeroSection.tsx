@@ -4,6 +4,10 @@ import { Button } from "@/components/ui/button";
 import { MapPin, Clock, Zap, CheckCircle2 } from "lucide-react";
 import handLeft from "@/assets/devices/hand-old-phone.png";
 import handRight from "@/assets/devices/hand-new-phone.png";
+import customer1 from "@/assets/people/customer-1.jpg";
+import customer2 from "@/assets/people/customer-2.jpg";
+import customer3 from "@/assets/people/customer-3.jpg";
+import customer4 from "@/assets/people/customer-4.jpg";
 import { useCountdownTimer } from "@/hooks/useCountdownTimer";
 import type { LandingVariant } from "@/types/landing";
 import { getLandingContent } from "@/content/landingContent";
@@ -16,6 +20,8 @@ import shard4 from "@/assets/repare/shard-4.png";
 import shard5 from "@/assets/repare/shard-5.png";
 import shard6 from "@/assets/repare/shard-6.png";
 import shard7 from "@/assets/repare/shard-7.png";
+
+const heroCustomers = [customer1, customer2, customer3, customer4];
 
 const scrollToWhatsApp = () => {
   const element = document.getElementById("whatsapp-chat");
@@ -471,12 +477,7 @@ const LandingHeroSection = ({ variant = "repare" }: LandingHeroSectionProps) => 
                   className="flex flex-col sm:flex-row items-center justify-center gap-3 md:gap-4"
                 >
                   <div className="flex -space-x-2">
-                    {[
-                      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop",
-                      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop",
-                      "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop",
-                      "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop",
-                    ].map((src, i) => (
+                    {heroCustomers.map((src, i) => (
                       <img 
                         key={i}
                         src={src} 
@@ -590,12 +591,7 @@ const LandingHeroSection = ({ variant = "repare" }: LandingHeroSectionProps) => 
                   className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3 md:gap-4"
                 >
                   <div className="flex -space-x-2">
-                    {[
-                      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop",
-                      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop",
-                      "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop",
-                      "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop",
-                    ].map((src, i) => (
+                    {heroCustomers.map((src, i) => (
                       <img 
                         key={i}
                         src={src} 
