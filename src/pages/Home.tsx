@@ -163,10 +163,10 @@ const Home = () => {
         onPointerLeave={() => heroPointerY.set(0)}
       >
 
-        <div className="container mx-auto px-4 relative z-10">
+        <div className="container mx-auto px-5 md:px-4 relative z-10">
           <div className="grid items-center gap-12 lg:grid-cols-[1.05fr_0.95fr] max-w-[1360px] mx-auto">
-            <div className="p-2 text-left text-white">
-              <div className="mb-5 grid w-[calc(100vw-40px)] max-w-full grid-cols-3 overflow-hidden rounded-full bg-[#25292D] p-1 md:mb-6 md:inline-flex md:w-auto md:overflow-visible">
+            <div className="p-0 text-left text-white md:p-2">
+              <div className="mb-5 grid w-full max-w-full grid-cols-3 overflow-hidden rounded-full bg-[#25292D] p-1 md:mb-6 md:inline-flex md:w-auto md:overflow-visible">
                 {heroModes.map((mode, index) => {
                   const Icon = mode.icon;
                   const isActive = index === currentWordIndex;
