@@ -54,40 +54,42 @@ const OfferSection = () => {
         >
       <div className="container mx-auto px-3 md:px-4 py-2 md:py-3">
         <div className="flex flex-col sm:flex-row items-center justify-between gap-2 md:gap-4 text-center sm:text-left">
-          <div className="flex items-center gap-2 flex-shrink-0">
-            <Tag className="h-3 w-3 md:h-4 md:w-4 text-primary-foreground flex-shrink-0" />
-            <span className="font-bold text-primary-foreground text-[11px] md:text-base whitespace-nowrap">
-              10% OFF NOVOS CLIENTES
-            </span>
-          </div>
-
-          <div className="flex items-center gap-2 md:gap-3">
-            <div className="flex items-center gap-1 text-primary-foreground/90 text-[10px] md:text-xs">
-              <Clock className="h-3 w-3 flex-shrink-0" />
-              <span className="hidden sm:inline whitespace-nowrap">Termina em:</span>
+          <div className="flex w-full items-center justify-center gap-3 sm:w-auto sm:justify-start md:gap-4">
+            <div className="flex items-center gap-1.5 flex-shrink-0 md:gap-2">
+              <Tag className="h-3 w-3 md:h-4 md:w-4 text-primary-foreground flex-shrink-0" />
+              <span className="font-bold text-primary-foreground text-[11px] md:text-base whitespace-nowrap">
+                10% OFF NOVOS CLIENTES
+              </span>
             </div>
-            <div className="flex gap-1">
-              {[
-                { value: timeLeft.hours, label: "h" },
-                { value: timeLeft.minutes, label: "m" },
-                { value: timeLeft.seconds, label: "s" },
-              ].map((item, index) => (
-                <div key={index} className="flex items-baseline gap-0.5">
-                  <div className="bg-primary-foreground text-primary w-6 h-6 md:w-9 md:h-9 rounded flex items-center justify-center text-[10px] md:text-sm font-bold">
-                    {String(item.value).padStart(2, "0")}
+
+            <div className="flex items-center gap-1.5 md:gap-3">
+              <div className="hidden items-center gap-1 text-primary-foreground/90 text-[10px] md:flex md:text-xs">
+                <Clock className="h-3 w-3 flex-shrink-0" />
+                <span className="hidden sm:inline whitespace-nowrap">Termina em:</span>
+              </div>
+              <div className="flex gap-1">
+                {[
+                  { value: timeLeft.hours, label: "h" },
+                  { value: timeLeft.minutes, label: "m" },
+                  { value: timeLeft.seconds, label: "s" },
+                ].map((item, index) => (
+                  <div key={index} className="flex items-baseline gap-0.5">
+                    <div className="bg-primary-foreground text-primary w-6 h-6 md:w-9 md:h-9 rounded flex items-center justify-center text-[10px] md:text-sm font-bold">
+                      {String(item.value).padStart(2, "0")}
+                    </div>
+                    <span className="text-primary-foreground/80 text-[10px] md:text-xs">
+                      {item.label}
+                    </span>
                   </div>
-                  <span className="text-primary-foreground/80 text-[10px] md:text-xs">
-                    {item.label}
-                  </span>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           </div>
 
           <Button
             size="sm"
             onClick={scrollToQuote}
-            className="bg-primary-foreground text-primary hover:bg-primary-foreground/90 font-bold text-[10px] md:text-sm px-3 md:px-6 h-7 md:h-10 hover:scale-105 transition-base whitespace-nowrap uppercase w-full sm:w-auto"
+            className="bg-primary-foreground text-primary hover:bg-primary-foreground/90 font-bold text-xs md:text-sm px-3 md:px-6 h-8 md:h-10 hover:scale-105 transition-base whitespace-nowrap uppercase w-full sm:w-auto"
           >
             Aproveitar Agora
           </Button>
