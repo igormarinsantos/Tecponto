@@ -17,9 +17,9 @@ const Footer = () => {
     <footer className="bg-background py-12 md:py-16">
       <div className="container mx-auto px-4 max-w-[1360px]">
         {/* Top row: Navigation and Socials */}
-        <div className="flex flex-col md:flex-row items-center justify-between gap-8 pb-10">
+        <div className="flex flex-col items-start justify-between gap-8 pb-10 md:flex-row md:items-center">
           {/* Navigation links */}
-          <nav className="flex flex-col items-center justify-center gap-3 text-sm font-semibold text-muted-foreground md:flex-row md:flex-wrap md:justify-start md:gap-x-8">
+          <nav className="grid w-full grid-cols-2 gap-x-8 gap-y-3 text-left text-sm font-semibold text-muted-foreground md:flex md:w-auto md:flex-wrap md:justify-start md:gap-x-8">
             {mainLinks.map((item) =>
               item.external ? (
                 <a
@@ -46,7 +46,7 @@ const Footer = () => {
           </nav>
 
           {/* Socials / Contact */}
-          <div className="flex flex-col items-center justify-center gap-3 text-sm text-muted-foreground md:flex-row md:flex-wrap md:gap-6">
+          <div className="grid w-full grid-cols-2 gap-x-8 gap-y-3 text-sm text-muted-foreground md:flex md:w-auto md:flex-wrap md:gap-6">
             <a
               href="https://wa.me/5511930642742"
               target="_blank"
