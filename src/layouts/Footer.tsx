@@ -19,7 +19,7 @@ const Footer = () => {
         {/* Top row: Navigation and Socials */}
         <div className="flex flex-col md:flex-row items-center justify-between gap-8 pb-10">
           {/* Navigation links */}
-          <nav className="flex flex-wrap justify-center md:justify-start gap-x-8 gap-y-3 text-sm font-semibold text-muted-foreground">
+          <nav className="flex flex-col items-center justify-center gap-3 text-sm font-semibold text-muted-foreground md:flex-row md:flex-wrap md:justify-start md:gap-x-8">
             {mainLinks.map((item) =>
               item.external ? (
                 <a
@@ -46,7 +46,7 @@ const Footer = () => {
           </nav>
 
           {/* Socials / Contact */}
-          <div className="flex flex-wrap justify-center gap-6 text-sm text-muted-foreground">
+          <div className="flex flex-col items-center justify-center gap-3 text-sm text-muted-foreground md:flex-row md:flex-wrap md:gap-6">
             <a
               href="https://wa.me/5511930642742"
               target="_blank"
