@@ -8,7 +8,6 @@ import DeliverySection from "@/sections/shared/DeliverySection";
 import WhatsAppChatSection from "@/features/whatsapp/WhatsAppChatSection";
 
 import BentoTestimonials from "@/sections/shared/BentoTestimonials";
-import InfrastructureSection from "@/sections/shared/InfrastructureSection";
 import LandingComparisonSection from "@/sections/landing/LandingComparisonSection";
 import FAQSection from "@/sections/shared/FAQSection";
 import FinalCTASection from "@/sections/landing/FinalCTASection";
@@ -50,9 +49,6 @@ const Index = ({ variant = "repare" }: IndexProps) => {
 
       {/* Testimonials - Bento Grid */}
       <BentoTestimonials />
-
-      {/* Infrastructure Video Section */}
-      <InfrastructureSection />
 
       {/* Comparison Section - With Before/After in middle */}
       <LandingComparisonSection variant={variant} />

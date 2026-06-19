@@ -62,10 +62,18 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground font-['Space_Grotesk',sans-serif] antialiased;
+    overflow-x: clip;
   }
   
   html {
     scroll-behavior: smooth;
+    overflow-x: clip;
+  }
+
+  #root {
+    width: 100%;
+    min-height: 100%;
+    overflow-x: clip;
   }
 }
 

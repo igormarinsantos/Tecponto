@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import type { PointerEvent } from "react";
 import { NavLink } from "react-router-dom";
 import { AnimatePresence, motion, useMotionValue, useSpring } from "framer-motion";
-import { ArrowRight, PlayCircle, RefreshCw, ShieldCheck, ShoppingBag, Smartphone, Star, Wrench, Zap } from "lucide-react";
+import { ArrowRight, RefreshCw, ShieldCheck, ShoppingBag, Smartphone, Star, Wrench, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Footer from "@/layouts/Footer";
 import WhatsAppButton from "@/features/whatsapp/WhatsAppButton";
@@ -19,9 +19,6 @@ import customer2 from "@/assets/people/customer-2.jpg";
 import customer3 from "@/assets/people/customer-3.jpg";
 import customer4 from "@/assets/people/customer-4.jpg";
 import whatsappLogo from "@/assets/icons/whatsapp-logo.svg";
-import shopLocation from "@/assets/media/shop-location.jpg";
-import spaceVideoMp4 from "@/assets/media/testimonial-video.mp4";
-import spaceVideoWebm from "@/assets/media/testimonial-video.webm";
 import { SHOPEE_STORE_URL } from "@/constants/links";
 
 const modalities = [
@@ -30,7 +27,7 @@ const modalities = [
     path: SHOPEE_STORE_URL,
     external: true,
     icon: ShoppingBag,
-    description: "Celulares revisados, testados pela assistência e prontos para uso.",
+    description: "Celulares revisados pela TecPonto, testados e prontos para uso.",
     image: perfectPhone,
     cta: "Ver aparelhos",
   },
@@ -38,7 +35,7 @@ const modalities = [
     title: "Troque",
     path: "/troque",
     icon: RefreshCw,
-    description: "Use seu aparelho atual como entrada para evoluir para um modelo melhor.",
+    description: "Use seu celular usado como entrada e veja opções melhores para seu dia a dia.",
     image: motoboy,
     cta: "Avaliar troca",
   },
@@ -46,7 +43,7 @@ const modalities = [
     title: "Repare",
     path: "/repare",
     icon: Wrench,
-    description: "Conserto rápido, garantia de 90 dias e atendimento especializado.",
+    description: "Conserto de celular com diagnóstico rápido, garantia e suporte técnico.",
     image: brokenPhone,
     cta: "Solicitar reparo",
   },
@@ -59,9 +56,27 @@ const trustPoints = [
 ];
 
 const heroVisuals = [
-  { image: homeHeroRepare, alt: "Celular quebrado para reparo TecPonto" },
-  { image: homeHeroTroque, alt: "Celular para troca TecPonto" },
-  { image: homeHeroCompre, alt: "Celular para compra TecPonto" },
+  {
+    image: homeHeroRepare,
+    alt: "Celular quebrado para reparo TecPonto",
+    frameClass: "items-end justify-end pr-0 md:pr-0 lg:pr-0",
+    imageClass: "right-[-16px] h-[272px] w-auto max-w-none object-contain md:h-auto md:max-h-[650px] md:w-[118%] lg:w-[112%]",
+    glowClass: "bottom-[-2%] right-[-10%] h-[82%] w-[92%] md:right-[-6%] md:top-[54%] md:-translate-y-1/2",
+  },
+  {
+    image: homeHeroTroque,
+    alt: "Celular para troca TecPonto",
+    frameClass: "items-end justify-end pr-0 md:pr-0 lg:pr-0",
+    imageClass: "right-[-10px] h-[272px] w-auto max-w-none object-contain md:h-auto md:max-h-[690px] md:w-[116%] lg:w-[110%]",
+    glowClass: "bottom-[-2%] right-[-8%] h-[78%] w-[96%] md:right-[-3%] md:w-[88%]",
+  },
+  {
+    image: homeHeroCompre,
+    alt: "Celular para compra TecPonto",
+    frameClass: "items-end justify-end pr-0 md:pr-0 lg:pr-0",
+    imageClass: "right-[-22px] h-[260px] w-auto max-w-none object-contain md:h-auto md:max-h-[630px] md:w-[110%] lg:w-[104%]",
+    glowClass: "bottom-[-2%] right-[-10%] h-[78%] w-[92%] md:right-[-3%] md:top-[58%] md:-translate-y-1/2 md:w-[84%]",
+  },
 ];
 
 const heroModes = [
@@ -69,18 +84,18 @@ const heroModes = [
     label: "Reparo",
     variant: "repare" as const,
     icon: Wrench,
-    title: "Seu celular resolvido sem enrolação.",
+    title: "Compra, troca e reparo de celular em Guarulhos.",
     lead: "Repare com garantia e atendimento rápido.",
-    description: "Consertamos seu celular com agilidade, peças de qualidade e garantia de 90 dias. Receba seu orçamento direto pelo WhatsApp.",
+    description: "Consertamos celulares com diagnóstico direto, peças de qualidade e garantia de 90 dias. Receba seu orçamento pelo WhatsApp.",
     cta: "Solicitar reparo",
   },
   {
     label: "Troca",
     variant: "troque" as const,
     icon: RefreshCw,
-    title: "Seu usado vale mais na troca.",
+    title: "Use seu celular usado como entrada.",
     lead: "Troque com avaliação clara e segura.",
-    description: "Avalie seu aparelho, use como entrada e evolua para um celular revisado com orientação da equipe TecPonto.",
+    description: "Avaliamos seu aparelho, orientamos a troca e mostramos opções revisadas para você evoluir de modelo com mais confiança.",
     cta: "Iniciar avaliação",
   },
   {
@@ -120,12 +135,11 @@ const AnimatedCounter = ({ end, duration = 1200, suffix = "", decimals = 0 }: { 
 };
 
 const Home = () => {
-  const [videoHover, setVideoHover] = useState(false);
-  const [videoHoverPosition, setVideoHoverPosition] = useState({ x: 0, y: 0 });
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalVariant, setModalVariant] = useState<LandingVariant | undefined>(undefined);
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
   const currentHeroMode = heroModes[currentWordIndex];
+  const currentHeroVisual = heroVisuals[currentWordIndex];
   const heroPointerY = useMotionValue(0);
   const heroVisualY = useSpring(heroPointerY, {
     stiffness: 70,
@@ -158,14 +172,14 @@ const Home = () => {
       <WhatsAppQualificationModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} variant={modalVariant} />
       
       <section
-        className="relative m-[10px] flex min-h-[calc(100dvh-20px)] items-center overflow-hidden rounded-[30px] bg-[#FF4B00] py-16 md:py-20"
+        className="relative m-[10px] flex min-h-[calc(100svh-20px)] items-start overflow-hidden rounded-[24px] bg-[#FF4B00] md:min-h-[calc(100dvh-20px)] md:items-center md:rounded-[30px] md:py-20"
         onPointerMove={handleHeroPointerMove}
         onPointerLeave={() => heroPointerY.set(0)}
       >
 
-        <div className="container mx-auto px-5 md:px-4 relative z-10">
-          <div className="grid items-center gap-12 lg:grid-cols-[1.05fr_0.95fr] max-w-[1360px] mx-auto">
-            <div className="p-0 text-left text-white md:p-2">
+        <div className="container relative z-10 mx-auto min-h-[calc(100svh-20px)] px-5 md:min-h-0 md:px-4">
+          <div className="relative mx-auto grid min-h-[calc(100svh-20px)] max-w-[1360px] content-start pb-[238px] pt-20 md:min-h-0 md:items-center md:gap-10 md:pb-0 md:pt-0 lg:grid-cols-[1.05fr_0.95fr] lg:gap-12">
+            <div className="relative z-20 p-0 text-left text-white md:p-2">
               <div className="mb-5 grid w-full max-w-full grid-cols-3 overflow-hidden rounded-full bg-[#25292D] p-1 md:mb-6 md:inline-flex md:w-auto md:overflow-visible">
                 {heroModes.map((mode, index) => {
                   const Icon = mode.icon;
@@ -194,26 +208,26 @@ const Home = () => {
                   exit={{ opacity: 0, y: -18 }}
                   transition={{ duration: 0.55, ease: "easeOut" }}
                 >
-                  <h1 className="max-w-3xl text-4xl font-black leading-[0.98] tracking-tight text-white md:text-6xl lg:text-7xl">
+                  <h1 className="max-w-3xl text-[2.45rem] font-black leading-[0.98] tracking-tight text-white min-[390px]:text-5xl md:text-6xl lg:text-7xl">
                     {currentHeroMode.title}
                   </h1>
 
-                  <p className="mt-5 max-w-2xl text-xl font-black leading-tight text-white md:text-2xl">
+                  <p className="mt-4 max-w-2xl text-lg font-black leading-tight text-white md:mt-5 md:text-2xl">
                     {currentHeroMode.lead}
                   </p>
 
-                  <p className="mt-3 max-w-2xl text-base leading-relaxed text-white/90 md:text-lg">
+                  <p className="mt-3 max-w-2xl text-sm leading-relaxed text-white/90 md:text-lg">
                     {currentHeroMode.description}
                   </p>
                 </motion.div>
               </AnimatePresence>
 
-              <div className="mt-7 flex flex-col gap-4 sm:flex-row sm:items-center">
+              <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center md:mt-7 md:gap-4">
                 {currentHeroMode.variant === "compre" ? (
                   <Button
                     asChild
                     size="lg"
-                    className="h-14 rounded-xl bg-white px-7 text-base font-black uppercase text-[#25292D] transition-all hover:-translate-y-0.5 hover:bg-white/95"
+                    className="h-[52px] w-full rounded-xl bg-white px-5 text-sm font-black uppercase text-[#25292D] transition-all hover:-translate-y-0.5 hover:bg-white/95 sm:h-14 sm:w-auto sm:px-7 sm:text-base"
                   >
                     <a href={SHOPEE_STORE_URL} target="_blank" rel="noopener noreferrer">
                       <ShoppingBag className="mr-2 h-5 w-5 text-primary" />
@@ -224,7 +238,7 @@ const Home = () => {
                   <Button
                     onClick={() => openModal(currentHeroMode.variant)}
                     size="lg"
-                    className="h-14 rounded-xl bg-white px-7 text-base font-black uppercase text-[#25292D] transition-all hover:-translate-y-0.5 hover:bg-white/95"
+                    className="h-[52px] w-full rounded-xl bg-white px-5 text-sm font-black uppercase text-[#25292D] transition-all hover:-translate-y-0.5 hover:bg-white/95 sm:h-14 sm:w-auto sm:px-7 sm:text-base"
                   >
                     <img src={whatsappLogo} alt="" className="mr-2 h-5 w-5" />
                     {currentHeroMode.cta}
@@ -235,9 +249,8 @@ const Home = () => {
                   onClick={() => document.getElementById("modalidades")?.scrollIntoView({ behavior: "smooth" })}
                   size="lg"
                   variant="outline"
-                  className="h-14 rounded-xl border-white/55 bg-white/10 px-7 text-base font-black uppercase text-white backdrop-blur hover:bg-white hover:text-primary"
+                  className="h-[52px] w-full rounded-xl border-white/55 bg-white/10 px-5 text-sm font-black uppercase text-white backdrop-blur hover:bg-white hover:text-primary sm:h-14 sm:w-auto sm:px-7 sm:text-base"
                 >
-                  <PlayCircle className="mr-2 h-5 w-5" />
                   Como funciona
                 </Button>
               </div>
@@ -257,30 +270,30 @@ const Home = () => {
                 </div>
               </div>
 
-              <div className="mt-7 grid max-w-2xl grid-cols-3 gap-3 md:gap-5">
-                <div className="rounded-2xl bg-white/10 p-3 text-white backdrop-blur">
-                  <div className="mb-2 flex h-9 w-9 items-center justify-center rounded-full bg-white/15">
+              <div className="mt-6 grid max-w-2xl grid-cols-3 gap-2 md:mt-7 md:gap-5">
+                <div className="rounded-2xl bg-white/10 p-2.5 text-white backdrop-blur md:p-3">
+                  <div className="mb-2 flex h-8 w-8 items-center justify-center rounded-full bg-white/15 md:h-9 md:w-9">
                     <ShieldCheck className="h-4 w-4" />
                   </div>
-                  <span className="block text-3xl font-black leading-none">
+                  <span className="block text-2xl font-black leading-none md:text-3xl">
                     <AnimatedCounter end={90} />
                   </span>
                   <span className="mt-1 block text-[11px] font-semibold leading-tight text-white/80">dias de garantia</span>
                 </div>
-                <div className="rounded-2xl bg-white/10 p-3 text-white backdrop-blur">
-                  <div className="mb-2 flex h-9 w-9 items-center justify-center rounded-full bg-white/15">
+                <div className="rounded-2xl bg-white/10 p-2.5 text-white backdrop-blur md:p-3">
+                  <div className="mb-2 flex h-8 w-8 items-center justify-center rounded-full bg-white/15 md:h-9 md:w-9">
                     <Star className="h-4 w-4" />
                   </div>
-                  <span className="block text-3xl font-black leading-none">
+                  <span className="block text-2xl font-black leading-none md:text-3xl">
                     <AnimatedCounter end={8} suffix="+" />
                   </span>
                   <span className="mt-1 block text-[11px] font-semibold leading-tight text-white/80">anos de experiência</span>
                 </div>
-                <div className="rounded-2xl bg-white/10 p-3 text-white backdrop-blur">
-                  <div className="mb-2 flex h-9 w-9 items-center justify-center rounded-full bg-white/15">
+                <div className="rounded-2xl bg-white/10 p-2.5 text-white backdrop-blur md:p-3">
+                  <div className="mb-2 flex h-8 w-8 items-center justify-center rounded-full bg-white/15 md:h-9 md:w-9">
                     <Zap className="h-4 w-4" />
                   </div>
-                  <span className="block text-3xl font-black leading-none">
+                  <span className="block text-2xl font-black leading-none md:text-3xl">
                     <AnimatedCounter end={4.9} decimals={1} />
                   </span>
                   <span className="mt-1 block text-[11px] font-semibold leading-tight text-white/80">avaliação média</span>
@@ -290,32 +303,32 @@ const Home = () => {
             </div>
 
             {/* Showcase visual sincronizado com a palavra da hero */}
-            <div className="flex min-h-[360px] items-center justify-end md:min-h-[500px] lg:-mr-16 lg:min-h-[620px] xl:-mr-24 2xl:-mr-28">
+            <div className="pointer-events-none absolute inset-x-0 bottom-0 z-0 flex h-[250px] items-end justify-end pt-0 md:pointer-events-auto md:relative md:inset-auto md:z-auto md:min-h-[500px] md:pt-0 lg:-mr-16 lg:min-h-[620px] xl:-mr-24 2xl:-mr-28">
               <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.6, delay: 0.15 }}
-                className="relative flex aspect-square w-full max-w-[500px] items-center justify-end py-6 md:max-w-[620px]"
+                className="relative flex h-full w-full max-w-none items-end justify-end overflow-visible py-0 md:aspect-square md:h-auto md:max-w-[660px]"
               >
                 <motion.div
                   style={{ y: heroVisualY }}
-                  className="relative flex h-full w-full items-center justify-end pr-6 will-change-transform md:pr-8 lg:pr-12 xl:pr-14"
+                  className={`relative flex h-full w-full overflow-visible will-change-transform ${currentHeroVisual.frameClass}`}
                 >
                   <div
-                    className="pointer-events-none absolute right-[2%] top-1/2 z-0 h-[66%] w-[78%] -translate-y-1/2 rounded-full opacity-70 blur-3xl"
-                    style={{ background: "radial-gradient(circle, rgba(255, 220, 185, 0.78) 0%, rgba(255, 178, 116, 0.42) 42%, rgba(255, 178, 116, 0) 74%)" }}
+                    className={`pointer-events-none absolute z-0 rounded-full opacity-90 blur-[54px] md:blur-[76px] ${currentHeroVisual.glowClass}`}
+                    style={{ background: "radial-gradient(circle, rgba(255, 238, 218, 0.98) 0%, rgba(255, 197, 139, 0.72) 34%, rgba(255, 123, 48, 0.42) 56%, rgba(255, 123, 48, 0) 78%)" }}
                     aria-hidden="true"
                   />
                   <AnimatePresence mode="wait">
                     <motion.img
-                      key={heroVisuals[currentWordIndex].alt}
-                      src={heroVisuals[currentWordIndex].image}
-                      alt={heroVisuals[currentWordIndex].alt}
+                      key={currentHeroVisual.alt}
+                      src={currentHeroVisual.image}
+                      alt={currentHeroVisual.alt}
                       initial={{ opacity: 0, y: 24, scale: 0.94 }}
                       animate={{ opacity: 1, y: 0, scale: 1 }}
                       exit={{ opacity: 0, y: -24, scale: 0.96 }}
                       transition={{ duration: 0.7, ease: "easeOut" }}
-                      className="relative z-10 ml-auto max-h-[480px] w-full object-contain object-right drop-shadow-[0_28px_38px_rgba(0,0,0,0.22)] md:max-h-[590px]"
+                      className={`absolute bottom-0 z-10 object-contain drop-shadow-[0_28px_38px_rgba(0,0,0,0.22)] md:relative md:bottom-auto md:right-auto md:ml-auto ${currentHeroVisual.imageClass}`}
                     />
                   </AnimatePresence>
                 </motion.div>
@@ -325,17 +338,17 @@ const Home = () => {
         </div>
       </section>
 
-      <section id="modalidades" className="py-14 md:py-20" style={{ backgroundColor: "#F0EFF5" }}>
+      <section id="modalidades" className="py-12 md:py-20" style={{ backgroundColor: "#F0EFF5" }}>
         <div className="container mx-auto px-4">
           <div className="mb-10 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
             <div>
               <p className="text-sm font-bold uppercase text-primary">Nossas modalidades</p>
-              <h2 className="mt-2 text-3xl md:text-5xl font-bold text-foreground">
+              <h2 className="mt-2 text-3xl font-bold text-foreground md:text-5xl">
                 Escolha o que você precisa hoje.
               </h2>
             </div>
             <p className="max-w-xl text-muted-foreground">
-              Cada modalidade tem uma LP própria para conversão, mas todas fazem parte da mesma experiência TecPonto.
+              Escolha se quer consertar, trocar seu usado ou comprar um celular revisado com atendimento TecPonto.
             </p>
           </div>
 
@@ -350,10 +363,10 @@ const Home = () => {
                   rel={item.external ? "noopener noreferrer" : undefined}
                   className="group overflow-hidden rounded-2xl border border-border bg-background shadow-soft transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-strong"
                 >
-                  <div className="h-64 bg-primary/5">
+                  <div className="h-48 bg-primary/5 md:h-64">
                     <img src={item.image} alt={item.title} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
                   </div>
-                  <div className="p-6">
+                  <div className="p-5 md:p-6">
                     <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-full bg-primary/10">
                       <Icon className="h-5 w-5 text-primary" />
                     </div>
@@ -371,67 +384,9 @@ const Home = () => {
         </div>
       </section>
 
-      <section className="py-16 md:py-20 bg-background">
+      <section className="py-12 md:py-20">
         <div className="container mx-auto px-4">
-          <div className="mx-auto max-w-5xl">
-            <div>
-              <div className="hidden">
-                Nosso espaço
-              </div>
-              <h2 className="mx-auto mb-8 max-w-3xl text-center text-3xl font-bold leading-tight text-foreground md:text-5xl">
-                Conheça onde seu celular é atendido.
-              </h2>
-              <p className="hidden">
-                Um ambiente preparado para diagnóstico, reparo, compra e troca com atendimento direto da equipe TecPonto.
-              </p>
-            </div>
-
-            <div
-              className="relative overflow-hidden rounded-2xl border border-border bg-card shadow-strong"
-              onMouseEnter={() => setVideoHover(true)}
-              onMouseLeave={() => setVideoHover(false)}
-              onMouseMove={(event) => {
-                const rect = event.currentTarget.getBoundingClientRect();
-                setVideoHoverPosition({
-                  x: event.clientX - rect.left,
-                  y: event.clientY - rect.top,
-                });
-              }}
-            >
-              <video
-                className="aspect-video w-full bg-[#25292D] object-cover"
-                controls
-                loop
-                muted
-                playsInline
-                preload="metadata"
-                poster={shopLocation}
-              >
-                <source src={spaceVideoWebm} type="video/webm" />
-                <source src={spaceVideoMp4} type="video/mp4" />
-                Seu navegador nao suporta video.
-              </video>
-              <div
-                className={`pointer-events-none absolute hidden items-center gap-2 rounded-full bg-background/95 px-4 py-2 text-xs font-bold uppercase text-foreground shadow-strong backdrop-blur transition-opacity duration-200 md:inline-flex ${
-                  videoHover ? "opacity-100" : "opacity-0"
-                }`}
-                style={{
-                  left: videoHoverPosition.x,
-                  top: videoHoverPosition.y,
-                  transform: "translate(-50%, -140%)",
-                }}
-              >
-                <PlayCircle className="h-4 w-4 text-primary" />
-                Aperte o play
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="py-16 md:py-20">
-        <div className="container mx-auto px-4">
-          <div className="rounded-2xl bg-[#25292D] p-8 md:p-12 text-white shadow-strong">
+          <div className="rounded-2xl bg-[#25292D] p-6 text-white shadow-strong md:p-12">
             <div className="grid gap-8 md:grid-cols-[1fr_auto] md:items-center">
               <div>
                 <div className="mb-4 flex items-center gap-2 text-primary">
@@ -441,11 +396,11 @@ const Home = () => {
                 <h2 className="text-3xl md:text-5xl font-bold">
                   Um caminho simples para resolver seu celular.
                 </h2>
-                <p className="mt-4 max-w-2xl text-gray-300">
-                  Fale pelo WhatsApp, diga se quer comprar, trocar ou reparar, e nossa equipe direciona você para a melhor solução.
+                <p className="mt-4 max-w-2xl text-sm text-gray-300 md:text-base">
+                  Fale pelo WhatsApp, diga se quer comprar, trocar ou reparar, e nossa equipe direciona você para o atendimento certo.
                 </p>
               </div>
-              <Button asChild size="lg" className="rounded-full px-8 py-6 font-bold uppercase">
+              <Button asChild size="lg" className="w-full rounded-full px-8 py-6 font-bold uppercase md:w-auto">
                 <NavLink to="/repare">
                   Falar com a TecPonto
                   <Smartphone className="ml-2 h-4 w-4" />

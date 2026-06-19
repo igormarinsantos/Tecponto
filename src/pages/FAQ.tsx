@@ -11,10 +11,10 @@ const FAQ = () => {
         <div className="container mx-auto px-4">
           <p className="text-sm font-bold uppercase text-primary">Perguntas frequentes</p>
           <h1 className="mt-3 text-4xl md:text-6xl font-bold text-foreground">
-            Dúvidas comuns antes de falar com a TecPonto.
+            Dúvidas comuns sobre a TecPonto.
           </h1>
           <p className="mx-auto mt-5 max-w-2xl text-lg text-muted-foreground">
-            Veja respostas rápidas sobre reparo, troca, compra, garantia, pagamento e atendimento.
+            Veja respostas rápidas sobre reparo de celular, troca de usado, compra de aparelhos revisados, garantia e atendimento.
           </p>
         </div>
       </section>
@@ -26,7 +26,7 @@ const FAQ = () => {
               Ainda ficou com alguma dúvida?
             </h2>
             <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-white/70 md:text-base">
-              Chame a TecPonto no WhatsApp e conte rapidamente se você quer comprar, trocar ou reparar.
+              Chame a TecPonto no WhatsApp e conte rapidamente se você quer comprar, trocar ou reparar seu celular.
             </p>
             <Button asChild size="lg" className="mt-6 rounded-full px-8 py-6 font-bold uppercase">
               <a href="https://wa.me/5511930642742" target="_blank" rel="noopener noreferrer">

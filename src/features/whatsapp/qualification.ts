@@ -20,7 +20,7 @@ export const qualificationFlow: Record<LandingVariant, {
 }> = {
   repare: {
     title: "Repare",
-    subtitle: "Responda rapidinho para receber uma orientação mais rápida.",
+    subtitle: "Responda rapidinho para a equipe entender o reparo antes do atendimento.",
     button: "Enviar pedido de reparo",
     fields: [
       { id: "name", label: "Nome", placeholder: "Seu nome" },
@@ -57,7 +57,7 @@ export const qualificationFlow: Record<LandingVariant, {
   },
   troque: {
     title: "Troque",
-    subtitle: "Vamos pré-avaliar seu usado com o mínimo de digitação.",
+    subtitle: "Vamos pré-avaliar seu usado com poucas respostas objetivas.",
     button: "Enviar pedido de troca",
     fields: [
       { id: "name", label: "Nome", placeholder: "Seu nome" },
@@ -94,7 +94,7 @@ export const qualificationFlow: Record<LandingVariant, {
   },
   compre: {
     title: "Compre",
-    subtitle: "Diga o que procura para receber a lista certa de aparelhos.",
+    subtitle: "Diga o que procura para ver opções revisadas e a loja Shopee.",
     button: "Enviar interesse de compra",
     fields: [
       { id: "name", label: "Nome", placeholder: "Seu nome" },

@@ -21,6 +21,7 @@ const WhatsAppButton = ({ variant }: WhatsAppButtonProps) => {
     window.addEventListener(LANDING_QUALIFICATION_EVENT, openQualification);
     return () => window.removeEventListener(LANDING_QUALIFICATION_EVENT, openQualification);
   }, []);
+
   useEffect(() => {
     const updateVisibility = () => {
       animationFrame.current = null;
@@ -59,8 +60,8 @@ const WhatsAppButton = ({ variant }: WhatsAppButtonProps) => {
         transition={{ duration: 0.25, delay: isOpen ? 0 : 1 }}
         whileHover={{ scale: 1.06 }}
         whileTap={{ scale: 0.94 }}
-        style={{ bottom: shouldAvoidOfferBanner && offerVisible ? "7rem" : "2rem" }}
-        className="fixed right-5 md:right-8 z-40 w-14 h-14 md:w-16 md:h-16 bg-[#25D366] hover:bg-[#20BA5A] rounded-full flex items-center justify-center group transition-all duration-300 shadow-strong"
+        style={{ bottom: shouldAvoidOfferBanner && offerVisible ? "7.5rem" : "2.25rem" }}
+        className="fixed right-6 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-[#25D366] shadow-strong transition-all duration-300 hover:bg-[#20BA5A] md:right-9 md:h-16 md:w-16 group"
         aria-label="Abrir conversa no WhatsApp"
       >
         <img src={whatsappLogo} alt="WhatsApp" className="w-8 h-8 md:w-9 md:h-9 invert group-hover:scale-110 transition-transform" />

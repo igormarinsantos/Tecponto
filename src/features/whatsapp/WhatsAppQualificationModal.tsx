@@ -334,23 +334,23 @@ const WhatsAppQualificationModal = ({ isOpen, onClose, variant }: WhatsAppQualif
     <AnimatePresence>
       {isOpen && (
         <motion.div
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/45 p-6 md:p-10 backdrop-blur-md"
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/45 p-3 sm:p-6 md:p-10 backdrop-blur-md"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           onMouseDown={onClose}
         >
           <motion.div
-            className="flex h-[min(650px,calc(100dvh-64px))] w-full max-w-[430px] flex-col overflow-hidden rounded-[2rem] bg-white shadow-2xl"
+            className="flex h-[min(650px,calc(100dvh-24px))] w-full max-w-[430px] flex-col overflow-hidden rounded-[1.5rem] bg-white shadow-2xl sm:h-[min(650px,calc(100dvh-64px))] sm:rounded-[2rem]"
             initial={{ opacity: 0, scale: 0.94, y: 24 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.94, y: 24 }}
             transition={{ duration: 0.2 }}
             onMouseDown={(event) => event.stopPropagation()}
           >
-            <div className="flex shrink-0 items-center gap-3 bg-[#25292D] px-5 py-4">
+            <div className="flex shrink-0 items-center gap-2 bg-[#25292D] px-4 py-3.5 sm:gap-3 sm:px-5 sm:py-4">
               <div className="relative">
-                <img src={whatsappAssistant} alt="TecPonto" className="h-12 w-12 rounded-full border-2 border-white/20 object-cover" />
+                <img src={whatsappAssistant} alt="TecPonto" className="h-11 w-11 rounded-full border-2 border-white/20 object-cover sm:h-12 sm:w-12" />
                 <span className="absolute bottom-0 right-0 h-3.5 w-3.5 rounded-full border-2 border-[#25292D] bg-[#25D366]" />
               </div>
               <div className="flex-1">
@@ -362,7 +362,7 @@ const WhatsAppQualificationModal = ({ isOpen, onClose, variant }: WhatsAppQualif
               {(selectedVariant || Object.keys(values).length > 0) && (
                 <button
                   onClick={resetChat}
-                  className="p-1.5 text-white/80 hover:text-white flex items-center gap-1 text-[11px] font-bold uppercase tracking-wider transition-colors bg-white/5 hover:bg-white/10 rounded-lg"
+                  className="flex items-center gap-1 rounded-lg bg-white/5 p-1.5 text-[11px] font-bold uppercase tracking-wider text-white/80 transition-colors hover:bg-white/10 hover:text-white"
                   title="Reiniciar conversa"
                 >
                   <RotateCcw className="h-3.5 w-3.5" />
@@ -375,7 +375,7 @@ const WhatsAppQualificationModal = ({ isOpen, onClose, variant }: WhatsAppQualif
             </div>
 
             <div className="flex min-h-0 flex-1 flex-col bg-[#ece5dd]">
-              <div ref={scrollAreaRef} className="min-h-0 flex-1 space-y-3 overflow-y-auto p-4 pr-3">
+              <div ref={scrollAreaRef} className="min-h-0 flex-1 space-y-3 overflow-y-auto p-3 pr-2 sm:p-4 sm:pr-3">
                 {visibleMessages.map((message) => (
                   <div key={message.id} className={message.from === "user" ? "flex justify-end" : "flex justify-start"}>
                     <div
@@ -385,7 +385,7 @@ const WhatsAppQualificationModal = ({ isOpen, onClose, variant }: WhatsAppQualif
                           : "rounded-[18px] rounded-tl-md bg-white"
                       }`}
                     >
-                      <p className="whitespace-pre-line text-[15px] font-normal leading-relaxed text-[#111b21]">{message.text}</p>
+                      <p className="whitespace-pre-line text-sm font-normal leading-relaxed text-[#111b21] sm:text-[15px]">{message.text}</p>
                       <span className={`mt-1 flex text-[10px] text-gray-400 ${message.from === "user" ? "justify-end gap-1" : "justify-end"}`}>
                         agora
                         {message.from === "user" && <CheckCheck className="h-3.5 w-3.5 text-[#53bdeb]" />}
@@ -399,13 +399,13 @@ const WhatsAppQualificationModal = ({ isOpen, onClose, variant }: WhatsAppQualif
 
               {/* Botões de Opção Rápidas estilo WhatsApp Business */}
               {canAnswer && !isComplete && (
-                <div className="px-3 py-2 flex flex-wrap gap-2 justify-center bg-transparent max-h-40 overflow-y-auto shrink-0 border-t border-black/[0.03]">
+                <div className="flex max-h-36 shrink-0 flex-wrap justify-center gap-2 overflow-y-auto border-t border-black/[0.03] bg-transparent px-3 py-2 sm:max-h-40">
                   {!selectedVariant ? (
                     initialOptions.map((option) => (
                       <button
                         key={option.value}
                         onClick={() => answerCurrent(option.label)}
-                        className="px-3.5 py-2 rounded-full border border-primary/20 bg-white text-xs font-bold uppercase tracking-wider text-primary shadow-sm hover:bg-primary hover:text-white transition-all duration-200"
+                        className="min-h-10 rounded-full border border-primary/20 bg-white px-3.5 py-2 text-xs font-bold uppercase tracking-wider text-primary shadow-sm transition-all duration-200 hover:bg-primary hover:text-white"
                       >
                         {option.label}
                       </button>
@@ -415,7 +415,7 @@ const WhatsAppQualificationModal = ({ isOpen, onClose, variant }: WhatsAppQualif
                       <button
                         key={option}
                         onClick={() => answerCurrent(option)}
-                        className="px-3.5 py-2 rounded-full border border-primary/20 bg-white text-xs font-bold uppercase tracking-wider text-primary shadow-sm hover:bg-primary hover:text-white transition-all duration-200"
+                        className="min-h-10 rounded-full border border-primary/20 bg-white px-3.5 py-2 text-xs font-bold uppercase tracking-wider text-primary shadow-sm transition-all duration-200 hover:bg-primary hover:text-white"
                       >
                         {option}
                       </button>
@@ -425,7 +425,7 @@ const WhatsAppQualificationModal = ({ isOpen, onClose, variant }: WhatsAppQualif
               )}
 
               {/* Input Bar no estilo WhatsApp Real (Sempre Visível) */}
-              <div className="shrink-0 bg-[#f0f2f5] p-3 border-t border-black/5">
+              <div className="shrink-0 border-t border-black/5 bg-[#f0f2f5] p-2.5 sm:p-3">
                 {isComplete ? (
                   <button onClick={handleFinalAction} className="flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-[#25D366] text-sm font-black uppercase tracking-wide text-white shadow-lg shadow-green-500/20 transition-colors hover:bg-[#20BA5A]">
                     {selectedVariant === "compre" ? "Abrir loja na Shopee" : "Enviar no WhatsApp"}

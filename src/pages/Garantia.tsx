@@ -5,9 +5,9 @@ import WhatsAppButton from "@/features/whatsapp/WhatsAppButton";
 import Footer from "@/layouts/Footer";
 
 const summaryCards = [
-  "Garantia informada antes da compra ou servico",
+  "Garantia informada antes da compra, troca ou servico",
   "Atendimento pelo WhatsApp para analise inicial",
-  "Necessario apresentar comprovante ou ordem de servico",
+  "Comprovante ou ordem de servico podem ser solicitados",
 ];
 
 const terms = [
@@ -59,7 +59,7 @@ const Garantia = () => {
               Politica de garantia TecPonto.
             </h1>
             <p className="mx-auto mt-5 max-w-2xl text-lg leading-relaxed text-muted-foreground">
-              Consulte as condicoes gerais para compras, trocas e reparos. As condicoes especificas de cada atendimento sao confirmadas antes da finalizacao.
+              Veja quando a garantia se aplica, quais casos precisam de analise tecnica e como acionar o suporte da TecPonto.
             </p>
             <div className="mt-6 inline-flex rounded-full border border-border bg-card px-4 py-2 text-xs font-bold uppercase text-muted-foreground">
               Atualizado em junho de 2026
@@ -98,7 +98,7 @@ const Garantia = () => {
                   <span className="text-sm font-bold uppercase">Precisa acionar garantia?</span>
                 </div>
                 <p className="text-lg font-semibold">
-                  Fale com a equipe e envie as informacoes do seu atendimento.
+                  Fale com a equipe e envie as informacoes do aparelho, comprovante ou ordem de servico.
                 </p>
               </div>
               <Button asChild size="lg" className="rounded-full px-8 py-6 font-bold uppercase">

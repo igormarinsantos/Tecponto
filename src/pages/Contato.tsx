@@ -12,7 +12,7 @@ const Contato = () => {
             Fale com a TecPonto pelo WhatsApp.
           </h1>
           <p className="mx-auto mt-5 max-w-2xl text-lg text-muted-foreground">
-            Responda poucas perguntas em formato de conversa e envie uma mensagem pronta para o atendimento certo.
+            Responda poucas perguntas em formato de conversa e envie uma mensagem pronta para compra, troca ou reparo.
           </p>
         </div>
       </section>
