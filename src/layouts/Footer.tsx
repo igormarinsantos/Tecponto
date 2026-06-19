@@ -27,7 +27,7 @@ const Footer = () => {
                   href={item.path}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="transition-colors hover:text-foreground relative group py-1"
+                  className="relative w-fit py-1 transition-colors hover:text-foreground group"
                 >
                   {item.label}
                   <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-primary transition-all duration-300 group-hover:w-full" />
@@ -36,7 +36,7 @@ const Footer = () => {
                 <NavLink
                   key={item.path}
                   to={item.path}
-                  className="transition-colors hover:text-foreground relative group py-1"
+                  className="relative w-fit py-1 transition-colors hover:text-foreground group"
                 >
                   {item.label}
                   <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-primary transition-all duration-300 group-hover:w-full" />
