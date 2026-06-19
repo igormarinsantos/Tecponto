@@ -38,7 +38,7 @@ const WarrantySection = ({ variant = "repare" }: WarrantySectionProps) => {
           initial={{ opacity: 0, scale: 0.9 }}
           animate={isInView ? { opacity: 1, scale: 1 } : {}}
           transition={{ duration: 0.6 }}
-          className={`max-w-5xl mx-auto rounded-2xl shadow-soft border-2 border-border flex flex-col md:flex-row items-end gap-8 relative min-h-[320px] ${
+          className={`max-w-5xl mx-auto rounded-2xl shadow-soft border-2 border-border flex ${isTroque ? "flex-col-reverse" : "flex-col"} md:flex-row items-end gap-8 relative min-h-[320px] ${
             isTroque ? "px-8 pt-10 md:px-16 md:pt-16 overflow-hidden" : "p-12 md:p-16 overflow-visible"
           }`}
           style={{ backgroundColor: '#25292D' }}
@@ -51,7 +51,7 @@ const WarrantySection = ({ variant = "repare" }: WarrantySectionProps) => {
             />
           </div>
 
-          <div className={`text-center md:text-left flex-1 ${isTroque ? "pb-10 md:pb-16" : ""}`}>
+          <div className={`text-center md:text-left flex-1 ${isTroque ? "pb-0 md:pb-16" : ""}`}>
             <h3 className="text-4xl md:text-5xl font-bold text-white mb-6">
               {title}
             </h3>

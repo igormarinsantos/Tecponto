@@ -166,7 +166,7 @@ const Home = () => {
         <div className="container mx-auto px-4 relative z-10">
           <div className="grid items-center gap-12 lg:grid-cols-[1.05fr_0.95fr] max-w-[1360px] mx-auto">
             <div className="p-2 text-left text-white">
-              <div className="mb-6 inline-flex rounded-full bg-[#25292D] p-1">
+              <div className="mb-5 grid w-[calc(100vw-40px)] max-w-full grid-cols-3 overflow-hidden rounded-full bg-[#25292D] p-1 md:mb-6 md:inline-flex md:w-auto md:overflow-visible">
                 {heroModes.map((mode, index) => {
                   const Icon = mode.icon;
                   const isActive = index === currentWordIndex;
@@ -175,11 +175,11 @@ const Home = () => {
                       key={mode.label}
                       type="button"
                       onClick={() => setCurrentWordIndex(index)}
-                      className={`flex min-w-[96px] items-center justify-center gap-2 rounded-full px-4 py-2.5 text-sm font-black transition-all ${
+                      className={`flex w-full min-w-0 items-center justify-center gap-1 rounded-full px-1.5 py-2.5 text-[10px] font-black transition-all min-[360px]:gap-1.5 min-[360px]:px-2.5 min-[360px]:text-xs sm:gap-2 sm:px-3 sm:text-sm md:w-auto md:min-w-[96px] md:px-4 ${
                         isActive ? "bg-white text-primary" : "text-white/85 hover:text-white"
                       }`}
                     >
-                      <Icon className="h-4 w-4" />
+                      <Icon className="h-3.5 w-3.5 shrink-0 min-[360px]:h-4 min-[360px]:w-4" />
                       {mode.label}
                     </button>
                   );
@@ -218,7 +218,6 @@ const Home = () => {
                     <a href={SHOPEE_STORE_URL} target="_blank" rel="noopener noreferrer">
                       <ShoppingBag className="mr-2 h-5 w-5 text-primary" />
                       {currentHeroMode.cta}
-                      <ArrowRight className="ml-5 h-5 w-5" />
                     </a>
                   </Button>
                 ) : (
@@ -229,7 +228,6 @@ const Home = () => {
                   >
                     <img src={whatsappLogo} alt="" className="mr-2 h-5 w-5" />
                     {currentHeroMode.cta}
-                    <ArrowRight className="ml-5 h-5 w-5" />
                   </Button>
                 )}
 
