@@ -532,7 +532,7 @@ const LandingHeroSection = ({ variant = "repare" }: LandingHeroSectionProps) => 
                     alt="Celular antigo usado"
                     animate={{ y: [0, -6, 0], rotate: [-2, 0, -2] }}
                     transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
-                    className="absolute left-[-14%] w-[80%] object-contain drop-shadow-xl z-10"
+                    className="absolute left-[-20%] w-[80%] object-contain drop-shadow-xl z-10"
                   />
                   {/* Right hand (new phone) */}
                   <motion.img
@@ -540,7 +540,7 @@ const LandingHeroSection = ({ variant = "repare" }: LandingHeroSectionProps) => 
                     alt="Celular novo premium"
                     animate={{ y: [0, 6, 0], rotate: [2, 0, 2] }}
                     transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 0.4 }}
-                    className="absolute right-[-14%] w-[80%] object-contain drop-shadow-2xl z-20"
+                    className="absolute right-[-20%] w-[80%] object-contain drop-shadow-2xl z-20"
                   />
                 </motion.div>
 
