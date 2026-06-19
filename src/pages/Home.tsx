@@ -242,16 +242,16 @@ const Home = () => {
                 </Button>
               </div>
 
-              <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center">
-                <div className="flex -space-x-3">
+              <div className="mt-5 flex items-center gap-3">
+                <div className="flex shrink-0 -space-x-3">
                   <img className="h-9 w-9 rounded-full border-2 border-white object-cover shadow-sm" src={customer1} alt="Cliente TecPonto" />
                   <img className="h-9 w-9 rounded-full border-2 border-white object-cover shadow-sm" src={customer2} alt="Cliente TecPonto" />
                   <img className="h-9 w-9 rounded-full border-2 border-white object-cover shadow-sm" src={customer3} alt="Cliente TecPonto" />
                   <img className="h-9 w-9 rounded-full border-2 border-white object-cover shadow-sm" src={customer4} alt="Cliente TecPonto" />
                 </div>
-                <div>
-                  <p className="text-sm font-black leading-none text-white">+2.000 atendimentos</p>
-                  <div className="mt-1 flex items-center gap-1 text-xs font-bold text-white">
+                <div className="min-w-0">
+                  <p className="whitespace-nowrap text-[13px] font-black leading-none text-white min-[390px]:text-sm">+2.000 atendimentos</p>
+                  <div className="mt-1 flex items-center gap-1 whitespace-nowrap text-[11px] font-bold text-white min-[390px]:text-xs">
                     Avaliação 4.9 no Google <span className="text-[#FFD33D]">★★★★★</span>
                   </div>
                 </div>
