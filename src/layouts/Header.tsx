@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import { NavLink, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ChevronDown, Menu, X } from "lucide-react";
@@ -37,12 +38,25 @@ const Header = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  useEffect(() => {
+    if (!isMenuOpen) return;
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [isMenuOpen]);
+
   return (
     <header
-      className={`fixed z-50 border-b transition-all duration-200 ${
-        isHomeTop
-          ? "left-[10px] right-[10px] top-[10px] border-transparent bg-transparent shadow-none"
-          : `left-0 right-0 top-0 border-border bg-background/95 shadow-soft backdrop-blur-sm ${isScrolled ? "mx-4 mt-4 rounded-2xl" : ""}`
+      className={`fixed z-50 transition-all duration-200 ${
+        isMenuOpen
+          ? "left-0 right-0 top-0 bottom-0 h-screen w-screen bg-background border-none shadow-none"
+          : isHomeTop
+          ? "left-[10px] right-[10px] top-[10px] border-b border-transparent bg-transparent shadow-none"
+          : `left-0 right-0 top-0 border-b border-border bg-background/95 shadow-soft backdrop-blur-sm ${isScrolled ? "mx-4 mt-4 rounded-2xl" : ""}`
       }`}
     >
       <nav className="container mx-auto px-4 py-3">
@@ -210,9 +224,37 @@ const Header = () => {
           </button>
         </div>
 
-        {isMenuOpen && (
-          <div className="md:hidden bg-card/95 backdrop-blur-lg rounded-xl mt-4 shadow-strong border border-border">
-            <div className="flex flex-col gap-2 p-4">
+        <AnimatePresence>
+          {isMenuOpen && (
+            <motion.div
+              key="mobile-menu"
+              initial={{ opacity: 0, y: "-100%" }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: "-100%" }}
+              transition={{ duration: 0.38, ease: [0.22, 1, 0.36, 1] }}
+              className="fixed inset-0 z-[80] overflow-y-auto bg-background px-4 pb-8 pt-4 shadow-strong md:hidden"
+            >
+              <motion.div
+                initial={{ opacity: 0, y: 18 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -12 }}
+                transition={{ duration: 0.28, delay: 0.08, ease: "easeOut" }}
+                className="mx-auto flex min-h-[calc(100svh-32px)] max-w-md flex-col gap-4"
+              >
+              <div className="flex h-14 items-center justify-between rounded-2xl border border-border bg-card px-4 shadow-soft">
+                <NavLink to="/" aria-label="TecPonto" className="flex items-center" onClick={() => setIsMenuOpen(false)}>
+                  <img src={logo} alt="TecPonto" className="h-3.5" />
+                </NavLink>
+                <button
+                  type="button"
+                  onClick={() => setIsMenuOpen(false)}
+                  className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-foreground"
+                  aria-label="Fechar menu"
+                >
+                  <X size={22} />
+                </button>
+              </div>
+
               <div className="grid grid-cols-3 gap-2">
                 {landingPages.map((item) =>
                   item.external ? (
@@ -221,7 +263,8 @@ const Header = () => {
                       href={item.path}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="rounded-lg bg-primary/10 px-2 py-3 text-center text-xs font-bold uppercase text-foreground transition-colors"
+                      onClick={() => setIsMenuOpen(false)}
+                      className="rounded-xl bg-primary/10 px-2 py-4 text-center text-xs font-bold uppercase text-foreground transition-colors"
                     >
                       {item.label}
                     </a>
@@ -229,8 +272,9 @@ const Header = () => {
                     <NavLink
                       key={item.path}
                       to={item.path}
+                      onClick={() => setIsMenuOpen(false)}
                       className={({ isActive }) =>
-                        `text-center rounded-lg px-2 py-3 text-xs font-bold uppercase transition-colors ${
+                        `rounded-xl px-2 py-4 text-center text-xs font-bold uppercase transition-colors ${
                           isActive ? "bg-primary text-primary-foreground" : "bg-primary/10 text-foreground"
                         }`
                       }
@@ -241,14 +285,15 @@ const Header = () => {
                 )}
               </div>
 
-              <div className="h-px bg-border my-2" />
+              <div className="my-2 h-px bg-border" />
 
               {navPages.map((item) => (
                 <NavLink
                   key={item.path}
                   to={item.path}
+                  onClick={() => setIsMenuOpen(false)}
                   className={({ isActive }) =>
-                    `text-left hover:text-primary hover:bg-primary/10 transition-colors font-medium py-3 px-4 rounded-lg ${
+                    `rounded-xl px-4 py-4 text-left font-medium transition-colors hover:bg-primary/10 hover:text-primary ${
                       isActive ? "text-primary bg-primary/10" : "text-foreground"
                     }`
                   }
@@ -260,22 +305,23 @@ const Header = () => {
               <Button
                 asChild
                 variant="outline"
-                className="border-primary/30 text-primary w-full font-bold uppercase hover:bg-primary/10 hover:text-primary mt-2"
+                className="mt-auto h-12 w-full border-primary/30 font-bold uppercase text-primary hover:bg-primary/10 hover:text-primary"
               >
-                <a href={SHOPEE_STORE_URL} target="_blank" rel="noopener noreferrer">
+                <a href={SHOPEE_STORE_URL} target="_blank" rel="noopener noreferrer" onClick={() => setIsMenuOpen(false)}>
                   Nossa Loja
                 </a>
               </Button>
 
               <Button
                 asChild
-                className="bg-primary text-primary-foreground w-full font-bold uppercase hover:bg-primary/90"
+                className="h-12 w-full bg-primary font-bold uppercase text-primary-foreground hover:bg-primary/90"
               >
-                <NavLink to="/contato">Quero Orçamento</NavLink>
+                <NavLink to="/contato" onClick={() => setIsMenuOpen(false)}>Quero Orçamento</NavLink>
               </Button>
-            </div>
-          </div>
-        )}
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </nav>
     </header>
   );
