@@ -524,7 +524,7 @@ const LandingHeroSection = ({ variant = "repare" }: LandingHeroSectionProps) => 
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.8, delay: 0.8 }}
-                  className="w-full max-w-[280px] xs:max-w-[320px] aspect-[1.6] relative my-4 flex items-center justify-center lg:hidden overflow-visible select-none"
+                  className="w-screen max-w-none aspect-[1.6] relative my-4 flex items-center justify-center lg:hidden overflow-visible select-none"
                 >
                   {/* Left hand (old phone) */}
                   <motion.img
