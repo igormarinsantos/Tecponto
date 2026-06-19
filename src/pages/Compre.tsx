@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { SHOPEE_STORE_URL } from "@/constants/links";
+import Footer from "@/layouts/Footer";
 
 const Compre = () => {
   useEffect(() => {
@@ -7,14 +8,17 @@ const Compre = () => {
   }, []);
 
   return (
-    <main className="min-h-screen bg-background pt-24">
-      <div className="container mx-auto px-4 py-20 text-center">
-        <p className="text-sm font-bold uppercase text-primary">Redirecionando</p>
-        <h1 className="mt-3 text-3xl font-bold text-foreground">
-          Abrindo a loja Shopee da TecPonto...
-        </h1>
-      </div>
-    </main>
+    <>
+      <main className="min-h-screen bg-background pt-24">
+        <div className="container mx-auto px-4 py-20 text-center">
+          <p className="text-sm font-bold uppercase text-primary">Redirecionando</p>
+          <h1 className="mt-3 text-3xl font-bold text-foreground">
+            Abrindo a loja Shopee da TecPonto...
+          </h1>
+        </div>
+      </main>
+      <Footer />
+    </>
   );
 };
 
