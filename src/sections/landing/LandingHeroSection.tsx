@@ -516,13 +516,6 @@ const LandingHeroSection = ({ variant = "repare" }: LandingHeroSectionProps) => 
                     className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold px-6 md:px-8 py-5 md:py-6 text-sm md:text-base rounded-full uppercase shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/30 transition-all duration-300 hover:-translate-y-0.5 group"
                   >
                     <span>Solicitar Orçamento Grátis</span>
-                    <motion.span
-                      animate={{ x: [0, 4, 0] }}
-                      transition={{ duration: 1.5, repeat: Infinity }}
-                      className="ml-2"
-                    >
-                      →
-                    </motion.span>
                   </Button>
                 </motion.div>
 
@@ -677,13 +670,6 @@ const LandingHeroSection = ({ variant = "repare" }: LandingHeroSectionProps) => 
                     className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold px-6 md:px-8 py-5 md:py-6 text-sm md:text-base rounded-full uppercase shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/30 transition-all duration-300 hover:-translate-y-0.5 group"
                   >
                     <span>Solicitar Orçamento Grátis</span>
-                    <motion.span
-                      animate={{ x: [0, 4, 0] }}
-                      transition={{ duration: 1.5, repeat: Infinity }}
-                      className="ml-2"
-                    >
-                      →
-                    </motion.span>
                   </Button>
                 </motion.div>
 
