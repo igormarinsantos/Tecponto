@@ -4,64 +4,23 @@ import { CheckCheck, Send } from "lucide-react";
 import WhatsAppQualificationModal from "@/features/whatsapp/WhatsAppQualificationModal";
 import whatsappAssistant from "@/assets/people/whatsapp-assistant.png";
 import type { LandingVariant } from "@/types/landing";
+import { defaultWhatsAppChatContent, getLandingContent } from "@/content/landingContent";
 
 type WhatsAppChatSectionProps = {
   variant?: LandingVariant;
-};
-
-const contentByVariant: Record<LandingVariant | "default", {
-  title: string;
-  subtitle: string;
-  button: string;
-  firstMessage: string;
-  secondMessage: string;
-  userReply: string;
-}> = {
-  repare: {
-    title: "Resolva agora seu reparo",
-    subtitle: "O Rodrigo te guia em poucas perguntas.",
-    button: "Iniciar orçamento",
-    firstMessage: "Oi! Sou o Rodrigo, da TecPonto. Vamos entender o que aconteceu com seu celular?",
-    secondMessage: "Responda rapidinho e eu organizo seu pedido para o atendimento certo.",
-    userReply: "Quero reparar meu celular",
-  },
-  troque: {
-    title: "Avalie seu usado agora",
-    subtitle: "Uma pré-avaliação simples, direto na conversa.",
-    button: "Iniciar avaliação",
-    firstMessage: "Oi! Sou o Rodrigo, da TecPonto. Quer usar seu celular como entrada?",
-    secondMessage: "Responda poucas perguntas e eu preparo sua pré-avaliação.",
-    userReply: "Quero avaliar meu usado",
-  },
-  compre: {
-    title: "Encontre seu próximo celular",
-    subtitle: "Receba o caminho certo para comprar com segurança.",
-    button: "Ver opções",
-    firstMessage: "Oi! Sou o Rodrigo, da TecPonto. Posso te ajudar a encontrar um celular revisado.",
-    secondMessage: "Também temos nossa loja na Shopee para você ver os aparelhos disponíveis.",
-    userReply: "Quero comprar um celular",
-  },
-  default: {
-    title: "Fale com a TecPonto",
-    subtitle: "Comece pelo WhatsApp e siga pelo atendimento certo.",
-    button: "Iniciar conversa",
-    firstMessage: "Oi! Sou o Rodrigo, da TecPonto. O que você gostaria de fazer hoje?",
-    secondMessage: "Posso te ajudar com compra, troca ou reparo de celular.",
-    userReply: "Quero atendimento",
-  },
 };
 
 const WhatsAppChatSection = ({ variant }: WhatsAppChatSectionProps) => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, amount: 0.3 });
   const [isOpen, setIsOpen] = useState(false);
-  const content = contentByVariant[variant ?? "default"];
+  const content = variant ? getLandingContent(variant).whatsappChat : defaultWhatsAppChatContent;
 
   return (
-    <section ref={ref} id="whatsapp-chat" className="py-16 md:py-20" style={{ backgroundColor: "#F0EFF5" }}>
+    <section ref={ref} id="whatsapp-chat" className="py-12 md:py-20" style={{ backgroundColor: "#F0EFF5" }}>
       <WhatsAppQualificationModal isOpen={isOpen} onClose={() => setIsOpen(false)} variant={variant} />
       <div className="container mx-auto px-4">
-        <div className="mx-auto flex max-w-4xl flex-col items-center gap-8">
+        <div className="mx-auto flex max-w-4xl flex-col items-center gap-6 md:gap-8">
           <motion.div
             initial={{ opacity: 0, y: 24 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
@@ -71,7 +30,7 @@ const WhatsAppChatSection = ({ variant }: WhatsAppChatSectionProps) => {
             <h2 className="text-3xl font-bold text-foreground md:text-4xl lg:text-5xl">
               {content.title}
             </h2>
-            <p className="mx-auto mt-3 max-w-xl text-base leading-relaxed text-muted-foreground md:text-lg">
+            <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-muted-foreground md:text-lg">
               {content.subtitle}
             </p>
           </motion.div>
@@ -80,15 +39,15 @@ const WhatsAppChatSection = ({ variant }: WhatsAppChatSectionProps) => {
             initial={{ opacity: 0, y: 28, scale: 0.96 }}
             animate={isInView ? { opacity: 1, y: 0, scale: 1 } : {}}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="mx-auto w-full max-w-[430px]"
+            className="mx-auto w-full max-w-[430px] px-0"
           >
-            <div className="overflow-hidden rounded-[2rem] border border-border bg-white shadow-strong">
-              <div className="flex items-center gap-3 bg-[#25292D] px-5 py-4">
+            <div className="overflow-hidden rounded-[1.5rem] border border-border bg-white shadow-strong md:rounded-[2rem]">
+              <div className="flex items-center gap-3 bg-[#25292D] px-4 py-3 md:px-5 md:py-4">
                 <div className="relative">
                   <img
                     src={whatsappAssistant}
                     alt="Rodrigo - TecPonto"
-                    className="h-12 w-12 rounded-full border-2 border-white/20 object-cover"
+                    className="h-11 w-11 rounded-full border-2 border-white/20 object-cover md:h-12 md:w-12"
                   />
                   <span className="absolute bottom-0 right-0 h-3.5 w-3.5 rounded-full border-2 border-[#25292D] bg-[#25D366]" />
                 </div>
@@ -98,20 +57,20 @@ const WhatsAppChatSection = ({ variant }: WhatsAppChatSectionProps) => {
                 </div>
               </div>
 
-              <div className="space-y-3 bg-[#ece5dd] p-4">
+              <div className="space-y-3 bg-[#ece5dd] p-3 md:p-4">
                 <div className="max-w-[86%] rounded-[18px] rounded-tl-md bg-white px-4 py-3 shadow-sm">
-                  <p className="text-[15px] leading-relaxed text-[#111b21]">{content.firstMessage}</p>
+                  <p className="text-sm leading-relaxed text-[#111b21] md:text-[15px]">{content.firstMessage}</p>
                   <span className="mt-1 flex justify-end text-[10px] text-gray-400">agora</span>
                 </div>
 
                 <div className="max-w-[86%] rounded-[18px] rounded-tl-md bg-white px-4 py-3 shadow-sm">
-                  <p className="text-[15px] leading-relaxed text-[#111b21]">{content.secondMessage}</p>
+                  <p className="text-sm leading-relaxed text-[#111b21] md:text-[15px]">{content.secondMessage}</p>
                   <span className="mt-1 flex justify-end text-[10px] text-gray-400">agora</span>
                 </div>
 
                 <div className="flex justify-end">
                   <div className="max-w-[86%] rounded-[18px] rounded-tr-md bg-[#e7ffdb] px-4 py-3 shadow-sm">
-                    <p className="text-[15px] leading-relaxed text-[#111b21]">{content.userReply}</p>
+                    <p className="text-sm leading-relaxed text-[#111b21] md:text-[15px]">{content.userReply}</p>
                     <span className="mt-1 flex justify-end gap-1 text-[10px] text-gray-400">
                       agora
                       <CheckCheck className="h-3.5 w-3.5 text-[#53bdeb]" />

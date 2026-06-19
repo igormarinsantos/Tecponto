@@ -1,14 +1,12 @@
 import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { MapPin, Clock, Shield, Zap, Award, CheckCircle2 } from "lucide-react";
-import reparoPhone from "@/assets/repare/repare-hero-phone.png";
-import trocaPhone from "@/assets/devices/troca.png";
-import comprePhone from "@/assets/devices/compre.png";
+import { MapPin, Clock, Zap, CheckCircle2 } from "lucide-react";
 import handLeft from "@/assets/devices/hand-old-phone.png";
 import handRight from "@/assets/devices/hand-new-phone.png";
 import { useCountdownTimer } from "@/hooks/useCountdownTimer";
 import type { LandingVariant } from "@/types/landing";
+import { getLandingContent } from "@/content/landingContent";
 
 // Import glass shard PNG cutouts
 import shard1 from "@/assets/repare/shard-1.png";
@@ -18,12 +16,6 @@ import shard4 from "@/assets/repare/shard-4.png";
 import shard5 from "@/assets/repare/shard-5.png";
 import shard6 from "@/assets/repare/shard-6.png";
 import shard7 from "@/assets/repare/shard-7.png";
-
-const heroImages: Record<LandingVariant, string> = {
-  repare: reparoPhone,
-  troque: trocaPhone,
-  compre: comprePhone,
-};
 
 const scrollToWhatsApp = () => {
   const element = document.getElementById("whatsapp-chat");
@@ -48,72 +40,6 @@ const HeroCountdown = () => {
       </span>
     </div>
   );
-};
-
-const heroContent: Record<LandingVariant, {
-  eyebrow: string;
-  title: string;
-  highlight: string;
-  description: JSX.Element;
-  features: Array<{ icon: typeof Zap; text: string }>;
-  floatingBadge: string;
-  imageAlt: string;
-}> = {
-  repare: {
-    eyebrow: "10% OFF Novos Clientes",
-    title: "Seu celular",
-    highlight: "quebrou?",
-    description: (
-      <>
-        <span className="font-bold text-foreground">Conserto rápido</span>,{" "}
-        <span className="font-bold text-foreground">garantia de 90 dias</span> e{" "}
-        <span className="font-bold text-foreground">atendimento especializado</span> que você merece
-      </>
-    ),
-    features: [
-      { icon: Zap, text: "Reparo Rápido" },
-      { icon: Shield, text: "90 Dias Garantia" },
-      { icon: Award, text: "Peças Originais" },
-    ],
-    floatingBadge: "Reparo em 2h",
-    imageAlt: "Celular quebrado - Conserto profissional",
-  },
-  troque: {
-    eyebrow: "Avaliação rápida do seu usado",
-    title: "Troque seu celular",
-    highlight: "sem enrolação",
-    description: (
-      <>
-        <span className="font-bold text-foreground">Avaliamos seu aparelho</span>,{" "}
-        <span className="font-bold text-foreground">aceitamos como entrada</span> e te ajudamos a sair com um modelo melhor
-      </>
-    ),
-    features: [
-      { icon: Zap, text: "Avaliação Rápida" },
-      { icon: Shield, text: "Troca Segura" },
-      { icon: Award, text: "Modelos Selecionados" },
-    ],
-    floatingBadge: "Troca facilitada",
-    imageAlt: "Celular para troca - Avaliação TecPonto",
-  },
-  compre: {
-    eyebrow: "Celulares revisados e com garantia",
-    title: "Compre seu próximo",
-    highlight: "celular",
-    description: (
-      <>
-        <span className="font-bold text-foreground">Aparelhos selecionados</span>,{" "}
-        <span className="font-bold text-foreground">testados pela assistência</span> e prontos para você comprar com confiança
-      </>
-    ),
-    features: [
-      { icon: Zap, text: "Pronta Entrega" },
-      { icon: Shield, text: "Garantia TecPonto" },
-      { icon: Award, text: "Curadoria Técnica" },
-    ],
-    floatingBadge: "Compra segura",
-    imageAlt: "Celular revisado para venda - TecPonto",
-  },
 };
 
 const glassShardsList = [
@@ -228,7 +154,7 @@ type LandingHeroSectionProps = {
 };
 
 const LandingHeroSection = ({ variant = "repare" }: LandingHeroSectionProps) => {
-  const content = heroContent[variant];
+  const content = getLandingContent(variant).hero;
   const repareContainerRef = useRef<HTMLDivElement>(null);
   const troqueHandsRef = useRef<HTMLDivElement>(null);
 
@@ -701,7 +627,7 @@ const LandingHeroSection = ({ variant = "repare" }: LandingHeroSectionProps) => 
                   <div ref={repareContainerRef} className="relative w-fit mx-auto select-none flex items-center justify-center">
                     <GlassShards />
                     <img 
-                      src={heroImages[variant]} 
+                      src={content.image}
                       alt={content.imageAlt} 
                       decoding="async"
                       className="w-full max-w-[340px] md:max-w-[460px] lg:max-w-[560px] drop-shadow-3xl relative z-10 repare-phone"
@@ -725,7 +651,7 @@ const LandingHeroSection = ({ variant = "repare" }: LandingHeroSectionProps) => 
                     <motion.img 
                       animate={{ y: [0, -10, 0] }}
                       transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                      src={heroImages[variant]} 
+                      src={content.image}
                       alt={content.imageAlt} 
                       decoding="async"
                       className="w-full max-w-[160px] md:max-w-[220px] lg:max-w-[280px] drop-shadow-2xl relative z-10"

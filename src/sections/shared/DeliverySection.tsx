@@ -1,9 +1,8 @@
 import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
 import { useRef } from "react";
-import motoboyImg from "@/assets/devices/motoboy.png";
-import troqueUsedValueImg from "@/assets/devices/troque-used-value.png";
 import type { LandingVariant } from "@/types/landing";
+import { getLandingContent } from "@/content/landingContent";
 
 type DeliverySectionProps = {
   variant?: LandingVariant;
@@ -14,23 +13,10 @@ const DeliverySection = ({ variant = "repare" }: DeliverySectionProps) => {
   const isInView = useInView(ref, { once: true, amount: 0.3 });
 
   const isTroque = variant === "troque";
-  const image = isTroque ? troqueUsedValueImg : motoboyImg;
-  const title = isTroque ? "Seu Usado Vale Dinheiro" : "Leva e Traz";
-  const description = isTroque ? (
-    <>
-      <span className="font-bold text-white">Avaliamos seu celular atual</span> de forma justa e transparente. Ele entra como <span className="font-semibold">parte do pagamento</span> para você levar um smartphone melhor hoje mesmo, sem complicações!
-    </>
-  ) : (
-    <>
-      <span className="font-bold text-white">Buscamos e entregamos</span> seu celular em <span className="font-semibold">total segurança</span> na região de{" "}
-      <span className="font-bold text-white">Guarulhos e São Paulo</span>,
-      <span className="font-bold"> sem custo adicional</span>. Você não precisa sair de casa!
-    </>
-  );
-  const buttonText = isTroque ? "Avaliar Meu Usado" : "Solicitar Coleta";
+  const content = getLandingContent(variant).delivery;
 
   return (
-    <section ref={ref} className="py-12 bg-background">
+    <section ref={ref} className="bg-background py-10 md:py-12">
       <div className="container mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
@@ -42,30 +28,30 @@ const DeliverySection = ({ variant = "repare" }: DeliverySectionProps) => {
           <div className="bg-primary rounded-2xl shadow-soft relative overflow-hidden">
             <div className="grid grid-cols-1 md:grid-cols-2">
               {/* Texto e CTA */}
-              <div className="text-center md:text-left p-8 md:p-12">
-                <h3 className="text-3xl md:text-4xl lg:text-5xl font-bold text-primary-foreground mb-4">
-                  {title}
+              <div className="p-6 text-center md:p-12 md:text-left">
+                <h3 className="mb-4 text-3xl font-bold text-primary-foreground md:text-4xl lg:text-5xl">
+                  {content.title}
                 </h3>
-                <p className="text-lg text-primary-foreground/90 leading-relaxed mb-6">
-                  {description}
+                <p className="mb-6 text-base leading-relaxed text-primary-foreground/90 md:text-lg">
+                  {content.description}
                 </p>
                 <button
                   onClick={() => {
                     const element = document.getElementById("whatsapp-chat");
                     element?.scrollIntoView({ behavior: "smooth" });
                   }}
-                  className="bg-white hover:bg-white/90 text-primary font-bold px-6 py-3 rounded-full transition-all hover:scale-105 uppercase text-sm"
+                  className="min-h-11 w-full rounded-full bg-white px-6 py-3 text-sm font-bold uppercase text-primary transition-all hover:scale-105 hover:bg-white/90 sm:w-auto"
                 >
-                  {buttonText}
+                  {content.buttonText}
                 </button>
               </div>
 
               {/* Imagem do motoboy - alinhada na base do card */}
               <div className="relative flex justify-center md:justify-end items-end">
                 <img 
-                  src={image} 
-                  alt={title}
-                  className={`h-auto object-contain self-end ${isTroque ? "w-80 md:w-[420px] lg:w-[520px] p-4 md:p-0" : "w-72 md:w-80 lg:w-96"}`}
+                  src={content.image}
+                  alt={content.title}
+                  className={`h-auto object-contain self-end ${isTroque ? "w-72 p-3 md:w-[420px] md:p-0 lg:w-[520px]" : "w-64 md:w-80 lg:w-96"}`}
                 />
               </div>
             </div>

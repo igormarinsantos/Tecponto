@@ -5,35 +5,18 @@ import { X, Check } from "lucide-react";
 import phoneAntes from "@/assets/devices/phone-antes.png";
 import phoneDepois from "@/assets/devices/phone-depois.png";
 import type { LandingVariant } from "@/types/landing";
+import { getLandingContent } from "@/content/landingContent";
 
 type LandingComparisonSectionProps = {
   variant?: LandingVariant;
 };
-
-const tradeComparisonRows = [
-  {
-    other: "Avaliação pouco clara do usado",
-    tecponto: "Pré-avaliação objetiva pelo WhatsApp",
-  },
-  {
-    other: "Proposta confusa na hora da troca",
-    tecponto: "Seu usado pode entrar como parte do pagamento",
-  },
-  {
-    other: "Aparelhos sem histórico de revisão",
-    tecponto: "Modelos selecionados e conferidos pela equipe",
-  },
-  {
-    other: "Atendimento sem orientação sobre próximo aparelho",
-    tecponto: "Indicação de opções conforme seu uso e orçamento",
-  },
-];
 
 const LandingComparisonSection = ({ variant = "repare" }: LandingComparisonSectionProps) => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, amount: 0.3 });
   const [scrollPosition, setScrollPosition] = useState(0);
   const animationFrame = useRef<number | null>(null);
+  const content = getLandingContent(variant).comparison;
 
   useEffect(() => {
     const updateScrollPosition = () => {
@@ -83,19 +66,19 @@ const LandingComparisonSection = ({ variant = "repare" }: LandingComparisonSecti
 
   if (variant === "troque") {
     return (
-      <section ref={ref} className="py-20 bg-background">
+      <section ref={ref} className="bg-background py-12 md:py-20">
         <div className="container mx-auto px-4">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6 }}
-            className="text-center mb-12"
+            className="mb-8 text-center md:mb-12"
           >
-            <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
-              Por Que Trocar com a TecPonto?
+            <h2 className="mb-3 text-3xl font-bold text-foreground md:mb-4 md:text-5xl">
+              {content.title}
             </h2>
-            <p className="text-xl text-muted-foreground">
-              Compare e entenda a diferença na hora de usar seu celular como entrada
+            <p className="text-base text-muted-foreground md:text-xl">
+              {content.subtitle}
             </p>
           </motion.div>
 
@@ -106,27 +89,27 @@ const LandingComparisonSection = ({ variant = "repare" }: LandingComparisonSecti
             className="mx-auto max-w-5xl overflow-hidden rounded-2xl border border-border bg-card shadow-soft"
           >
             <div className="grid grid-cols-2 border-b border-border bg-muted/30">
-              <div className="px-4 py-5 text-center text-sm font-bold uppercase text-muted-foreground md:text-base">
+              <div className="px-3 py-4 text-center text-xs font-bold uppercase text-muted-foreground md:px-4 md:py-5 md:text-base">
                 Outras Lojas
               </div>
-              <div className="border-l border-border px-4 py-5 text-center text-sm font-bold uppercase text-primary md:text-base">
+              <div className="border-l border-border px-3 py-4 text-center text-xs font-bold uppercase text-primary md:px-4 md:py-5 md:text-base">
                 TecPonto
               </div>
             </div>
 
-            {tradeComparisonRows.map((row, index) => (
+            {content.rows.map((row, index) => (
               <div key={row.tecponto} className={`grid grid-cols-2 ${index > 0 ? "border-t border-border" : ""}`}>
-                <div className="flex items-center gap-3 px-4 py-5 md:px-6">
-                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-destructive/10">
-                    <X className="h-4 w-4 text-destructive" />
+                <div className="flex items-start gap-2 px-3 py-4 md:items-center md:gap-3 md:px-6 md:py-5">
+                  <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-destructive/10 md:h-9 md:w-9">
+                    <X className="h-3.5 w-3.5 text-destructive md:h-4 md:w-4" />
                   </div>
-                  <span className="text-sm leading-relaxed text-muted-foreground md:text-base">{row.other}</span>
+                  <span className="text-xs leading-relaxed text-muted-foreground md:text-base">{row.other}</span>
                 </div>
-                <div className="flex items-center gap-3 border-l border-border bg-primary/5 px-4 py-5 md:px-6">
-                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary/10">
-                    <Check className="h-4 w-4 text-primary" />
+                <div className="flex items-start gap-2 border-l border-border bg-primary/5 px-3 py-4 md:items-center md:gap-3 md:px-6 md:py-5">
+                  <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-primary/10 md:h-9 md:w-9">
+                    <Check className="h-3.5 w-3.5 text-primary md:h-4 md:w-4" />
                   </div>
-                  <span className="text-sm font-medium leading-relaxed text-foreground md:text-base">{row.tecponto}</span>
+                  <span className="text-xs font-medium leading-relaxed text-foreground md:text-base">{row.tecponto}</span>
                 </div>
               </div>
             ))}
@@ -137,19 +120,19 @@ const LandingComparisonSection = ({ variant = "repare" }: LandingComparisonSecti
   }
 
   return (
-    <section ref={ref} className="py-20 bg-background">
+    <section ref={ref} className="bg-background py-12 md:py-20">
       <div className="container mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
-          className="text-center mb-12"
+          className="mb-8 text-center md:mb-12"
         >
-          <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
-            Por Que Escolher a TecPonto?
+          <h2 className="mb-3 text-3xl font-bold text-foreground md:mb-4 md:text-5xl">
+            {content.title}
           </h2>
-          <p className="text-xl text-muted-foreground">
-            Compare e veja a diferença
+          <p className="text-base text-muted-foreground md:text-xl">
+            {content.subtitle}
           </p>
         </motion.div>
 
@@ -168,33 +151,14 @@ const LandingComparisonSection = ({ variant = "repare" }: LandingComparisonSecti
               </h3>
               
               <div className="space-y-4">
-                <div className="flex items-center gap-3 bg-card rounded-xl p-4 border border-border">
-                  <div className="w-10 h-10 rounded-full bg-destructive/10 flex items-center justify-center flex-shrink-0">
-                    <X className="w-5 h-5 text-destructive" />
+                {content.rows.map((row) => (
+                  <div key={row.other} className="flex items-center gap-3 bg-card rounded-xl p-4 border border-border">
+                    <div className="w-10 h-10 rounded-full bg-destructive/10 flex items-center justify-center flex-shrink-0">
+                      <X className="w-5 h-5 text-destructive" />
+                    </div>
+                    <span className="text-muted-foreground">{row.other}</span>
                   </div>
-                  <span className="text-muted-foreground">Sem garantia ou apenas 30 dias</span>
-                </div>
-                
-                <div className="flex items-center gap-3 bg-card rounded-xl p-4 border border-border">
-                  <div className="w-10 h-10 rounded-full bg-destructive/10 flex items-center justify-center flex-shrink-0">
-                    <X className="w-5 h-5 text-destructive" />
-                  </div>
-                  <span className="text-muted-foreground">Peças genéricas</span>
-                </div>
-                
-                <div className="flex items-center gap-3 bg-card rounded-xl p-4 border border-border">
-                  <div className="w-10 h-10 rounded-full bg-destructive/10 flex items-center justify-center flex-shrink-0">
-                    <X className="w-5 h-5 text-destructive" />
-                  </div>
-                  <span className="text-muted-foreground">Você precisa levar até a loja</span>
-                </div>
-                
-                <div className="flex items-center gap-3 bg-card rounded-xl p-4 border border-border">
-                  <div className="w-10 h-10 rounded-full bg-destructive/10 flex items-center justify-center flex-shrink-0">
-                    <X className="w-5 h-5 text-destructive" />
-                  </div>
-                  <span className="text-muted-foreground">Demora de dias ou semanas</span>
-                </div>
+                ))}
               </div>
             </motion.div>
 
@@ -260,33 +224,14 @@ const LandingComparisonSection = ({ variant = "repare" }: LandingComparisonSecti
               </h3>
               
               <div className="space-y-4">
-                <div className="flex items-center gap-3 bg-primary/5 rounded-xl p-4 border-2 border-primary/20">
-                  <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                    <Check className="w-5 h-5 text-primary" />
+                {content.rows.map((row) => (
+                  <div key={row.tecponto} className="flex items-center gap-3 bg-primary/5 rounded-xl p-4 border-2 border-primary/20">
+                    <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                      <Check className="w-5 h-5 text-primary" />
+                    </div>
+                    <span className="text-foreground font-medium">{row.tecponto}</span>
                   </div>
-                  <span className="text-foreground font-medium">Garantia de 90 dias</span>
-                </div>
-                
-                <div className="flex items-center gap-3 bg-primary/5 rounded-xl p-4 border-2 border-primary/20">
-                  <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                    <Check className="w-5 h-5 text-primary" />
-                  </div>
-                  <span className="text-foreground font-medium">Peças de qualidade</span>
-                </div>
-                
-                <div className="flex items-center gap-3 bg-primary/5 rounded-xl p-4 border-2 border-primary/20">
-                  <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                    <Check className="w-5 h-5 text-primary" />
-                  </div>
-                  <span className="text-foreground font-medium">Busca e entrega grátis</span>
-                </div>
-                
-                <div className="flex items-center gap-3 bg-primary/5 rounded-xl p-4 border-2 border-primary/20">
-                  <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                    <Check className="w-5 h-5 text-primary" />
-                  </div>
-                  <span className="text-foreground font-medium">Reparo em até 2 horas</span>
-                </div>
+                ))}
               </div>
             </motion.div>
           </div>

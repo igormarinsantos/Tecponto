@@ -3,50 +3,7 @@ import { motion, useInView } from "framer-motion";
 import { Bike, Shield, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { LandingVariant } from "@/types/landing";
-
-const ctaByVariant: Record<LandingVariant, {
-  title: JSX.Element;
-  subtitle: string;
-  button: string;
-  bullets: string[];
-}> = {
-  repare: {
-    title: (
-      <>
-        Seu celular novo em pouco
-        <br />
-        tempo, <span className="text-primary">rápido e sem dor de cabeça</span>
-      </>
-    ),
-    subtitle: "Atendimento profissional, peças de qualidade e garantia estendida",
-    button: "Quero um Orçamento Gratuito",
-    bullets: ["Resposta em até 5 minutos", "Garantia de 90 dias", "Busca e entrega grátis"],
-  },
-  troque: {
-    title: (
-      <>
-        Troque seu celular com
-        <br />
-        <span className="text-primary">avaliação justa e rápida</span>
-      </>
-    ),
-    subtitle: "Use seu aparelho como entrada e veja opções melhores para o seu dia a dia",
-    button: "Avaliar Meu Celular",
-    bullets: ["Pré-avaliação por WhatsApp", "Troca segura", "Atendimento em Guarulhos"],
-  },
-  compre: {
-    title: (
-      <>
-        Compre seu próximo celular
-        <br />
-        <span className="text-primary">revisado pela TecPonto</span>
-      </>
-    ),
-    subtitle: "Modelos selecionados, testados e com suporte de assistência técnica",
-    button: "Ver Modelos Disponíveis",
-    bullets: ["Lista atualizada", "Aparelhos testados", "Compra com suporte"],
-  },
-};
+import { getLandingContent } from "@/content/landingContent";
 
 type FinalCTASectionProps = {
   variant?: LandingVariant;
@@ -55,7 +12,7 @@ type FinalCTASectionProps = {
 const FinalCTASection = ({ variant = "repare" }: FinalCTASectionProps) => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, amount: 0.5 });
-  const content = ctaByVariant[variant];
+  const content = getLandingContent(variant).finalCta;
   const icons = [Zap, Shield, Bike];
 
   const scrollToWhatsApp = () => {
@@ -64,25 +21,25 @@ const FinalCTASection = ({ variant = "repare" }: FinalCTASectionProps) => {
   };
 
   return (
-    <section ref={ref} className="py-20 relative overflow-hidden" style={{ backgroundColor: "#25292D" }}>
+    <section ref={ref} className="relative overflow-hidden py-14 md:py-20" style={{ backgroundColor: "#25292D" }}>
       <div className="container mx-auto px-4 text-center relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
         >
-          <h2 className="text-4xl md:text-6xl font-bold text-white mb-6">
+          <h2 className="mb-5 text-3xl font-bold text-white md:mb-6 md:text-6xl">
             {content.title}
           </h2>
 
-          <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto">
+          <p className="mx-auto mb-7 max-w-3xl text-base text-gray-300 md:mb-8 md:text-2xl">
             {content.subtitle}
           </p>
 
           <Button
             size="lg"
             onClick={scrollToWhatsApp}
-            className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-lg px-12 py-6 rounded-full uppercase"
+            className="h-[52px] w-full max-w-sm rounded-full bg-primary px-6 py-5 text-sm font-bold uppercase text-primary-foreground hover:bg-primary/90 md:w-auto md:px-12 md:py-6 md:text-lg"
           >
             {content.button}
           </Button>
@@ -91,7 +48,7 @@ const FinalCTASection = ({ variant = "repare" }: FinalCTASectionProps) => {
             initial={{ opacity: 0 }}
             animate={isInView ? { opacity: 1 } : {}}
             transition={{ duration: 0.6, delay: 0.5 }}
-            className="flex flex-wrap items-center justify-center gap-4 md:gap-6 mt-8 text-white/80 text-sm md:text-base"
+            className="mt-7 flex flex-wrap items-center justify-center gap-3 text-sm text-white/80 md:mt-8 md:gap-6 md:text-base"
           >
             {content.bullets.map((bullet, index) => {
               const Icon = icons[index] ?? Zap;
