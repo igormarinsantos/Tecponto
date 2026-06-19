@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import type { PointerEvent } from "react";
 import { NavLink } from "react-router-dom";
 import { AnimatePresence, motion, useMotionValue, useSpring } from "framer-motion";
-import { ArrowRight, RefreshCw, ShieldCheck, ShoppingBag, Smartphone, Star, Wrench, Zap } from "lucide-react";
+import { ArrowRight, CheckCircle2, RefreshCw, ShieldCheck, ShoppingBag, Smartphone, Star, Wrench, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Footer from "@/layouts/Footer";
 import WhatsAppButton from "@/features/whatsapp/WhatsAppButton";
@@ -11,9 +11,9 @@ import type { LandingVariant } from "@/types/landing";
 import brokenPhone from "@/assets/devices/reparo.png";
 import perfectPhone from "@/assets/devices/compre.png";
 import motoboy from "@/assets/devices/troca.png";
-import homeHeroCompre from "@/assets/devices/home-hero-compre.png";
-import homeHeroRepare from "@/assets/devices/home-hero-repare.png";
-import homeHeroTroque from "@/assets/devices/home-hero-troque.png";
+import homeHeroCompre from "@/assets/devices/home-hero-compre.webp";
+import homeHeroRepare from "@/assets/devices/home-hero-repare.webp";
+import homeHeroTroque from "@/assets/devices/home-hero-troque.webp";
 import customer1 from "@/assets/people/customer-1.jpg";
 import customer2 from "@/assets/people/customer-2.jpg";
 import customer3 from "@/assets/people/customer-3.jpg";
@@ -58,24 +58,24 @@ const trustPoints = [
 const heroVisuals = [
   {
     image: homeHeroRepare,
-    alt: "Celular quebrado para reparo TecPonto",
-    frameClass: "items-end justify-end pr-0 md:pr-0 lg:pr-0",
-    imageClass: "right-[-16px] h-[272px] w-auto max-w-none object-contain md:h-auto md:max-h-[650px] md:w-[118%] lg:w-[112%]",
-    glowClass: "bottom-[-2%] right-[-10%] h-[82%] w-[92%] md:right-[-6%] md:top-[54%] md:-translate-y-1/2",
+    alt: "Celular com tela quebrada em uma mão para reparo TecPonto",
+    frameClass: "items-end justify-end pr-0 md:translate-y-20 md:pr-0 lg:pr-0",
+    imageClass: "left-auto right-[-20px] h-[390px] w-auto max-w-none object-contain md:top-28 md:right-auto md:h-auto md:max-h-[780px] md:ml-auto md:w-[126%] lg:max-h-[880px] lg:w-[140%]",
+    glowClass: "bottom-[-4%] right-[-12%] h-[88%] w-[94%] md:right-[-12%] md:top-[55%] md:h-[102%] md:w-[118%] md:-translate-y-1/2",
   },
   {
     image: homeHeroTroque,
-    alt: "Celular para troca TecPonto",
-    frameClass: "items-end justify-end pr-0 md:pr-0 lg:pr-0",
-    imageClass: "right-[-10px] h-[272px] w-auto max-w-none object-contain md:h-auto md:max-h-[690px] md:w-[116%] lg:w-[110%]",
-    glowClass: "bottom-[-2%] right-[-8%] h-[78%] w-[96%] md:right-[-3%] md:w-[88%]",
+    alt: "Celular usado e celular novo em uma mão para troca TecPonto",
+    frameClass: "items-end justify-end pr-0 md:translate-y-20 md:pr-0 lg:pr-0",
+    imageClass: "left-auto right-[-20px] h-[388px] w-auto max-w-none object-contain md:bottom-auto md:top-28 md:right-auto md:h-auto md:max-h-[740px] md:ml-auto md:w-[120%] lg:max-h-[820px] lg:w-[130%]",
+    glowClass: "bottom-[-5%] right-[-10%] h-[86%] w-[96%] md:right-[-9%] md:top-[55%] md:h-[95%] md:-translate-y-1/2 md:w-[108%]",
   },
   {
     image: homeHeroCompre,
-    alt: "Celular para compra TecPonto",
-    frameClass: "items-end justify-end pr-0 md:pr-0 lg:pr-0",
-    imageClass: "right-[-22px] h-[260px] w-auto max-w-none object-contain md:h-auto md:max-h-[630px] md:w-[110%] lg:w-[104%]",
-    glowClass: "bottom-[-2%] right-[-10%] h-[78%] w-[92%] md:right-[-3%] md:top-[58%] md:-translate-y-1/2 md:w-[84%]",
+    alt: "Celular e acessórios TecPonto apoiados em uma mão",
+    frameClass: "items-end justify-end pr-0 md:translate-y-8 md:items-center md:pr-0 lg:pr-0",
+    imageClass: "bottom-[21px] left-auto right-[-20px] h-[374px] w-auto max-w-none object-contain md:bottom-auto md:right-auto md:h-auto md:max-h-[700px] md:ml-auto md:w-[112%] lg:max-h-[740px] lg:w-[118%]",
+    glowClass: "bottom-[-6%] right-[-12%] h-[82%] w-[94%] md:right-[-7%] md:top-[57%] md:h-[88%] md:-translate-y-1/2 md:w-[100%]",
   },
 ];
 
@@ -138,6 +138,7 @@ const Home = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalVariant, setModalVariant] = useState<LandingVariant | undefined>(undefined);
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
+  const [heroCycle, setHeroCycle] = useState(0);
   const currentHeroMode = heroModes[currentWordIndex];
   const currentHeroVisual = heroVisuals[currentWordIndex];
   const heroPointerY = useMotionValue(0);
@@ -149,21 +150,32 @@ const Home = () => {
 
 
   useEffect(() => {
-    const interval = setInterval(() => {
+    const timeout = window.setTimeout(() => {
       setCurrentWordIndex((prev) => (prev + 1) % heroModes.length);
     }, 4000);
-    return () => clearInterval(interval);
-  }, []);
+    return () => window.clearTimeout(timeout);
+  }, [currentWordIndex, heroCycle]);
 
   const openModal = (variant?: LandingVariant) => {
     setModalVariant(variant);
     setIsModalOpen(true);
   };
 
+  const selectHeroMode = (index: number) => {
+    setCurrentWordIndex(index);
+    setHeroCycle((cycle) => cycle + 1);
+  };
+
   const handleHeroPointerMove = (event: PointerEvent<HTMLElement>) => {
+    if (event.pointerType !== "mouse" || window.matchMedia("(max-width: 767px)").matches) {
+      heroPointerY.set(0);
+      return;
+    }
+
     const rect = event.currentTarget.getBoundingClientRect();
     const pointerY = (event.clientY - rect.top) / rect.height;
-    heroPointerY.set((pointerY - 0.5) * 96);
+    const parallaxRange = currentHeroMode.variant === "compre" ? 40 : 96;
+    heroPointerY.set((pointerY - 0.5) * parallaxRange);
   };
 
   return (
@@ -178,7 +190,7 @@ const Home = () => {
       >
 
         <div className="container relative z-10 mx-auto min-h-[calc(100svh-20px)] px-5 md:min-h-0 md:px-4">
-          <div className="relative mx-auto grid min-h-[calc(100svh-20px)] max-w-[1360px] content-start pb-[238px] pt-20 md:min-h-0 md:items-center md:gap-10 md:pb-0 md:pt-0 lg:grid-cols-[1.05fr_0.95fr] lg:gap-12">
+          <div className="relative mx-auto grid min-h-[calc(100svh-20px)] max-w-[1360px] content-start pb-[416px] pt-20 md:min-h-0 md:items-center md:gap-10 md:pb-0 md:pt-0 lg:grid-cols-[1.05fr_0.95fr] lg:gap-12">
             <div className="relative z-20 p-0 text-left text-white md:p-2">
               <div className="mb-5 grid w-full max-w-full grid-cols-3 overflow-hidden rounded-full bg-[#25292D] p-1 md:mb-6 md:inline-flex md:w-auto md:overflow-visible">
                 {heroModes.map((mode, index) => {
@@ -188,7 +200,7 @@ const Home = () => {
                     <button
                       key={mode.label}
                       type="button"
-                      onClick={() => setCurrentWordIndex(index)}
+                      onClick={() => selectHeroMode(index)}
                       className={`flex w-full min-w-0 items-center justify-center gap-1 rounded-full px-1.5 py-2.5 text-[10px] font-black transition-all min-[360px]:gap-1.5 min-[360px]:px-2.5 min-[360px]:text-xs sm:gap-2 sm:px-3 sm:text-sm md:w-auto md:min-w-[96px] md:px-4 ${
                         isActive ? "bg-white text-primary" : "text-white/85 hover:text-white"
                       }`}
@@ -263,9 +275,10 @@ const Home = () => {
                   <img className="h-9 w-9 rounded-full border-2 border-white object-cover shadow-sm" src={customer4} alt="Cliente TecPonto" />
                 </div>
                 <div className="min-w-0">
-                  <p className="whitespace-nowrap text-[13px] font-black leading-none text-white min-[390px]:text-sm">+2.000 atendimentos</p>
-                  <div className="mt-1 flex items-center gap-1 whitespace-nowrap text-[11px] font-bold text-white min-[390px]:text-xs">
-                    Avaliação 4.9 no Google <span className="text-[#FFD33D]">★★★★★</span>
+                  <p className="whitespace-nowrap text-[13px] font-black leading-none text-white min-[390px]:text-sm">+2.000 Clientes Atendidos</p>
+                  <div className="mt-1 flex items-center gap-1 whitespace-nowrap text-[11px] font-bold text-white/85 min-[390px]:text-xs">
+                    <CheckCircle2 className="h-3.5 w-3.5 shrink-0 fill-emerald-500 text-white" />
+                    <span>Avaliação 4.9/5 no Google</span>
                   </div>
                 </div>
               </div>
@@ -303,7 +316,7 @@ const Home = () => {
             </div>
 
             {/* Showcase visual sincronizado com a palavra da hero */}
-            <div className="pointer-events-none absolute inset-x-0 bottom-0 z-0 flex h-[250px] items-end justify-end pt-0 md:pointer-events-auto md:relative md:inset-auto md:z-auto md:min-h-[500px] md:pt-0 lg:-mr-16 lg:min-h-[620px] xl:-mr-24 2xl:-mr-28">
+            <div className="pointer-events-none absolute inset-x-0 bottom-0 z-0 flex h-[416px] items-end justify-center pt-0 md:pointer-events-auto md:relative md:inset-auto md:z-auto md:min-h-[500px] md:justify-end md:pt-0 lg:-mr-16 lg:min-h-[620px] xl:-mr-24 2xl:-mr-28">
               <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
@@ -312,24 +325,28 @@ const Home = () => {
               >
                 <motion.div
                   style={{ y: heroVisualY }}
-                  className={`relative flex h-full w-full overflow-visible will-change-transform ${currentHeroVisual.frameClass}`}
+                  className="relative h-full w-full overflow-visible will-change-transform"
                 >
-                  <div
-                    className={`pointer-events-none absolute z-0 rounded-full opacity-90 blur-[54px] md:blur-[76px] ${currentHeroVisual.glowClass}`}
-                    style={{ background: "radial-gradient(circle, rgba(255, 238, 218, 0.98) 0%, rgba(255, 197, 139, 0.72) 34%, rgba(255, 123, 48, 0.42) 56%, rgba(255, 123, 48, 0) 78%)" }}
-                    aria-hidden="true"
-                  />
-                  <AnimatePresence mode="wait">
-                    <motion.img
+                  <AnimatePresence initial={false} mode="sync">
+                    <motion.div
                       key={currentHeroVisual.alt}
-                      src={currentHeroVisual.image}
-                      alt={currentHeroVisual.alt}
-                      initial={{ opacity: 0, y: 24, scale: 0.94 }}
-                      animate={{ opacity: 1, y: 0, scale: 1 }}
-                      exit={{ opacity: 0, y: -24, scale: 0.96 }}
-                      transition={{ duration: 0.7, ease: "easeOut" }}
-                      className={`absolute bottom-0 z-10 object-contain drop-shadow-[0_28px_38px_rgba(0,0,0,0.22)] md:relative md:bottom-auto md:right-auto md:ml-auto ${currentHeroVisual.imageClass}`}
-                    />
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.65, ease: "easeInOut" }}
+                      className={`absolute inset-0 flex overflow-visible ${currentHeroVisual.frameClass}`}
+                    >
+                      <div
+                        className={`pointer-events-none absolute z-0 rounded-full opacity-100 blur-[48px] saturate-150 md:blur-[64px] ${currentHeroVisual.glowClass}`}
+                        style={{ background: "radial-gradient(circle, rgba(255, 251, 235, 1) 0%, rgba(255, 221, 128, 0.98) 26%, rgba(255, 142, 35, 0.88) 50%, rgba(255, 75, 0, 0) 78%)" }}
+                        aria-hidden="true"
+                      />
+                      <img
+                        src={currentHeroVisual.image}
+                        alt={currentHeroVisual.alt}
+                        className={`absolute bottom-0 z-10 object-contain drop-shadow-[0_28px_38px_rgba(0,0,0,0.22)] md:relative md:bottom-auto md:right-auto md:ml-auto ${currentHeroVisual.imageClass}`}
+                      />
+                    </motion.div>
                   </AnimatePresence>
                 </motion.div>
               </motion.div>
