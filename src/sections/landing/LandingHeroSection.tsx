@@ -450,13 +450,6 @@ const LandingHeroSection = ({ variant = "repare" }: LandingHeroSectionProps) => 
                     <MapPin className="w-3 h-3 text-primary" />
                     <span className="text-[10px] md:text-xs font-medium text-foreground uppercase">Guarulhos, SP</span>
                   </div>
-                  
-                  <div className="inline-flex items-center gap-1.5 md:gap-2 bg-primary text-primary-foreground px-3 py-1.5 md:px-4 md:py-2 rounded-full">
-                    <Clock className="w-3 h-3" />
-                    <span className="text-[10px] md:text-xs font-semibold uppercase">{content.eyebrow}</span>
-                    <span className="text-[10px] md:text-xs opacity-70">|</span>
-                    <HeroCountdown />
-                  </div>
                 </motion.div>
 
                 {/* Main Heading */}
