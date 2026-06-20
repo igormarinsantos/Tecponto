@@ -23,15 +23,7 @@ export const qualificationFlow: Record<LandingVariant, {
     subtitle: "Responda rapidinho para a equipe entender o reparo antes do atendimento.",
     button: "Enviar pedido de reparo",
     fields: [
-      { id: "name", label: "Nome", placeholder: "Seu nome" },
-      {
-        id: "brand",
-        label: "Marca",
-        placeholder: "Qual a marca?",
-        type: "select",
-        options: ["iPhone", "Samsung", "Xiaomi", "Motorola", "LG", "Outra"],
-      },
-      { id: "model", label: "Modelo", placeholder: "Digite só o modelo. Ex: iPhone 13, A32" },
+      { id: "model", label: "Marca e modelo", placeholder: "Qual a marca e o modelo? Ex: iPhone 13, Galaxy A32" },
       {
         id: "problem",
         label: "Problema",
@@ -60,15 +52,7 @@ export const qualificationFlow: Record<LandingVariant, {
     subtitle: "Vamos pré-avaliar seu usado com poucas respostas objetivas.",
     button: "Enviar pedido de troca",
     fields: [
-      { id: "name", label: "Nome", placeholder: "Seu nome" },
-      {
-        id: "currentBrand",
-        label: "Marca atual",
-        placeholder: "Qual a marca do seu usado?",
-        type: "select",
-        options: ["iPhone", "Samsung", "Xiaomi", "Motorola", "LG", "Outra"],
-      },
-      { id: "currentModel", label: "Modelo atual", placeholder: "Digite só o modelo do usado" },
+      { id: "currentModel", label: "Marca e modelo atual", placeholder: "Qual a marca e o modelo do seu usado?" },
       {
         id: "condition",
         label: "Estado do aparelho",

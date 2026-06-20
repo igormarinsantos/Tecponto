@@ -60,22 +60,22 @@ const heroVisuals = [
     image: homeHeroRepare,
     alt: "Celular com tela quebrada em uma mão para reparo TecPonto",
     frameClass: "items-end justify-end pr-0 md:translate-y-20 md:pr-0 lg:pr-0",
-    imageClass: "left-auto right-[-20px] h-[390px] w-auto max-w-none object-contain md:top-28 md:right-auto md:h-auto md:max-h-[780px] md:ml-auto md:w-[126%] lg:max-h-[880px] lg:w-[140%]",
-    glowClass: "bottom-[-4%] right-[-12%] h-[88%] w-[94%] md:right-[-12%] md:top-[55%] md:h-[102%] md:w-[118%] md:-translate-y-1/2",
+    imageClass: "left-auto right-[-20px] h-[390px] w-auto max-w-none object-contain md:top-28 md:right-auto md:h-auto md:max-h-[780px] md:ml-auto md:w-[90%] lg:max-h-[880px] lg:w-[70%]",
+    glowClass: "bottom-[-4%] right-[-12%] h-[88%] w-[94%] md:right-[-4%] md:top-[55%] md:h-[92%] md:w-[72%] md:-translate-y-1/2",
   },
   {
     image: homeHeroTroque,
     alt: "Celular usado e celular novo em uma mão para troca TecPonto",
     frameClass: "items-end justify-end pr-0 md:translate-y-20 md:pr-0 lg:pr-0",
-    imageClass: "left-auto right-[-20px] h-[388px] w-auto max-w-none object-contain md:bottom-auto md:top-28 md:right-auto md:h-auto md:max-h-[740px] md:ml-auto md:w-[120%] lg:max-h-[820px] lg:w-[130%]",
-    glowClass: "bottom-[-5%] right-[-10%] h-[86%] w-[96%] md:right-[-9%] md:top-[55%] md:h-[95%] md:-translate-y-1/2 md:w-[108%]",
+    imageClass: "left-auto right-[-20px] h-[388px] w-auto max-w-none object-contain md:bottom-auto md:top-28 md:right-auto md:h-auto md:max-h-[740px] md:ml-auto md:w-[88%] lg:max-h-[820px] lg:w-[66%]",
+    glowClass: "bottom-[-5%] right-[-10%] h-[86%] w-[96%] md:right-[-3%] md:top-[55%] md:h-[90%] md:-translate-y-1/2 md:w-[68%]",
   },
   {
     image: homeHeroCompre,
     alt: "Celular e acessórios TecPonto apoiados em uma mão",
     frameClass: "items-end justify-end pr-0 md:translate-y-8 md:items-center md:pr-0 lg:pr-0",
-    imageClass: "bottom-[21px] left-auto right-[-20px] h-[374px] w-auto max-w-none object-contain md:bottom-auto md:right-auto md:h-auto md:max-h-[700px] md:ml-auto md:w-[112%] lg:max-h-[740px] lg:w-[118%]",
-    glowClass: "bottom-[-6%] right-[-12%] h-[82%] w-[94%] md:right-[-7%] md:top-[57%] md:h-[88%] md:-translate-y-1/2 md:w-[100%]",
+    imageClass: "bottom-[21px] left-auto right-[-20px] h-[374px] w-auto max-w-none object-contain md:bottom-auto md:right-auto md:h-auto md:max-h-[700px] md:ml-auto md:w-[82%] lg:max-h-[740px] lg:w-[60%]",
+    glowClass: "bottom-[-6%] right-[-12%] h-[82%] w-[94%] md:right-[-2%] md:top-[57%] md:h-[78%] md:-translate-y-1/2 md:w-[62%]",
   },
 ];
 
@@ -316,12 +316,12 @@ const Home = () => {
             </div>
 
             {/* Showcase visual sincronizado com a palavra da hero */}
-            <div className="pointer-events-none absolute inset-x-0 bottom-0 z-0 flex h-[416px] items-end justify-center pt-0 md:pointer-events-auto md:relative md:inset-auto md:z-auto md:min-h-[500px] md:justify-end md:pt-0 lg:-mr-16 lg:min-h-[620px] xl:-mr-24 2xl:-mr-28">
+            <div className="pointer-events-none absolute inset-x-0 bottom-0 z-0 flex h-[416px] items-end justify-center pt-0 md:pointer-events-auto md:inset-0 md:h-full md:justify-end md:pt-0">
               <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.6, delay: 0.15 }}
-                className="relative flex h-full w-full max-w-none items-end justify-end overflow-visible py-0 md:aspect-square md:h-auto md:max-w-[660px]"
+                className="relative flex h-full w-full items-end justify-end overflow-visible py-0"
               >
                 <motion.div
                   style={{ y: heroVisualY }}

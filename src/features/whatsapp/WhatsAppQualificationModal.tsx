@@ -1,6 +1,7 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { CheckCheck, ExternalLink, Send, X, RotateCcw, ArrowLeft } from "lucide-react";
+import { ArrowLeft, CheckCheck, ExternalLink, Pencil, RotateCcw, Send, X } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import whatsappAssistant from "@/assets/people/whatsapp-assistant.png";
 import { SHOPEE_STORE_URL } from "@/constants/links";
 import { buildWhatsAppUrl, qualificationFlow, type QualificationField, type QualificationValues } from "@/features/whatsapp/qualification";
@@ -18,6 +19,10 @@ type ChatMessage = {
   text: string;
   label?: string;
 };
+
+const STORAGE_KEY = "tecponto_chat_state";
+const STORAGE_VERSION = 2;
+const STORAGE_TTL = 30 * 60 * 1000;
 
 const initialOptions: Array<{ label: string; value: LandingVariant }> = [
   { label: "Quero comprar", value: "compre" },
@@ -55,6 +60,19 @@ const fieldQuestion = (label: string, placeholder: string) => {
   return placeholder;
 };
 
+const fieldAcknowledgement = (field?: QualificationField, answer?: string) => {
+  if (!field || !answer) return "";
+  const normalized = field.label.toLowerCase();
+
+  if (normalized.includes("modelo")) return `Boa, ${answer}.`;
+  if (normalized.includes("problema") || normalized.includes("estado")) return "Entendi.";
+  if (normalized.includes("urg")) return "Certo, vou considerar esse prazo.";
+  if (normalized.includes("atendimento")) return "Perfeito.";
+  if (normalized.includes("trocar") || normalized.includes("volta")) return "Boa, isso já ajuda na pré-avaliação.";
+
+  return "Perfeito.";
+};
+
 const TypingBubble = () => (
   <div className="flex justify-start">
     <div className="rounded-[18px] rounded-tl-md bg-white px-4 py-3 shadow-sm">
@@ -78,23 +96,27 @@ const WhatsAppQualificationModal = ({ isOpen, onClose, variant }: WhatsAppQualif
   const [isTyping, setIsTyping] = useState(true);
   const [visibleMessageCount, setVisibleMessageCount] = useState(0);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
+  const modalRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const onCloseRef = useRef(onClose);
+
+  useEffect(() => {
+    onCloseRef.current = onClose;
+  }, [onClose]);
 
   const flow = selectedVariant ? qualificationFlow[selectedVariant] : null;
   const activeFields = getFlowFields(selectedVariant, flow?.fields);
   const currentField = activeFields.find((field) => !values[field.id]);
   const isComplete = Boolean(flow && !currentField);
+  const answeredFieldCount = activeFields.filter((field) => values[field.id]).length;
+  const progressStep = Math.min(answeredFieldCount + 1, activeFields.length);
 
   const messages = useMemo<ChatMessage[]>(() => {
     const chat: ChatMessage[] = [
       {
         id: "hello",
         from: "assistant",
-        text: "Oi, que bom te ter aqui. Eu sou o Rodrigo, da TecPonto.",
-      },
-      {
-        id: "start",
-        from: "assistant",
-        text: "Vou te direcionar rapidinho. O que voce gostaria de fazer agora?",
+        text: "Oi, sou o Rodrigo, da TecPonto. O que você gostaria de resolver agora?",
       },
     ];
 
@@ -148,17 +170,20 @@ const WhatsAppQualificationModal = ({ isOpen, onClose, variant }: WhatsAppQualif
       });
     });
 
+    const lastAnsweredField = [...activeFields].reverse().find((field) => values[field.id]);
+    const acknowledgement = fieldAcknowledgement(lastAnsweredField, lastAnsweredField ? values[lastAnsweredField.id] : undefined);
+
     if (currentField) {
       chat.push({
         id: `${currentField.id}-current`,
         from: "assistant",
-        text: fieldQuestion(currentField.label, currentField.placeholder),
+        text: `${acknowledgement ? `${acknowledgement}\n\n` : ""}${fieldQuestion(currentField.label, currentField.placeholder)}`,
       });
     } else {
       chat.push({
         id: "complete",
         from: "assistant",
-        text: "Fechado. Ja organizei as informacoes para continuar com um atendente no WhatsApp.",
+        text: `${acknowledgement ? `${acknowledgement} ` : ""}Já organizei tudo para você continuar com um atendente no WhatsApp.`,
       });
     }
 
@@ -168,10 +193,12 @@ const WhatsAppQualificationModal = ({ isOpen, onClose, variant }: WhatsAppQualif
   const nextMessage = messages[visibleMessageCount];
   const visibleMessages = messages.slice(0, visibleMessageCount);
   const canAnswer = visibleMessageCount >= messages.length && !isTyping;
+  const optionLabels = !selectedVariant
+    ? initialOptions.map((option) => option.label)
+    : currentField?.options ?? [];
+  const expectsOption = optionLabels.length > 0;
+  const shouldUseOptionMenu = Boolean(selectedVariant && optionLabels.length > 4);
 
-  const STORAGE_KEY = "tecponto_chat_state";
-
-  // Load state on mount/open
   useEffect(() => {
     if (!isOpen) return;
 
@@ -179,12 +206,19 @@ const WhatsAppQualificationModal = ({ isOpen, onClose, variant }: WhatsAppQualif
       const saved = localStorage.getItem(STORAGE_KEY);
       if (saved) {
         const parsed = JSON.parse(saved);
-        setSelectedVariant(parsed.selectedVariant ?? null);
-        setValues(parsed.values ?? {});
-        setNeedsClearerIntent(parsed.needsClearerIntent ?? false);
-        setVisibleMessageCount(parsed.visibleMessageCount ?? 0);
-        setDraft(parsed.draft ?? "");
-        return;
+        const isFresh = parsed.version === STORAGE_VERSION && Date.now() - parsed.updatedAt < STORAGE_TTL;
+        const matchesEntryPoint = !variant || parsed.selectedVariant === variant;
+
+        if (isFresh && matchesEntryPoint) {
+          setSelectedVariant(parsed.selectedVariant ?? null);
+          setValues(parsed.values ?? {});
+          setNeedsClearerIntent(parsed.needsClearerIntent ?? false);
+          setVisibleMessageCount(parsed.visibleMessageCount ?? 0);
+          setDraft(parsed.draft ?? "");
+          return;
+        }
+
+        localStorage.removeItem(STORAGE_KEY);
       }
     } catch (e) {
       console.error("Error loading chat state", e);
@@ -198,11 +232,12 @@ const WhatsAppQualificationModal = ({ isOpen, onClose, variant }: WhatsAppQualif
     setVisibleMessageCount(0);
   }, [isOpen, variant]);
 
-  // Save state to localStorage on changes
   useEffect(() => {
     if (!isOpen) return;
 
     const stateToSave = {
+      version: STORAGE_VERSION,
+      updatedAt: Date.now(),
       selectedVariant,
       values,
       needsClearerIntent,
@@ -231,12 +266,13 @@ const WhatsAppQualificationModal = ({ isOpen, onClose, variant }: WhatsAppQualif
       const answeredFields = activeFields.filter((f) => values[f.id]);
       if (answeredFields.length > 0) {
         const lastField = answeredFields[answeredFields.length - 1];
+        const fieldIndex = activeFields.findIndex((field) => field.id === lastField.id);
         setValues((current) => {
           const updated = { ...current };
           delete updated[lastField.id];
           return updated;
         });
-        setVisibleMessageCount((prev) => Math.max(0, prev - 2));
+        setVisibleMessageCount(3 + fieldIndex * 2);
         return;
       }
     }
@@ -245,9 +281,22 @@ const WhatsAppQualificationModal = ({ isOpen, onClose, variant }: WhatsAppQualif
       setSelectedVariant(null);
       setValues({});
       setNeedsClearerIntent(false);
-      setVisibleMessageCount(2);
+      setVisibleMessageCount(1);
       return;
     }
+  };
+
+  const editField = (fieldId: string) => {
+    const fieldIndex = activeFields.findIndex((field) => field.id === fieldId);
+    if (fieldIndex < 0) return;
+
+    setValues((current) => {
+      const updated = { ...current };
+      activeFields.slice(fieldIndex).forEach((field) => delete updated[field.id]);
+      return updated;
+    });
+    setVisibleMessageCount(3 + fieldIndex * 2);
+    setIsTyping(true);
   };
 
   useEffect(() => {
@@ -269,7 +318,7 @@ const WhatsAppQualificationModal = ({ isOpen, onClose, variant }: WhatsAppQualif
     setIsTyping(true);
     const timer = window.setTimeout(() => {
       setVisibleMessageCount((current) => Math.min(current + 1, messages.length));
-    }, Math.min(1150, 420 + (nextMessage?.text?.length ?? 0) * 9));
+    }, Math.min(800, 260 + (nextMessage?.text?.length ?? 0) * 6));
 
     return () => window.clearTimeout(timer);
   }, [isOpen, messages.length, nextMessage?.from, nextMessage?.text?.length, visibleMessageCount]);
@@ -284,12 +333,49 @@ const WhatsAppQualificationModal = ({ isOpen, onClose, variant }: WhatsAppQualif
 
   useEffect(() => {
     if (!isOpen) return;
+    const previousFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    const focusTimer = window.setTimeout(() => modalRef.current?.focus(), 50);
     const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") onClose();
+      if (event.key === "Escape") {
+        onCloseRef.current();
+        return;
+      }
+
+      if (event.key !== "Tab" || !modalRef.current) return;
+      const focusable = Array.from(
+        modalRef.current.querySelectorAll<HTMLElement>(
+          'button:not([disabled]), input:not([disabled]), [href], [tabindex]:not([tabindex="-1"])',
+        ),
+      );
+      if (!focusable.length) return;
+
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
     };
     window.addEventListener("keydown", onKeyDown);
-    return () => window.removeEventListener("keydown", onKeyDown);
-  }, [isOpen, onClose]);
+    return () => {
+      window.clearTimeout(focusTimer);
+      window.removeEventListener("keydown", onKeyDown);
+      document.body.style.overflow = previousOverflow;
+      previousFocus?.focus();
+    };
+  }, [isOpen]);
+
+  useEffect(() => {
+    if (!isOpen || !canAnswer || isComplete || currentField?.options?.length) return;
+    const timer = window.setTimeout(() => inputRef.current?.focus(), 80);
+    return () => window.clearTimeout(timer);
+  }, [canAnswer, currentField?.id, currentField?.options?.length, isComplete, isOpen]);
 
   const answerCurrent = (answer: string) => {
     const cleanedAnswer = answer.trim();
@@ -341,6 +427,11 @@ const WhatsAppQualificationModal = ({ isOpen, onClose, variant }: WhatsAppQualif
           onMouseDown={onClose}
         >
           <motion.div
+            ref={modalRef}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="whatsapp-chat-title"
+            tabIndex={-1}
             className="flex h-[min(650px,calc(100dvh-24px))] w-full max-w-[430px] flex-col overflow-hidden rounded-[1.5rem] bg-white shadow-2xl sm:h-[min(650px,calc(100dvh-64px))] sm:rounded-[2rem]"
             initial={{ opacity: 0, scale: 0.94, y: 24 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -354,9 +445,15 @@ const WhatsAppQualificationModal = ({ isOpen, onClose, variant }: WhatsAppQualif
                 <span className="absolute bottom-0 right-0 h-3.5 w-3.5 rounded-full border-2 border-[#25292D] bg-[#25D366]" />
               </div>
               <div className="flex-1">
-                <p className="text-sm font-black text-white">Rodrigo - TecPonto</p>
+                <p id="whatsapp-chat-title" className="text-sm font-black text-white">Rodrigo - TecPonto</p>
                 <p className="text-[11px] font-black uppercase tracking-wide text-primary">
-                  {isTyping ? "Digitando..." : "Atendimento online"}
+                  {isTyping
+                    ? "Digitando..."
+                    : selectedVariant && activeFields.length
+                      ? isComplete
+                        ? "Informações prontas"
+                        : `Etapa ${progressStep} de ${activeFields.length}`
+                      : "Atendimento online"}
                 </p>
               </div>
               {(selectedVariant || Object.keys(values).length > 0) && (
@@ -374,8 +471,24 @@ const WhatsAppQualificationModal = ({ isOpen, onClose, variant }: WhatsAppQualif
               </button>
             </div>
 
+            {selectedVariant && activeFields.length > 0 && (
+              <div className="h-1 shrink-0 bg-[#364047]">
+                <motion.div
+                  className="h-full bg-[#25D366]"
+                  animate={{ width: `${isComplete ? 100 : (answeredFieldCount / activeFields.length) * 100}%` }}
+                  transition={{ duration: 0.25 }}
+                />
+              </div>
+            )}
+
             <div className="flex min-h-0 flex-1 flex-col bg-[#ece5dd]">
-              <div ref={scrollAreaRef} className="min-h-0 flex-1 space-y-3 overflow-y-auto p-3 pr-2 sm:p-4 sm:pr-3">
+              <div
+                ref={scrollAreaRef}
+                role="log"
+                aria-live="polite"
+                aria-relevant="additions"
+                className="min-h-0 flex-1 space-y-3 overflow-y-auto p-3 pr-2 sm:p-4 sm:pr-3"
+              >
                 {visibleMessages.map((message) => (
                   <div key={message.id} className={message.from === "user" ? "flex justify-end" : "flex justify-start"}>
                     <div
@@ -397,81 +510,117 @@ const WhatsAppQualificationModal = ({ isOpen, onClose, variant }: WhatsAppQualif
                 {nextMessage?.from === "assistant" && isTyping && <TypingBubble />}
               </div>
 
-              {/* Botões de Opção Rápidas estilo WhatsApp Business */}
-              {canAnswer && !isComplete && (
-                <div className="flex max-h-36 shrink-0 flex-wrap justify-center gap-2 overflow-y-auto border-t border-black/[0.03] bg-transparent px-3 py-2 sm:max-h-40">
-                  {!selectedVariant ? (
-                    initialOptions.map((option) => (
-                      <button
-                        key={option.value}
-                        onClick={() => answerCurrent(option.label)}
-                        className="min-h-10 rounded-full border border-primary/20 bg-white px-3.5 py-2 text-xs font-bold uppercase tracking-wider text-primary shadow-sm transition-all duration-200 hover:bg-primary hover:text-white"
-                      >
-                        {option.label}
-                      </button>
-                    ))
-                  ) : currentField?.options?.length ? (
-                    currentField.options.map((option) => (
-                      <button
-                        key={option}
-                        onClick={() => answerCurrent(option)}
-                        className="min-h-10 rounded-full border border-primary/20 bg-white px-3.5 py-2 text-xs font-bold uppercase tracking-wider text-primary shadow-sm transition-all duration-200 hover:bg-primary hover:text-white"
-                      >
-                        {option}
-                      </button>
-                    ))
-                  ) : null}
-                </div>
-              )}
-
-              {/* Input Bar no estilo WhatsApp Real (Sempre Visível) */}
-              <div className="shrink-0 border-t border-black/5 bg-[#f0f2f5] p-2.5 sm:p-3">
-                {isComplete ? (
-                  <button onClick={handleFinalAction} className="flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-[#25D366] text-sm font-black uppercase tracking-wide text-white shadow-lg shadow-green-500/20 transition-colors hover:bg-[#20BA5A]">
-                    {selectedVariant === "compre" ? "Abrir loja na Shopee" : "Enviar no WhatsApp"}
-                    {selectedVariant === "compre" ? <ExternalLink className="h-4 w-4" /> : <Send className="h-4 w-4" />}
-                  </button>
-                ) : (
+              {canAnswer && !isComplete && expectsOption && (
+                <div className="shrink-0 border-t border-black/5 bg-[#f0f2f5] p-3">
                   <div className="flex items-center gap-2">
                     {canGoBack && (
                       <button
                         onClick={goBack}
                         title="Voltar pergunta"
-                        className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-white border border-black/[0.08] text-gray-600 shadow-sm transition-all hover:bg-gray-100 active:scale-95"
+                        aria-label="Voltar para a pergunta anterior"
+                        className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-black/[0.08] bg-white text-gray-600 shadow-sm transition-colors hover:bg-gray-100"
                       >
-                        <ArrowLeft className="h-4.5 w-4.5" />
+                        <ArrowLeft className="h-4 w-4" />
                       </button>
                     )}
-                    <div className="flex flex-1 items-center bg-white rounded-full px-4 py-2 shadow-sm border border-black/[0.04]">
+
+                    {shouldUseOptionMenu ? (
+                      <Select key={currentField?.id} onValueChange={answerCurrent}>
+                        <SelectTrigger className="h-11 flex-1 rounded-full border-black/[0.08] bg-white px-4 text-sm font-semibold shadow-sm">
+                          <SelectValue placeholder="Selecione uma opção" />
+                        </SelectTrigger>
+                        <SelectContent className="z-[120] max-h-72">
+                          {optionLabels.map((option) => (
+                            <SelectItem key={option} value={option} className="py-3">
+                              {option}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    ) : (
+                      <div className="flex flex-1 flex-wrap justify-center gap-2">
+                        {optionLabels.map((option) => (
+                          <button
+                            key={option}
+                            onClick={() => answerCurrent(option)}
+                            className="min-h-10 rounded-full border border-primary/20 bg-white px-3.5 py-2 text-xs font-bold uppercase tracking-wide text-primary shadow-sm transition-colors hover:bg-primary hover:text-white"
+                          >
+                            {option}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {canAnswer && !isComplete && !expectsOption && (
+                <div className="shrink-0 border-t border-black/5 bg-[#f0f2f5] p-3">
+                  <div className="flex items-center gap-2">
+                    {canGoBack && (
+                      <button
+                        onClick={goBack}
+                        title="Voltar pergunta"
+                        aria-label="Voltar para a pergunta anterior"
+                        className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-black/[0.08] bg-white text-gray-600 shadow-sm transition-colors hover:bg-gray-100"
+                      >
+                        <ArrowLeft className="h-4 w-4" />
+                      </button>
+                    )}
+                    <div className="flex flex-1 items-center rounded-full border border-black/[0.04] bg-white px-4 py-2 shadow-sm">
                       <input
+                        ref={inputRef}
                         value={draft}
                         onChange={(event) => setDraft(event.target.value)}
-                        onKeyDown={(event) => event.key === "Enter" && canAnswer && answerCurrent(draft)}
-                        disabled={!canAnswer}
-                        placeholder={
-                          !canAnswer
-                            ? "Rodrigo está digitando..."
-                            : !selectedVariant || currentField?.options?.length
-                              ? "Escolha uma opção ou digite..."
-                              : "Digite uma resposta..."
-                        }
-                        className="h-8 w-full bg-transparent text-[14px] font-medium outline-none disabled:text-gray-400 placeholder:text-gray-400"
+                        onKeyDown={(event) => event.key === "Enter" && answerCurrent(draft)}
+                        placeholder="Digite uma resposta..."
+                        className="h-8 w-full bg-transparent text-sm font-medium outline-none placeholder:text-gray-400"
                       />
                     </div>
                     <button
-                      onClick={() => canAnswer && answerCurrent(draft)}
-                      disabled={!canAnswer || !draft.trim()}
+                      onClick={() => answerCurrent(draft)}
+                      disabled={!draft.trim()}
+                      aria-label="Enviar resposta"
                       className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-white shadow-md transition-all ${
-                        canAnswer && draft.trim()
-                          ? "bg-[#25D366] hover:bg-[#20BA5A] scale-100"
-                          : "bg-gray-300 scale-95 cursor-not-allowed"
+                        draft.trim() ? "bg-[#25D366] hover:bg-[#20BA5A]" : "cursor-not-allowed bg-gray-300"
                       }`}
                     >
-                      <Send className="h-4.5 w-4.5" />
+                      <Send className="h-4 w-4" />
                     </button>
                   </div>
-                )}
-              </div>
+                </div>
+              )}
+
+              {canAnswer && isComplete && (
+                <div className="shrink-0 border-t border-black/5 bg-[#f0f2f5] p-3">
+                  {activeFields.length > 0 && (
+                    <div className="mb-3 max-h-28 space-y-1.5 overflow-y-auto rounded-lg bg-white p-3 shadow-sm">
+                      {activeFields.map((field) => (
+                        <div key={field.id} className="flex items-center justify-between gap-3 text-xs">
+                          <span className="min-w-0 truncate text-gray-600">
+                            <strong className="text-[#111b21]">{field.label}:</strong> {values[field.id]}
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() => editField(field.id)}
+                            className="shrink-0 p-1 text-primary hover:text-primary/80"
+                            aria-label={`Alterar ${field.label}`}
+                          >
+                            <Pencil className="h-3.5 w-3.5" />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                  <button
+                    onClick={handleFinalAction}
+                    className="flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-[#25D366] text-sm font-black uppercase tracking-wide text-white shadow-lg shadow-green-500/20 transition-colors hover:bg-[#20BA5A]"
+                  >
+                    {selectedVariant === "compre" ? "Abrir loja na Shopee" : "Enviar no WhatsApp"}
+                    {selectedVariant === "compre" ? <ExternalLink className="h-4 w-4" /> : <Send className="h-4 w-4" />}
+                  </button>
+                </div>
+              )}
             </div>
           </motion.div>
         </motion.div>
