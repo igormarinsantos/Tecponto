@@ -344,7 +344,7 @@ const Home = () => {
                       <img
                         src={currentHeroVisual.image}
                         alt={currentHeroVisual.alt}
-                        className={`absolute bottom-0 z-10 origin-right object-contain drop-shadow-[0_28px_38px_rgba(0,0,0,0.22)] md:relative md:bottom-auto md:right-auto md:ml-auto 2xl:scale-110 ${currentHeroVisual.imageClass}`}
+                        className={`absolute bottom-0 z-10 origin-right object-contain drop-shadow-[0_28px_38px_rgba(0,0,0,0.22)] md:relative md:bottom-auto md:right-auto md:ml-auto 2xl:translate-x-[5%] 2xl:scale-[1.18] ${currentHeroVisual.imageClass}`}
                       />
                     </motion.div>
                   </AnimatePresence>
