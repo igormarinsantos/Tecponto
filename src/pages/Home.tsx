@@ -189,8 +189,8 @@ const Home = () => {
         onPointerLeave={() => heroPointerY.set(0)}
       >
 
-        <div className="container relative z-10 mx-auto min-h-[calc(100svh-20px)] px-5 md:min-h-0 md:px-4">
-          <div className="relative mx-auto grid min-h-[calc(100svh-20px)] max-w-[1360px] content-start pb-[416px] pt-20 md:min-h-0 md:items-center md:gap-10 md:pb-0 md:pt-0 lg:grid-cols-[1.05fr_0.95fr] lg:gap-12">
+        <div className="relative z-10 mx-auto min-h-[calc(100svh-20px)] w-full px-5 md:min-h-0 md:px-8 lg:px-10 xl:px-12 2xl:px-14">
+          <div className="relative grid min-h-[calc(100svh-20px)] w-full content-start pb-[416px] pt-20 md:min-h-0 md:items-center md:gap-10 md:pb-0 md:pt-0 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] lg:gap-12">
             <div className="relative z-20 p-0 text-left text-white md:p-2">
               <div className="mb-5 grid w-full max-w-full grid-cols-3 overflow-hidden rounded-full bg-[#25292D] p-1 md:mb-6 md:inline-flex md:w-auto md:overflow-visible">
                 {heroModes.map((mode, index) => {
@@ -316,7 +316,7 @@ const Home = () => {
             </div>
 
             {/* Showcase visual sincronizado com a palavra da hero */}
-            <div className="pointer-events-none absolute inset-x-0 bottom-0 z-0 flex h-[416px] items-end justify-center pt-0 md:pointer-events-auto md:inset-y-0 md:left-0 md:right-[calc((100vw-20px-100%)/-2)] md:h-full md:justify-end md:pt-0">
+            <div className="pointer-events-none absolute inset-x-0 bottom-0 z-0 flex h-[416px] items-end justify-center pt-0 md:pointer-events-auto md:inset-y-0 md:left-0 md:-right-8 md:h-full md:justify-end md:pt-0 lg:-right-10 xl:-right-12 2xl:-right-14">
               <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}

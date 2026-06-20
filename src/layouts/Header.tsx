@@ -20,7 +20,8 @@ const Header = () => {
   const [isSolutionsOpen, setIsSolutionsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
-  const isHomeTop = location.pathname === "/" && !isScrolled && !isMenuOpen;
+  const isHome = location.pathname === "/";
+  const isHomeTop = isHome && !isScrolled && !isMenuOpen;
 
   useEffect(() => {
     setIsMenuOpen(false);
@@ -59,7 +60,7 @@ const Header = () => {
           : `left-0 right-0 top-0 border-b border-border bg-background/95 shadow-soft backdrop-blur-sm ${isScrolled ? "mx-4 mt-4 rounded-2xl" : ""}`
       }`}
     >
-      <nav className="container mx-auto px-4 py-3">
+      <nav className={isHome ? "w-full px-5 py-3 md:px-8 lg:px-10 xl:px-12 2xl:px-14" : "container mx-auto px-4 py-3"}>
         <div className="flex items-center justify-between gap-4">
           <div className="flex items-center gap-3 md:min-w-[330px]">
             <NavLink to="/" aria-label="TecPonto" className="flex items-center">
