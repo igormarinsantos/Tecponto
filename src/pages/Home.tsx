@@ -73,7 +73,7 @@ const heroVisuals = [
   {
     image: homeHeroCompre,
     alt: "Celular e acessórios TecPonto apoiados em uma mão",
-    frameClass: "items-end justify-end pr-0 md:translate-y-8 md:items-center md:pr-0 lg:pr-0 2xl:translate-y-28",
+    frameClass: "items-end justify-end pr-0 md:translate-y-8 md:items-center md:pr-0 lg:pr-0",
     imageClass: "bottom-[21px] left-auto right-[-20px] h-[374px] w-auto max-w-none object-contain md:bottom-auto md:right-auto md:h-auto md:max-h-[700px] md:ml-auto md:w-[82%] lg:max-h-[840px] lg:w-[68%] 2xl:origin-top-right 2xl:translate-x-[13%]",
     glowClass: "bottom-[-6%] right-[-12%] h-[82%] w-[94%] md:right-[-2%] md:top-[57%] md:h-[78%] md:-translate-y-1/2 md:w-[62%]",
   },
