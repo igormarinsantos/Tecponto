@@ -1,0 +1,38 @@
+{
+ "actions": [],
+ "autoname": "field:customer",
+ "creation": "2026-06-23 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": ["customer","whatsapp_number","consent_source","operational_section","operational_messages","operational_consent_at","operational_opt_out_at","marketing_section","marketing_messages","marketing_consent_at","marketing_opt_out_at","notes"],
+ "fields": [
+  {"fieldname":"customer","fieldtype":"Link","in_list_view":1,"label":"Cliente","options":"Customer","reqd":1,"unique":1},
+  {"description":"Somente números, com país e DDD. Exemplo: 5511999999999.","fieldname":"whatsapp_number","fieldtype":"Data","in_list_view":1,"label":"WhatsApp","reqd":1},
+  {"fieldname":"consent_source","fieldtype":"Select","label":"Origem da preferência","options":"Balcão\nSite\nWhatsApp\nImportação\nOutro","reqd":1},
+  {"fieldname":"operational_section","fieldtype":"Section Break","label":"Mensagens do atendimento"},
+  {"default":"0","description":"Atualizações sobre reparo ou troca em andamento.","fieldname":"operational_messages","fieldtype":"Check","in_list_view":1,"label":"Autoriza mensagens operacionais"},
+  {"fieldname":"operational_consent_at","fieldtype":"Datetime","label":"Autorizado em","read_only":1},
+  {"fieldname":"operational_opt_out_at","fieldtype":"Datetime","label":"Cancelado em","read_only":1},
+  {"fieldname":"marketing_section","fieldtype":"Section Break","label":"Marketing"},
+  {"default":"0","description":"Ofertas e campanhas. Não se confunde com mensagens da OS.","fieldname":"marketing_messages","fieldtype":"Check","in_list_view":1,"label":"Autoriza marketing"},
+  {"fieldname":"marketing_consent_at","fieldtype":"Datetime","label":"Autorizado em","read_only":1},
+  {"fieldname":"marketing_opt_out_at","fieldtype":"Datetime","label":"Cancelado em","read_only":1},
+  {"fieldname":"notes","fieldtype":"Small Text","label":"Observações"}
+ ],
+ "modified":"2026-06-29 00:00:00.000000",
+ "modified_by":"Administrator",
+ "module":"TecPonto",
+ "name":"TecPonto Contact Preference",
+ "naming_rule":"By fieldname",
+ "owner":"Administrator",
+ "permissions":[
+  {"create":1,"delete":1,"export":1,"read":1,"report":1,"role":"System Manager","write":1},
+  {"create":1,"read":1,"report":1,"role":"TecPonto Atendente","write":1},
+  {"create":1,"delete":1,"export":1,"read":1,"report":1,"role":"TecPonto Gestor","write":1},
+  {"create":1,"delete":1,"export":1,"read":1,"report":1,"role":"TecPonto Direcao","write":1}
+ ],
+ "search_fields":"customer,whatsapp_number",
+ "sort_field":"modified",
+ "sort_order":"DESC",
+ "track_changes":1
+}

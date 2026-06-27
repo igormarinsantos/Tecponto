@@ -1,0 +1,213 @@
+{
+ "actions": [],
+ "allow_import": 1,
+ "autoname": "format:DEV-{#####}",
+ "creation": "2026-06-23 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "customer_section",
+  "customer",
+  "customer_name",
+  "column_break_customer",
+  "active",
+  "device_section",
+  "device_type",
+  "brand",
+  "model",
+  "column_break_device",
+  "imei_serial",
+  "color",
+  "storage_capacity",
+  "intake_section",
+  "condition_summary",
+  "ownership_confirmed",
+  "privacy_note"
+ ],
+ "fields": [
+  {
+   "fieldname": "customer_section",
+   "fieldtype": "Section Break",
+   "label": "Cliente"
+  },
+  {
+   "fieldname": "customer",
+   "fieldtype": "Link",
+   "in_global_search": 1,
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Cliente",
+   "options": "Customer",
+   "reqd": 1,
+   "search_index": 1
+  },
+  {
+   "fetch_from": "customer.customer_name",
+   "fieldname": "customer_name",
+   "fieldtype": "Data",
+   "label": "Nome do cliente",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_customer",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "1",
+   "fieldname": "active",
+   "fieldtype": "Check",
+   "label": "Ativo"
+  },
+  {
+   "fieldname": "device_section",
+   "fieldtype": "Section Break",
+   "label": "Aparelho"
+  },
+  {
+   "fieldname": "device_type",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Tipo",
+   "options": "Celular\nNotebook\nTablet\nOutro",
+   "reqd": 1
+  },
+  {
+   "fieldname": "brand",
+   "fieldtype": "Data",
+   "in_global_search": 1,
+   "in_list_view": 1,
+   "label": "Marca",
+   "reqd": 1
+  },
+  {
+   "fieldname": "model",
+   "fieldtype": "Data",
+   "in_global_search": 1,
+   "in_list_view": 1,
+   "label": "Modelo",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_device",
+   "fieldtype": "Column Break"
+  },
+  {
+   "description": "Não registre senhas de desbloqueio ou credenciais do cliente.",
+   "fieldname": "imei_serial",
+   "fieldtype": "Data",
+   "in_global_search": 1,
+   "in_list_view": 1,
+   "label": "IMEI ou número de série",
+   "search_index": 1
+  },
+  {
+   "fieldname": "color",
+   "fieldtype": "Data",
+   "label": "Cor"
+  },
+  {
+   "fieldname": "storage_capacity",
+   "fieldtype": "Data",
+   "label": "Armazenamento"
+  },
+  {
+   "fieldname": "intake_section",
+   "fieldtype": "Section Break",
+   "label": "Registro e privacidade"
+  },
+  {
+   "description": "Estado geral permanente do aparelho. A condição de cada entrada fica registrada na ordem de serviço.",
+   "fieldname": "condition_summary",
+   "fieldtype": "Small Text",
+   "label": "Resumo da condição"
+  },
+  {
+   "default": "0",
+   "description": "O cliente declarou ser proprietário ou estar autorizado a entregar o aparelho.",
+   "fieldname": "ownership_confirmed",
+   "fieldtype": "Check",
+   "label": "Titularidade confirmada"
+  },
+  {
+   "fieldname": "privacy_note",
+   "fieldtype": "HTML",
+   "options": "<div class=\"alert alert-warning\"><strong>Privacidade:</strong> nunca registre senha do aparelho, conta Apple/Google, senha bancaria ou codigo de autenticacao.</div>"
+  }
+ ],
+ "icon": "fa fa-mobile",
+ "links": [
+  {
+   "group": "Atendimentos",
+   "link_doctype": "Repair Order",
+   "link_fieldname": "device"
+  }
+ ],
+ "modified": "2026-06-26 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "TecPonto",
+ "name": "Service Device",
+ "naming_rule": "Expression",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "TecPonto Atendente",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "TecPonto Tecnico",
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "TecPonto Gestor",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "TecPonto Direcao",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "search_fields": "customer,customer_name,brand,model,imei_serial",
+ "show_name_in_global_search": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "model",
+ "track_changes": 1
+}

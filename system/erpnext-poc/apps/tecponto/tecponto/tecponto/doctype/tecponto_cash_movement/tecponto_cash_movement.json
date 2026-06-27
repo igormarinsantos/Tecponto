@@ -1,0 +1,37 @@
+{
+ "actions": [],
+ "autoname": "MOV-.YYYY.-.#####",
+ "creation": "2026-06-23 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": ["cash_session","occurred_at","movement_type","direction","column_break_movement","payment_method","amount","reference_section","reference_doctype","reference_name","column_break_reference","created_by","notes"],
+ "fields": [
+  {"fieldname":"cash_session","fieldtype":"Link","in_list_view":1,"in_standard_filter":1,"label":"Caixa","options":"TecPonto Cash Session","read_only":1,"reqd":1},
+  {"fieldname":"occurred_at","fieldtype":"Datetime","in_list_view":1,"label":"Data e hora","read_only":1,"reqd":1},
+  {"fieldname":"movement_type","fieldtype":"Select","in_list_view":1,"in_standard_filter":1,"label":"Movimento","options":"Venda\nRecebimento\nSuprimento\nSangria\nEstorno\nAjuste","read_only":1,"reqd":1},
+  {"fieldname":"direction","fieldtype":"Select","label":"Direção","options":"Entrada\nSaída","read_only":1,"reqd":1},
+  {"fieldname":"column_break_movement","fieldtype":"Column Break"},
+  {"fieldname":"payment_method","fieldtype":"Select","in_standard_filter":1,"label":"Forma de pagamento","options":"Dinheiro\nPix\nDébito\nCrédito\nTransferência\nOutro","read_only":1,"reqd":1},
+  {"fieldname":"amount","fieldtype":"Currency","in_list_view":1,"label":"Valor","read_only":1,"reqd":1},
+  {"fieldname":"reference_section","fieldtype":"Section Break","label":"Origem"},
+  {"fieldname":"reference_doctype","fieldtype":"Link","label":"Tipo de registro","options":"DocType","read_only":1},
+  {"fieldname":"reference_name","fieldtype":"Dynamic Link","label":"Registro","options":"reference_doctype","read_only":1},
+  {"fieldname":"column_break_reference","fieldtype":"Column Break"},
+  {"fieldname":"created_by","fieldtype":"Link","label":"Registrado por","options":"User","read_only":1},
+  {"fieldname":"notes","fieldtype":"Small Text","label":"Observações","read_only":1}
+ ],
+ "modified":"2026-06-29 00:00:00.000000",
+ "modified_by":"Administrator",
+ "module":"TecPonto",
+ "name":"TecPonto Cash Movement",
+ "naming_rule":"Expression",
+ "owner":"Administrator",
+ "permissions":[
+  {"export":1,"read":1,"report":1,"role":"System Manager"},
+  {"export":1,"read":1,"report":1,"role":"TecPonto Direcao"}
+ ],
+ "search_fields":"cash_session,movement_type,payment_method,reference_name",
+ "sort_field":"creation",
+ "sort_order":"DESC",
+ "track_changes":1
+}

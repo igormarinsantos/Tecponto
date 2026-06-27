@@ -1,0 +1,680 @@
+{
+ "actions": [],
+ "allow_import": 1,
+ "autoname": "naming_series:",
+ "creation": "2026-06-23 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "identification_section",
+  "naming_series",
+  "customer",
+  "customer_name",
+  "device",
+  "column_break_identification",
+  "workflow_state",
+  "intake_at",
+  "channel",
+  "priority",
+  "service_type",
+  "original_repair_order",
+  "promised_at",
+  "sla_status",
+  "intake_section",
+  "reported_issue",
+  "intake_front_photo",
+  "intake_back_photo",
+  "column_break_intake",
+  "intake_condition",
+  "accessories",
+  "intake_photo",
+  "technical_section",
+  "technician",
+  "diagnosis",
+  "root_cause",
+  "solution",
+  "column_break_technical",
+  "third_party_service",
+  "third_party_supplier",
+  "third_party_cost",
+  "no_repair_reason",
+  "no_repair_details",
+  "waiting_parts_section",
+  "waiting_part_details",
+  "part_expected_at",
+  "column_break_waiting_parts",
+  "waiting_parts_started_at",
+  "quote_section",
+  "items",
+  "estimated_total",
+  "parts_stock_entry",
+  "approval_section",
+  "approval_status",
+  "approval_method",
+  "approval_reference",
+  "column_break_approval",
+  "approval_at",
+  "sales_invoice",
+  "tests_section",
+  "tests",
+  "completion_photo",
+  "delivery_section",
+  "ready_at",
+  "delivered_at",
+  "column_break_delivery",
+  "warranty_days",
+  "warranty_until",
+  "parts_warranty_days",
+  "parts_warranty_until",
+  "tracking_section",
+  "diagnosis_started_at",
+  "diagnosis_completed_at",
+  "column_break_tracking",
+  "repair_started_at",
+  "tests_started_at",
+  "stage_changed_at",
+  "closure_outcome",
+  "administration_section",
+  "company",
+  "currency",
+  "notes",
+  "whatsapp_messages_log",
+  "customer_signature_token_hash",
+  "customer_signature_token_created_at",
+  "customer_signature_ip",
+  "customer_signature_at",
+  "customer_signature_hash",
+  "customer_signature_ua"
+ ],
+ "fields": [
+  {
+   "fieldname": "identification_section",
+   "fieldtype": "Section Break",
+   "label": "Identificação"
+  },
+  {
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "label": "Série",
+   "no_copy": 1,
+   "options": "OS-.YYYY.-.#####",
+   "reqd": 1,
+   "set_only_once": 1
+  },
+  {
+   "fieldname": "customer",
+   "fieldtype": "Link",
+   "in_global_search": 1,
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Cliente",
+   "options": "Customer",
+   "reqd": 1,
+   "search_index": 1
+  },
+  {
+   "fetch_from": "customer.customer_name",
+   "fieldname": "customer_name",
+   "fieldtype": "Data",
+   "label": "Nome do cliente",
+   "read_only": 1
+  },
+  {
+   "fieldname": "device",
+   "fieldtype": "Link",
+   "in_global_search": 1,
+   "in_list_view": 1,
+   "label": "Aparelho",
+   "options": "Service Device",
+   "reqd": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "column_break_identification",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "Recebido",
+   "fieldname": "workflow_state",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Etapa",
+   "no_copy": 1,
+   "options": "Workflow State",
+   "read_only": 1,
+   "search_index": 1
+  },
+  {
+   "default": "Now",
+   "fieldname": "intake_at",
+   "fieldtype": "Datetime",
+   "label": "Entrada",
+   "reqd": 1
+  },
+  {
+   "fieldname": "channel",
+   "fieldtype": "Select",
+   "in_standard_filter": 1,
+   "label": "Canal",
+   "options": "Balcao\nWebsite\nWhatsApp\nShopee\nMercado Livre\nPOC\nOutro",
+   "reqd": 1
+  },
+  {
+   "default": "Normal",
+   "fieldname": "priority",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Prioridade",
+   "options": "Normal\nUrgente",
+   "reqd": 1
+  },
+  {
+   "default": "Reparo",
+   "fieldname": "service_type",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Tipo de atendimento",
+   "options": "Reparo\nGarantia\nRetrabalho",
+   "reqd": 1
+  },
+  {
+   "depends_on": "eval:doc.service_type != 'Reparo'",
+   "description": "Ordem original que gerou a garantia ou o retrabalho.",
+   "fieldname": "original_repair_order",
+   "fieldtype": "Link",
+   "label": "Ordem de serviço original",
+   "options": "Repair Order"
+  },
+  {
+   "description": "Prazo combinado com o cliente.",
+   "fieldname": "promised_at",
+   "fieldtype": "Datetime",
+   "in_list_view": 1,
+   "label": "Prometido para"
+  },
+  {
+   "fieldname": "sla_status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Prazo",
+   "options": "No prazo\nVence em breve\nAtrasado\nConcluído",
+   "read_only": 1
+  },
+  {
+   "fieldname": "intake_section",
+   "fieldtype": "Section Break",
+   "label": "Entrada do aparelho"
+  },
+  {
+   "description": "Registre o relato do cliente sem concluir o diagnóstico.",
+   "fieldname": "reported_issue",
+   "fieldtype": "Small Text",
+   "label": "Problema relatado",
+   "reqd": 1
+  },
+  {
+   "description": "Fotografe toda a parte frontal do aparelho antes de concluir a entrada.",
+   "fieldname": "intake_front_photo",
+   "fieldtype": "Attach Image",
+   "label": "Foto obrigatória da frente",
+   "reqd": 1
+  },
+  {
+   "description": "Fotografe toda a parte traseira do aparelho antes de concluir a entrada.",
+   "fieldname": "intake_back_photo",
+   "fieldtype": "Attach Image",
+   "label": "Foto obrigatória de trás",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_intake",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "intake_condition",
+   "fieldtype": "Small Text",
+   "label": "Estado na entrada",
+   "reqd": 1
+  },
+  {
+   "fieldname": "accessories",
+   "fieldtype": "Small Text",
+   "label": "Acessórios entregues"
+  },
+  {
+   "description": "Campo legado para entradas antigas. Use anexos adicionais para outros ângulos.",
+   "fieldname": "intake_photo",
+   "fieldtype": "Attach Image",
+   "hidden": 1,
+   "label": "Foto de entrada antiga",
+   "read_only": 1
+  },
+  {
+   "fieldname": "technical_section",
+   "fieldtype": "Section Break",
+   "label": "Diagnóstico técnico"
+  },
+  {
+   "fieldname": "technician",
+   "fieldtype": "Link",
+   "in_standard_filter": 1,
+   "label": "Técnico responsável",
+   "options": "User"
+  },
+  {
+   "fieldname": "diagnosis",
+   "fieldtype": "Text Editor",
+   "label": "Diagnóstico"
+  },
+  {
+   "fieldname": "root_cause",
+   "fieldtype": "Small Text",
+   "label": "Causa encontrada"
+  },
+  {
+   "fieldname": "solution",
+   "fieldtype": "Small Text",
+   "label": "Solução executada"
+  },
+  {
+   "fieldname": "column_break_technical",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "third_party_service",
+   "fieldtype": "Check",
+   "label": "Serviço de terceiro"
+  },
+  {
+   "depends_on": "third_party_service",
+   "fieldname": "third_party_supplier",
+   "fieldtype": "Link",
+   "label": "Terceiro responsável",
+   "options": "Supplier"
+  },
+  {
+   "depends_on": "third_party_service",
+   "fieldname": "third_party_cost",
+   "fieldtype": "Currency",
+   "label": "Custo do terceiro",
+   "non_negative": 1
+  },
+  {
+   "depends_on": "eval:['Em diagnostico', 'Em reparo', 'Sem conserto'].includes(doc.workflow_state)",
+   "fieldname": "no_repair_reason",
+   "fieldtype": "Select",
+   "label": "Motivo sem conserto",
+   "options": "Sem viabilidade técnica\nPeça indisponível\nCusto inviável\nRisco elevado\nDano irreversível\nOutro"
+  },
+  {
+   "depends_on": "eval:['Em diagnostico', 'Em reparo', 'Sem conserto'].includes(doc.workflow_state)",
+   "fieldname": "no_repair_details",
+   "fieldtype": "Small Text",
+   "label": "Detalhes do encerramento"
+  },
+  {
+   "depends_on": "eval:doc.workflow_state == 'Aguardando peca'",
+   "fieldname": "waiting_parts_section",
+   "fieldtype": "Section Break",
+   "label": "Aguardando peça"
+  },
+  {
+   "depends_on": "eval:doc.workflow_state == 'Aguardando peca'",
+   "description": "Informe a peça, o fornecedor ou o motivo que bloqueou o reparo.",
+   "fieldname": "waiting_part_details",
+   "fieldtype": "Small Text",
+   "label": "Peça ou impedimento"
+  },
+  {
+   "depends_on": "eval:doc.workflow_state == 'Aguardando peca'",
+   "fieldname": "part_expected_at",
+   "fieldtype": "Datetime",
+   "label": "Previsão da peça"
+  },
+  {
+   "fieldname": "column_break_waiting_parts",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "waiting_parts_started_at",
+   "fieldtype": "Datetime",
+   "label": "Aguardando desde",
+   "read_only": 1
+  },
+  {
+   "fieldname": "quote_section",
+   "fieldtype": "Section Break",
+   "label": "Orçamento"
+  },
+  {
+   "fieldname": "items",
+   "fieldtype": "Table",
+   "label": "Serviços e peças",
+   "options": "Repair Order Item"
+  },
+  {
+   "fieldname": "estimated_total",
+   "fieldtype": "Currency",
+   "label": "Total estimado",
+   "read_only": 1
+  },
+  {
+   "fieldname": "parts_stock_entry",
+   "fieldtype": "Link",
+   "label": "Baixa de peças",
+   "options": "Stock Entry",
+   "read_only": 1
+  },
+  {
+   "fieldname": "approval_section",
+   "fieldtype": "Section Break",
+   "label": "Aprovação"
+  },
+  {
+   "default": "Pendente",
+   "fieldname": "approval_status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Situação da aprovação",
+   "options": "Pendente\nAprovado\nRecusado",
+   "read_only": 1
+  },
+  {
+   "fieldname": "approval_method",
+   "fieldtype": "Select",
+   "label": "Canal da aprovação",
+   "options": "\nWhatsApp\nPresencial\nE-mail\nOutro"
+  },
+  {
+   "description": "Identificador ou observação da confirmação; não cole conversas com dados desnecessários.",
+   "fieldname": "approval_reference",
+   "fieldtype": "Data",
+   "label": "Referência da aprovação"
+  },
+  {
+   "fieldname": "column_break_approval",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "approval_at",
+   "fieldtype": "Datetime",
+   "label": "Aprovado em",
+   "read_only": 1
+  },
+  {
+   "fieldname": "sales_invoice",
+   "fieldtype": "Link",
+   "label": "Fatura de venda",
+   "options": "Sales Invoice",
+   "read_only": 1
+  },
+  {
+   "fieldname": "tests_section",
+   "fieldtype": "Section Break",
+   "label": "Testes de saída"
+  },
+  {
+   "fieldname": "tests",
+   "fieldtype": "Table",
+   "label": "Checklist técnico",
+   "options": "Repair Test"
+  },
+  {
+   "description": "Foto do aparelho concluído antes da entrega.",
+   "fieldname": "completion_photo",
+   "fieldtype": "Attach Image",
+   "label": "Foto de conclusão"
+  },
+  {
+   "fieldname": "delivery_section",
+   "fieldtype": "Section Break",
+   "label": "Entrega e garantia"
+  },
+  {
+   "fieldname": "ready_at",
+   "fieldtype": "Datetime",
+   "label": "Pronto em",
+   "read_only": 1
+  },
+  {
+   "fieldname": "delivered_at",
+   "fieldtype": "Datetime",
+   "label": "Entregue em",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_delivery",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "90",
+   "fieldname": "warranty_days",
+   "fieldtype": "Int",
+   "label": "Dias de garantia",
+   "non_negative": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "warranty_until",
+   "fieldtype": "Date",
+   "label": "Garantia até",
+   "read_only": 1
+  },
+  {
+   "default": "90",
+   "fieldname": "parts_warranty_days",
+   "fieldtype": "Int",
+   "label": "Garantia das peças (dias)",
+   "non_negative": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "parts_warranty_until",
+   "fieldtype": "Date",
+   "label": "Garantia das peças até",
+   "read_only": 1
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "tracking_section",
+   "fieldtype": "Section Break",
+   "label": "Tempos da oficina"
+  },
+  {
+   "fieldname": "diagnosis_started_at",
+   "fieldtype": "Datetime",
+   "label": "Diagnóstico iniciado em",
+   "read_only": 1
+  },
+  {
+   "fieldname": "diagnosis_completed_at",
+   "fieldtype": "Datetime",
+   "label": "Diagnóstico concluído em",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_tracking",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "repair_started_at",
+   "fieldtype": "Datetime",
+   "label": "Reparo iniciado em",
+   "read_only": 1
+  },
+  {
+   "fieldname": "tests_started_at",
+   "fieldtype": "Datetime",
+   "label": "Testes iniciados em",
+   "read_only": 1
+  },
+  {
+   "fieldname": "stage_changed_at",
+   "fieldtype": "Datetime",
+   "label": "Etapa alterada em",
+   "read_only": 1
+  },
+  {
+   "fieldname": "closure_outcome",
+   "fieldtype": "Select",
+   "label": "Resultado final",
+   "options": "\nConsertado\nSem conserto\nOrçamento recusado\nCancelado",
+   "read_only": 1
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "administration_section",
+   "fieldtype": "Section Break",
+   "label": "Administração"
+  },
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "label": "Empresa",
+   "options": "Company",
+   "remember_last_selected_value": 1,
+   "reqd": 1
+  },
+  {
+   "fetch_from": "company.default_currency",
+   "fieldname": "currency",
+   "fieldtype": "Link",
+   "label": "Moeda",
+   "options": "Currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "notes",
+   "fieldtype": "Text",
+   "label": "Observações internas"
+  },
+  {
+   "fieldname": "whatsapp_messages_log",
+   "fieldtype": "Text",
+   "label": "Log de Mensagens WhatsApp"
+  },
+  {
+   "fieldname": "customer_signature_token_hash",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "Hash do token de assinatura",
+   "no_copy": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "customer_signature_token_created_at",
+   "fieldtype": "Datetime",
+   "hidden": 1,
+   "label": "Token de assinatura gerado em",
+   "no_copy": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "customer_signature_ip",
+   "fieldtype": "Data",
+   "label": "IP do Aceite"
+  },
+  {
+   "fieldname": "customer_signature_at",
+   "fieldtype": "Datetime",
+   "label": "Data/Hora do Aceite"
+  },
+  {
+   "fieldname": "customer_signature_hash",
+   "fieldtype": "Data",
+   "label": "Hash de Assinatura"
+  },
+  {
+   "fieldname": "customer_signature_ua",
+   "fieldtype": "Small Text",
+   "label": "User Agent do Aceite"
+  }
+ ],
+ "icon": "fa fa-wrench",
+ "links": [],
+ "modified": "2026-06-29 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "TecPonto",
+ "name": "Repair Order",
+ "naming_rule": "By \"Naming Series\" field",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "TecPonto Atendente",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "TecPonto Tecnico",
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "TecPonto Gestor",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "TecPonto Direcao",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "search_fields": "workflow_state,customer,customer_name,device,reported_issue",
+ "show_name_in_global_search": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [
+  {"color": "Gray", "title": "Recebido"},
+  {"color": "Orange", "title": "Aguardando aprovacao"},
+  {"color": "Yellow", "title": "Aguardando peca"},
+  {"color": "Blue", "title": "Em reparo"},
+  {"color": "Green", "title": "Pronto para retirada"},
+  {"color": "Green", "title": "Entregue"},
+  {"color": "Red", "title": "Sem conserto"},
+  {"color": "Red", "title": "Cancelado"}
+ ],
+ "timeline_field": "customer",
+ "title_field": "customer_name",
+ "track_changes": 1
+}

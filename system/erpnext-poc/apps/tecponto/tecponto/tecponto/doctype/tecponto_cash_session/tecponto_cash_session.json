@@ -1,0 +1,40 @@
+{
+ "actions": [],
+ "autoname": "CAIXA-.YYYY.-.#####",
+ "creation": "2026-06-23 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": ["status","opened_at","opened_by","opening_amount","column_break_open","closed_at","closed_by","totals_section","total_in","total_out","expected_amount","column_break_totals","counted_amount","difference","notes"],
+ "fields": [
+  {"default":"Aberto","fieldname":"status","fieldtype":"Select","in_list_view":1,"in_standard_filter":1,"label":"Situação","options":"Aberto\nFechado","read_only":1,"reqd":1},
+  {"fieldname":"opened_at","fieldtype":"Datetime","in_list_view":1,"label":"Aberto em","read_only":1},
+  {"fieldname":"opened_by","fieldtype":"Link","label":"Aberto por","options":"User","read_only":1},
+  {"fieldname":"opening_amount","fieldtype":"Currency","label":"Fundo inicial","non_negative":1,"read_only":1},
+  {"fieldname":"column_break_open","fieldtype":"Column Break"},
+  {"fieldname":"closed_at","fieldtype":"Datetime","label":"Fechado em","read_only":1},
+  {"fieldname":"closed_by","fieldtype":"Link","label":"Fechado por","options":"User","read_only":1},
+  {"fieldname":"totals_section","fieldtype":"Section Break","label":"Fechamento"},
+  {"fieldname":"total_in","fieldtype":"Currency","label":"Entradas","read_only":1},
+  {"fieldname":"total_out","fieldtype":"Currency","label":"Saídas","read_only":1},
+  {"fieldname":"expected_amount","fieldtype":"Currency","label":"Saldo esperado","read_only":1},
+  {"fieldname":"column_break_totals","fieldtype":"Column Break"},
+  {"fieldname":"counted_amount","fieldtype":"Currency","label":"Saldo contado","read_only":1},
+  {"fieldname":"difference","fieldtype":"Currency","label":"Diferença","read_only":1},
+  {"fieldname":"notes","fieldtype":"Small Text","label":"Observações","read_only":1}
+ ],
+ "modified":"2026-06-29 00:00:00.000000",
+ "modified_by":"Administrator",
+ "module":"TecPonto",
+ "name":"TecPonto Cash Session",
+ "naming_rule":"Expression",
+ "owner":"Administrator",
+ "permissions":[
+  {"export":1,"print":1,"read":1,"report":1,"role":"System Manager"},
+  {"export":1,"print":1,"read":1,"report":1,"role":"TecPonto Direcao"}
+ ],
+ "search_fields":"status,opened_by,closed_by",
+ "sort_field":"creation",
+ "sort_order":"DESC",
+ "states":[{"color":"Green","title":"Aberto"},{"color":"Gray","title":"Fechado"}],
+ "track_changes":1
+}

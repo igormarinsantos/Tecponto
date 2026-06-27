@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Aceite Digital — TecPonto</title>
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+	<style>
+		:root {
+			--tp-orange: #FF4B00;
+			--tp-dark: #1E2022;
+			--tp-border: #E2E8F0;
+			--tp-bg: #F7FAFC;
+			--tp-surface: #FFFFFF;
+			--tp-text: #2D3748;
+			--tp-muted: #718096;
+			--tp-vh: 100vh;
+		}
+
+		@supports (height: 100svh) {
+			:root {
+				--tp-vh: 100svh;
+			}
+		}
+
+		body {
+			font-family: 'Inter', sans-serif;
+			background-color: var(--tp-bg);
+			color: var(--tp-text);
+			margin: 0;
+			padding: 20px;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			min-height: var(--tp-vh);
+			box-sizing: border-box;
+		}
+
+		.tp-container {
+			width: 100%;
+			max-width: 540px;
+			background: var(--tp-surface);
+			border-radius: 16px;
+			box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+			border: 1px solid var(--tp-border);
+			overflow: hidden;
+		}
+
+		.tp-header {
+			background: var(--tp-dark);
+			color: #fff;
+			padding: 24px;
+			text-align: center;
+			border-bottom: 4px solid var(--tp-orange);
+		}
+
+		.tp-logo {
+			font-size: 24px;
+			font-weight: 700;
+			letter-spacing: -0.04em;
+			color: #fff;
+			text-transform: uppercase;
+		}
+
+		.tp-logo span {
+			color: var(--tp-orange);
+		}
+
+		.tp-content {
+			padding: 28px;
+		}
+
+		h2 {
+			font-size: 18px;
+			font-weight: 700;
+			margin-top: 0;
+			margin-bottom: 18px;
+			color: var(--tp-dark);
+		}
+
+		.form-group {
+			margin-bottom: 20px;
+		}
+
+		label {
+			display: block;
+			font-size: 12px;
+			font-weight: 600;
+			margin-bottom: 8px;
+			text-transform: uppercase;
+			letter-spacing: 0.05em;
+			color: var(--tp-muted);
+		}
+
+		.form-control {
+			width: 100%;
+			padding: 12px 16px;
+			font-size: 14px;
+			border: 1.5px solid var(--tp-border);
+			border-radius: 8px;
+			box-sizing: border-box;
+			font-family: inherit;
+			transition: border-color 0.15s ease;
+		}
+
+		.form-control:focus {
+			outline: none;
+			border-color: var(--tp-orange);
+		}
+
+		.btn {
+			width: 100%;
+			padding: 14px;
+			font-size: 14px;
+			font-weight: 600;
+			background-color: var(--tp-orange);
+			color: white;
+			border: none;
+			border-radius: 8px;
+			cursor: pointer;
+			font-family: inherit;
+			transition: background-color 0.15s ease;
+		}
+
+		.btn:hover {
+			background-color: #e04200;
+		}
+
+		.alert {
+			padding: 12px 16px;
+			border-radius: 8px;
+			font-size: 13px;
+			margin-bottom: 20px;
+			line-height: 1.4;
+		}
+
+		.alert-error {
+			background-color: #FFF5F5;
+			color: #C53030;
+			border: 1px solid #FEB2B2;
+		}
+
+		.alert-success {
+			background-color: #F0FFF4;
+			color: #22543D;
+			border: 1px solid #9AE6B4;
+		}
+
+		.os-detail-box {
+			background: var(--tp-bg);
+			border: 1px solid var(--tp-border);
+			border-radius: 8px;
+			padding: 16px;
+			margin-bottom: 20px;
+			font-size: 13px;
+		}
+
+		.os-detail-row {
+			display: flex;
+			justify-content: space-between;
+			margin-bottom: 8px;
+		}
+
+		.os-detail-row:last-child {
+			margin-bottom: 0;
+		}
+
+		.os-detail-label {
+			color: var(--tp-muted);
+			font-weight: 500;
+		}
+
+		.os-detail-value {
+			font-weight: 600;
+			color: var(--tp-dark);
+		}
+
+		.terms-box {
+			height: 120px;
+			overflow-y: scroll;
+			background: #f7fafc;
+			border: 1px solid var(--tp-border);
+			border-radius: 8px;
+			padding: 12px;
+			font-size: 11px;
+			line-height: 1.5;
+			color: var(--tp-muted);
+			margin-bottom: 20px;
+			text-align: justify;
+		}
+
+		.signature-box {
+			border: 1px dashed var(--tp-orange);
+			background: #fff8f5;
+			border-radius: 8px;
+			padding: 16px;
+			margin-bottom: 20px;
+			display: flex;
+			flex-direction: column;
+			gap: 8px;
+		}
+
+		.hidden {
+			display: none;
+		}
+	</style>
+</head>
+<body>
+
+<div class="tp-container">
+	<header class="tp-header">
+		<div class="tp-logo">Tec<span>Ponto</span></div>
+	</header>
+
+	<div class="tp-content">
+		{% if error %}
+			<div class="alert alert-error">{{ error }}</div>
+		{% else %}
+			<!-- Step 1: Verification -->
+			<div id="step-verification">
+				<h2>Verifique sua identidade</h2>
+				<p style="font-size: 13px; color: var(--tp-muted); margin-bottom: 20px;">
+					Por questões de privacidade, digite o número do seu <strong>WhatsApp com DDD</strong> para acessar os detalhes da Ordem de Serviço.
+				</p>
+				<div class="alert alert-error hidden" id="verification-error"></div>
+				<div class="form-group">
+					<label for="verification-phone">Seu WhatsApp</label>
+					<input type="tel" id="verification-phone" class="form-control" placeholder="Ex: 11999999999">
+				</div>
+				<button class="btn" id="btn-verify">Acessar Ordem de Serviço</button>
+			</div>
+
+			<!-- Step 2: Content and signature -->
+			<div id="step-content" class="hidden">
+				<h2>Resumo do Atendimento</h2>
+				
+				<div class="os-detail-box">
+					<div class="os-detail-row">
+						<span class="os-detail-label">Ordem de Serviço:</span>
+						<span class="os-detail-value">{{ doc.name }}</span>
+					</div>
+					<div class="os-detail-row">
+						<span class="os-detail-label">Cliente:</span>
+						<span class="os-detail-value">{{ doc.customer_name }}</span>
+					</div>
+					<div class="os-detail-row">
+						<span class="os-detail-label">Aparelho:</span>
+						<span class="os-detail-value">{{ device_label }}</span>
+					</div>
+					{% if doc.workflow_state in ["Aguardando aprovacao", "Aprovado", "Em reparo", "Em testes", "Pronto para retirada"] %}
+						<div class="os-detail-row" style="border-top: 1px dashed var(--tp-border); margin-top: 8px; padding-top: 8px;">
+							<span class="os-detail-label">Valor do Orçamento:</span>
+							<span class="os-detail-value" style="color: var(--tp-orange); font-size: 14px;">R$ {{ doc.estimated_total }}</span>
+						</div>
+					{% endif %}
+				</div>
+
+				{% if doc.customer_signature_hash %}
+					<div class="alert alert-success">
+						<strong>Ordem de Serviço Assinada Digitalmente!</strong><br>
+						IP do Aceite: {{ doc.customer_signature_ip }}<br>
+						Data: {{ doc.customer_signature_at }}
+					</div>
+				{% else %}
+					<h2>Termos de Autorização</h2>
+					<div class="terms-box">
+						1. Autorizo a TecPonto a realizar a análise diagnóstica no aparelho especificado nesta Ordem de Serviço.<br/>
+						2. Entendo que o diagnóstico pode exigir a abertura física do dispositivo, o que pode anular garantias de fábrica.<br/>
+						3. A TecPonto compromete-se a proteger a privacidade dos meus dados pessoais e dados do aparelho.<br/>
+						4. Orçamentos gerados têm validade de 10 dias corridos.<br/>
+						5. Após o aviso de pronto, aparelhos não retirados em 90 dias estarão sujeitos a cobrança de taxa de guarda ou descarte regulamentado.<br/>
+						6. Declaro ser o legítimo proprietário ou possuir autorização legal para entregar o aparelho para reparo.
+					</div>
+
+					<div class="alert alert-error hidden" id="signature-error"></div>
+
+					<div class="signature-box">
+						<label style="display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--tp-dark); text-transform: none; font-weight: 500; cursor: pointer;">
+							<input type="checkbox" id="terms-check" style="accent-color: var(--tp-orange);">
+							Declaro que li e aceito todos os termos de serviço e autorizo o início do reparo.
+						</label>
+					</div>
+
+					<button class="btn" id="btn-sign">Assinar e Autorizar Digitalmente</button>
+				{% endif %}
+			</div>
+		{% endif %}
+	</div>
+</div>
+
+<script>
+	document.addEventListener("DOMContentLoaded", function() {
+		const btnVerify = document.getElementById("btn-verify");
+		const btnSign = document.getElementById("btn-sign");
+		const verifyStep = document.getElementById("step-verification");
+		const contentStep = document.getElementById("step-content");
+		const phoneInput = document.getElementById("verification-phone");
+		const verificationError = document.getElementById("verification-error");
+		const signatureError = document.getElementById("signature-error");
+		const termsCheck = document.getElementById("terms-check");
+
+		const orderName = "{{ doc.name }}";
+		const signatureToken = "{{ signature_token }}";
+
+		if (btnVerify) {
+			btnVerify.addEventListener("click", function() {
+				const phoneVal = phoneInput.value.trim().replace(/\D/g, '');
+				if (!phoneVal) {
+					showError(verificationError, "Por favor, digite seu WhatsApp com DDD.");
+					return;
+				}
+
+				if (phoneVal.length < 8) {
+					showError(verificationError, "Número de WhatsApp inválido.");
+					return;
+				}
+
+				const stored = "{{ whatsapp }}".trim().replace(/\D/g, '');
+				if (stored.endsWith(phoneVal.substr(-8))) {
+					verifyStep.classList.add("hidden");
+					contentStep.classList.remove("hidden");
+				} else {
+					showError(verificationError, "WhatsApp informado não confere com os dados do cliente.");
+				}
+			});
+		}
+
+		if (btnSign) {
+			btnSign.addEventListener("click", function() {
+				if (!termsCheck.checked) {
+					showError(signatureError, "Você precisa ler e marcar a caixa de consentimento dos termos.");
+					return;
+				}
+
+				const phoneVal = phoneInput.value.trim();
+
+				btnSign.disabled = true;
+				btnSign.innerText = "Assinando...";
+
+				fetch("/api/method/tecponto.www.os_aceite.submit_signature", {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify({
+						repair_order: orderName,
+						whatsapp_number: phoneVal,
+						token: signatureToken
+					})
+				})
+				.then(res => res.json())
+				.then(data => {
+					if (data.message && data.message.status === "success") {
+						alert("Ordem de Serviço assinada com sucesso!");
+						location.reload();
+					} else if (data._server_messages) {
+						const msg = JSON.parse(JSON.parse(data._server_messages)[0]).message;
+						showError(signatureError, msg);
+						btnSign.disabled = false;
+						btnSign.innerText = "Assinar e Autorizar Digitalmente";
+					} else {
+						showError(signatureError, "Falha na assinatura.");
+						btnSign.disabled = false;
+						btnSign.innerText = "Assinar e Autorizar Digitalmente";
+					}
+				})
+				.catch(err => {
+					showError(signatureError, "Ocorreu um erro interno de conexão.");
+					btnSign.disabled = false;
+					btnSign.innerText = "Assinar e Autorizar Digitalmente";
+				});
+			});
+		}
+
+		function showError(el, message) {
+			el.innerText = message;
+			el.classList.remove("hidden");
+		}
+	});
+</script>
+
+</body>
+</html>
