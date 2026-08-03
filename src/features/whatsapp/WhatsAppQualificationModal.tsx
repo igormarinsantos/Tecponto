@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import whatsappAssistant from "@/assets/people/whatsapp-assistant.png";
 import { SHOPEE_STORE_URL } from "@/constants/links";
+import { trackCampaignEvent, withCampaignParameters } from "@/features/analytics/campaign";
 import { buildWhatsAppUrl, qualificationFlow, type QualificationField, type QualificationValues } from "@/features/whatsapp/qualification";
 import type { LandingVariant } from "@/types/landing";
 
@@ -405,12 +406,14 @@ const WhatsAppQualificationModal = ({ isOpen, onClose, variant }: WhatsAppQualif
     if (!selectedVariant) return;
 
     if (selectedVariant === "compre") {
-      window.open(SHOPEE_STORE_URL, "_blank");
+      trackCampaignEvent("bio_shopee_open", { placement: "qualification_modal" });
+      window.open(withCampaignParameters(SHOPEE_STORE_URL), "_blank");
       localStorage.removeItem(STORAGE_KEY);
       onClose();
       return;
     }
 
+    trackCampaignEvent("bio_whatsapp_start", { modality: selectedVariant, completed_fields: Object.keys(values).length });
     window.open(buildWhatsAppUrl(selectedVariant, values), "_blank");
     localStorage.removeItem(STORAGE_KEY);
     onClose();

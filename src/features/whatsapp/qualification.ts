@@ -1,4 +1,5 @@
 import type { LandingVariant } from "@/types/landing";
+import { getCampaignWhatsAppContext } from "@/features/analytics/campaign";
 
 export const WHATSAPP_PHONE = "5511930642742";
 
@@ -122,11 +123,12 @@ export const buildQualificationMessage = (
   const lines = [
     "Olá! Vim pelo site da TecPonto.",
     `Modalidade: ${flow.title}`,
+    getCampaignWhatsAppContext(),
     "",
     ...flow.fields.map((field) => `${field.label}: ${values[field.id] || "Não informado"}`),
   ];
 
-  return lines.join("\n");
+  return lines.filter(Boolean).join("\n");
 };
 
 export const buildWhatsAppUrl = (variant: LandingVariant, values: QualificationValues) =>

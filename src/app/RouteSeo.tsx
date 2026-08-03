@@ -41,6 +41,21 @@ const seoByPath: Record<string, {
     description: "Fale com a TecPonto pelo WhatsApp para comprar, trocar ou reparar seu celular em Guarulhos.",
     keywords: "contato TecPonto, WhatsApp TecPonto, orcamento celular Guarulhos",
   },
+  "/marca": {
+    title: "Sistema de Marca TecPonto | Brand Rules",
+    description: "Diretrizes de marca, comunicação, identidade visual e interface da TecPonto.",
+    keywords: "marca TecPonto, design system TecPonto, identidade visual TecPonto",
+  },
+  "/links": {
+    title: "TecPonto | Compre, Troque e Repare",
+    description: "Escolha entre reparar, trocar ou comprar seu celular com a TecPonto em Guarulhos.",
+    keywords: "TecPonto, reparo de celular, troca de celular, celular revisado",
+  },
+  "/bio": {
+    title: "TecPonto | Compre, Troque e Repare",
+    description: "Escolha entre reparar, trocar ou comprar seu celular com a TecPonto em Guarulhos.",
+    keywords: "TecPonto, reparo de celular, troca de celular, celular revisado",
+  },
 };
 
 const ensureMeta = (name: string) => {
