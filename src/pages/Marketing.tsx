@@ -46,6 +46,7 @@ const statusLabels: Record<LeadStatus, string> = {
   perdido: "Perdido",
 };
 const modalityLabels = { repare: "Repare", troque: "Troque", compre: "Compre" };
+const kanbanStatuses: LeadStatus[] = ["novo", "em_atendimento", "orcamento_enviado", "aguardando_cliente", "convertido", "perdido"];
 
 const ratio = (numerator: number, denominator: number) => denominator ? `${Math.round((numerator / denominator) * 100)}%` : "-";
 
@@ -57,6 +58,7 @@ const Marketing = () => {
   const [leads, setLeads] = useState<MarketingLead[]>([]);
   const [leadsLoading, setLeadsLoading] = useState(false);
   const [audiences, setAudiences] = useState<Audience[]>([]);
+  const [draggedLeadId, setDraggedLeadId] = useState<string | null>(null);
   const [error, setError] = useState<"unauthorized" | "not_configured" | "failed" | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -130,6 +132,13 @@ const Marketing = () => {
     } catch {
       setLeads(previousLeads);
     }
+  };
+
+  const dropLead = (status: LeadStatus) => {
+    if (!draggedLeadId) return;
+    const lead = leads.find((item) => item.id === draggedLeadId);
+    setDraggedLeadId(null);
+    if (lead && lead.status !== status) void updateLead(lead, status);
   };
 
   const login = async (event: FormEvent) => {
@@ -215,8 +224,19 @@ const Marketing = () => {
             </section>
 
             <section className="mt-6 rounded-xl border border-black/10 bg-white p-5 sm:p-6">
-              <div className="flex flex-wrap items-end justify-between gap-3"><div><h2 className="font-black">Leads para acompanhar</h2><p className="mt-1 text-sm font-medium text-[#25292C]/55">Qualificacoes salvas apos a conclusao do atendimento guiado.</p></div><span className="text-xs font-bold text-[#25292C]/45">{leads.length} recentes</span></div>
-              <div className="mt-5 overflow-x-auto"><table className="w-full min-w-[760px] text-left text-sm"><thead className="border-b border-black/10 text-[10px] font-black uppercase tracking-wide text-[#25292C]/45"><tr><th className="pb-3">Lead</th><th className="pb-3">Interesse</th><th className="pb-3">Origem</th><th className="pb-3">Recebido</th><th className="pb-3 text-right">Etapa</th></tr></thead><tbody>{leads.length ? leads.map((lead) => <tr key={lead.id} className="border-b border-black/5 last:border-0"><td className="py-3"><strong className="block font-black">{modalityLabels[lead.modality]}</strong><span className="block max-w-[260px] truncate text-xs font-medium text-[#25292C]/55">{Object.values(lead.qualification).join(" · ") || "Atendimento iniciado"}</span></td><td className="py-3 text-xs font-bold text-[#25292C]/70">{lead.campaign_name || lead.campaign_source || "Direto"}</td><td className="py-3 text-xs font-bold text-[#25292C]/70">{lead.campaign_content || lead.campaign_source || "Site"}</td><td className="py-3 text-xs font-bold text-[#25292C]/70">{new Intl.DateTimeFormat("pt-BR", { dateStyle: "short", timeStyle: "short" }).format(new Date(lead.created_at))}</td><td className="py-3 text-right"><label className="sr-only" htmlFor={`lead-${lead.id}`}>Etapa do lead</label><select id={`lead-${lead.id}`} value={lead.status} onChange={(event) => void updateLead(lead, event.target.value as LeadStatus)} className="h-9 rounded-lg border border-black/10 bg-white px-2 text-xs font-black outline-none focus:border-[#FE5000]">{Object.entries(statusLabels).map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select></td></tr>) : <tr><td colSpan={5} className="py-10 text-center font-medium text-[#25292C]/50">Nenhum lead qualificado ainda.</td></tr>}</tbody></table></div>
+              <div className="flex flex-wrap items-end justify-between gap-3"><div><h2 className="font-black">Kanban de atendimento</h2><p className="mt-1 text-sm font-medium text-[#25292C]/55">Arraste cada lead entre as etapas. As alteracoes ficam salvas imediatamente.</p></div><span className="text-xs font-bold text-[#25292C]/45">{leads.length} leads recentes</span></div>
+              <div className="mt-5 overflow-x-auto pb-2"><div className="flex min-w-[1470px] gap-3">{kanbanStatuses.map((status) => {
+                const columnLeads = leads.filter((lead) => lead.status === status);
+                return <section key={status} onDragOver={(event) => event.preventDefault()} onDrop={() => dropLead(status)} className={`min-h-[360px] w-[232px] shrink-0 rounded-xl border p-3 transition ${draggedLeadId ? "border-[#FE5000]/40 bg-[#FE5000]/[0.04]" : "border-black/10 bg-[#EEEDF6]/60"}`}>
+                  <div className="flex items-center justify-between gap-2 border-b border-black/10 pb-3"><h3 className="text-xs font-black uppercase tracking-wide">{statusLabels[status]}</h3><span className="grid h-6 min-w-6 place-items-center rounded-full bg-white px-1 text-[11px] font-black text-[#25292C]/60">{columnLeads.length}</span></div>
+                  <div className="mt-3 space-y-3">{columnLeads.map((lead) => <article key={lead.id} draggable onDragStart={() => setDraggedLeadId(lead.id)} onDragEnd={() => setDraggedLeadId(null)} className="cursor-grab rounded-lg border border-black/10 bg-white p-3 shadow-sm transition hover:-translate-y-0.5 hover:border-[#FE5000]/40 active:cursor-grabbing">
+                    <div className="flex items-start justify-between gap-2"><span className="rounded-full bg-[#FE5000]/10 px-2 py-1 text-[10px] font-black uppercase text-[#d84000]">{modalityLabels[lead.modality]}</span><time className="text-[10px] font-bold text-[#25292C]/45">{new Intl.DateTimeFormat("pt-BR", { day: "2-digit", month: "2-digit" }).format(new Date(lead.created_at))}</time></div>
+                    <p className="mt-3 text-xs font-bold leading-relaxed text-[#25292C]/80">{Object.values(lead.qualification).join(" / ") || "Atendimento iniciado"}</p>
+                    <p className="mt-2 truncate text-[10px] font-bold text-[#25292C]/45">{lead.campaign_name || lead.campaign_content || lead.campaign_source || "Acesso direto"}</p>
+                    <label className="sr-only" htmlFor={`kanban-lead-${lead.id}`}>Mover lead</label><select id={`kanban-lead-${lead.id}`} value={lead.status} onChange={(event) => void updateLead(lead, event.target.value as LeadStatus)} className="mt-3 h-8 w-full rounded-md border border-black/10 bg-[#EEEDF6]/60 px-2 text-[10px] font-black outline-none focus:border-[#FE5000]">{kanbanStatuses.map((value) => <option key={value} value={value}>{statusLabels[value]}</option>)}</select>
+                  </article>)}{!columnLeads.length && <p className="rounded-lg border border-dashed border-black/10 px-3 py-6 text-center text-xs font-semibold text-[#25292C]/35">Solte um lead aqui</p>}</div>
+                </section>;
+              })}</div></div>
             </section>
 
             <section className="mt-6 rounded-xl border border-black/10 bg-white p-5 sm:p-6"><div><h2 className="font-black">Publicos para remarketing</h2><p className="mt-1 text-sm font-medium text-[#25292C]/55">Leitura dos ultimos 30 dias. Ative os eventos com o Pixel e crie estes publicos na Meta.</p></div><div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">{audiences.map((audience) => <article key={audience.id} className="rounded-lg border border-black/10 bg-[#EEEDF6]/60 p-4"><p className="text-2xl font-black text-[#FE5000]">{audience.visitors}</p><h3 className="mt-3 font-black">{audience.label}</h3><p className="mt-2 text-xs font-medium leading-relaxed text-[#25292C]/55">{audience.activation}</p></article>)}</div></section>
