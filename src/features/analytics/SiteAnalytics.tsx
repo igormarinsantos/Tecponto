@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import { useLocation } from "react-router-dom";
 import { captureCampaignAttribution, trackCampaignEvent } from "@/features/analytics/campaign";
+import { hasMarketingConsent, MARKETING_CONSENT_EVENT } from "@/features/analytics/consent";
 
 const getPageType = (pathname: string) => {
   if (pathname === "/") return "home";
@@ -23,11 +24,19 @@ const SiteAnalytics = () => {
     const pageType = getPageType(pathname);
     const reachedMilestones = new Set<number>();
     let frame: number | null = null;
+    let hasTrackedPageView = false;
 
-    trackCampaignEvent("page_view", { page_path: pathname, page_type: pageType });
+    const trackPageView = () => {
+      if (hasTrackedPageView || !hasMarketingConsent()) return;
+      hasTrackedPageView = true;
+      trackCampaignEvent("page_view", { page_path: pathname, page_type: pageType });
+    };
+
+    trackPageView();
 
     const trackScroll = () => {
       frame = null;
+      if (!hasMarketingConsent()) return;
       const scrollableHeight = document.documentElement.scrollHeight - window.innerHeight;
       if (scrollableHeight <= 0) return;
 
@@ -61,11 +70,13 @@ const SiteAnalytics = () => {
     };
 
     window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener(MARKETING_CONSENT_EVENT, trackPageView);
     document.addEventListener("click", onDocumentClick);
     trackScroll();
 
     return () => {
       window.removeEventListener("scroll", onScroll);
+      window.removeEventListener(MARKETING_CONSENT_EVENT, trackPageView);
       document.removeEventListener("click", onDocumentClick);
       if (frame !== null) window.cancelAnimationFrame(frame);
     };

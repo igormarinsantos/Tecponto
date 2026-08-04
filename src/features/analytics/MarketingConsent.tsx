@@ -1,7 +1,7 @@
 import { Cookie, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import { captureCampaignAttribution, trackCampaignEvent } from "@/features/analytics/campaign";
+import { captureCampaignAttribution } from "@/features/analytics/campaign";
 import { getMarketingConsent, MARKETING_CONSENT_EVENT, setMarketingConsent, type MarketingConsent } from "@/features/analytics/consent";
 
 declare global {
@@ -75,8 +75,7 @@ const MarketingConsent = () => {
     if (consent !== "granted") return;
     activateAdvertisingTools();
     captureCampaignAttribution();
-    trackCampaignEvent("page_view", { page_path: pathname, page_type: pathname === "/" ? "home" : pathname.slice(1) || "home", consent_granted: true });
-  }, [consent, pathname]);
+  }, [consent]);
 
   if (pathname === "/marketing" || !isPreferencesOpen) return null;
 
