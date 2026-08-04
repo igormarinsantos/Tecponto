@@ -5,13 +5,13 @@ const SESSION_TTL_SECONDS = 60 * 60 * 12;
 
 const sign = (value: string, secret: string) => createHmac("sha256", secret).update(value).digest("base64url");
 
-const cookieValue = (request: Request, name: string) => request.headers.get("cookie")
+const cookieValue = (request: { headers: { cookie?: string | string[] | undefined } }, name: string) => (Array.isArray(request.headers.cookie) ? request.headers.cookie.join(";") : request.headers.cookie)
   ?.split(";")
   .map((item) => item.trim())
   .find((item) => item.startsWith(`${name}=`))
   ?.slice(name.length + 1) ?? "";
 
-export const verifyMarketingSession = (request: Request) => {
+export const verifyMarketingSession = (request: { headers: { cookie?: string | string[] | undefined } }) => {
   const secret = process.env.MARKETING_SESSION_SECRET;
   const token = cookieValue(request, COOKIE_NAME);
   if (!secret || !token) return false;

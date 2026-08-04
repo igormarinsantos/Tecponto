@@ -1,23 +1,19 @@
+import { readJson, sendJson, type ApiRequest, type ApiResponse } from "../_lib/http.js";
 import { createMarketingSessionHeader, isValidMarketingPassword } from "../_lib/marketingAuth.js";
 
-const json = (body: unknown, init: ResponseInit = {}) => new Response(JSON.stringify(body), {
-  ...init,
-  headers: { "Content-Type": "application/json", ...(init.headers ?? {}) },
-});
-
-export default async function handler(request: Request) {
-  if (request.method !== "POST") return json({ error: "method_not_allowed" }, { status: 405 });
+export default async function handler(request: ApiRequest, response: ApiResponse) {
+  if (request.method !== "POST") return sendJson(response, 405, { error: "method_not_allowed" });
 
   try {
-    const { password } = await request.json() as { password?: unknown };
+    const { password } = await readJson<{ password?: unknown }>(request);
     if (typeof password !== "string" || !isValidMarketingPassword(password)) {
-      return json({ error: "invalid_credentials" }, { status: 401 });
+      return sendJson(response, 401, { error: "invalid_credentials" });
     }
 
     const session = createMarketingSessionHeader();
-    if (!session) return json({ error: "marketing_not_configured" }, { status: 503 });
-    return json({ ok: true }, { headers: { "Set-Cookie": session } });
+    if (!session) return sendJson(response, 503, { error: "marketing_not_configured" });
+    return sendJson(response, 200, { ok: true }, { "Set-Cookie": session, "Cache-Control": "no-store" });
   } catch {
-    return json({ error: "invalid_request" }, { status: 400 });
+    return sendJson(response, 400, { error: "invalid_request" });
   }
 }
