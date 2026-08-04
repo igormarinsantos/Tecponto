@@ -137,12 +137,16 @@ const fieldAcknowledgement = (field?: QualificationField, answer?: string) => {
   return "Perfeito.";
 };
 
-const TypingBubble = ({ messageId }: { messageId: string }) => (
-  <div className="flex justify-start">
+const TypingBubble = () => (
+  <motion.div
+    className="flex justify-start"
+    initial={{ opacity: 0, y: 4 }}
+    animate={{ opacity: 1, y: 0 }}
+    exit={{ opacity: 0, scale: 0.94, y: -2 }}
+    transition={{ duration: 0.18, ease: "easeOut" }}
+  >
     <motion.div
-      layoutId={`assistant-bubble-${messageId}`}
       className="w-[62px] rounded-[18px] rounded-tl-md bg-white px-4 py-3 shadow-sm"
-      transition={{ type: "spring", stiffness: 360, damping: 30 }}
     >
       <div className="flex items-center gap-1">
         <span className="h-2 w-2 animate-bounce rounded-full bg-gray-400 [animation-delay:-0.2s]" />
@@ -150,7 +154,7 @@ const TypingBubble = ({ messageId }: { messageId: string }) => (
         <span className="h-2 w-2 animate-bounce rounded-full bg-gray-400" />
       </div>
     </motion.div>
-  </div>
+  </motion.div>
 );
 
 const getFlowFields = (selectedVariant: LandingVariant | null, flowFields: QualificationField[] = []) =>
@@ -168,8 +172,6 @@ const WhatsAppQualificationModal = ({ isOpen, onClose, variant }: WhatsAppQualif
   const [needsClearerIntent, setNeedsClearerIntent] = useState(false);
   const [isResuming, setIsResuming] = useState(false);
   const [isTyping, setIsTyping] = useState(true);
-  const [typingMessageId, setTypingMessageId] = useState<string | null>(null);
-  const [typedMessageLength, setTypedMessageLength] = useState(0);
   const [visibleMessageCount, setVisibleMessageCount] = useState(0);
   const [messageTimes, setMessageTimes] = useState<Record<string, number>>({});
   const [customOption, setCustomOption] = useState<string | null>(null);
@@ -276,7 +278,7 @@ const WhatsAppQualificationModal = ({ isOpen, onClose, variant }: WhatsAppQualif
 
   const nextMessage = messages[visibleMessageCount];
   const visibleMessages = messages.slice(0, visibleMessageCount);
-  const canAnswer = visibleMessageCount >= messages.length && !isTyping && !typingMessageId;
+  const canAnswer = visibleMessageCount >= messages.length && !isTyping;
   const optionLabels = !selectedVariant
     ? initialOptions.map((option) => option.label)
     : currentField?.options ?? [];
@@ -329,8 +331,6 @@ const WhatsAppQualificationModal = ({ isOpen, onClose, variant }: WhatsAppQualif
           setDraft(parsed.draft ?? "");
           setMessageTimes(parsed.messageTimes ?? getSavedMessageTimes());
           setCustomOption(parsed.customOption ?? null);
-          setTypingMessageId(null);
-          setTypedMessageLength(0);
           if (Object.keys(parsed.values ?? {}).length > 0) {
             trackCampaignEvent("qualification_resume", { modality: parsed.selectedVariant ?? "unspecified" });
           }
@@ -352,8 +352,6 @@ const WhatsAppQualificationModal = ({ isOpen, onClose, variant }: WhatsAppQualif
     setVisibleMessageCount(0);
     setMessageTimes(getSavedMessageTimes());
     setCustomOption(null);
-    setTypingMessageId(null);
-    setTypedMessageLength(0);
   }, [isOpen, variant]);
 
   useEffect(() => {
@@ -385,8 +383,6 @@ const WhatsAppQualificationModal = ({ isOpen, onClose, variant }: WhatsAppQualif
     setVisibleMessageCount(0);
     setMessageTimes({});
     setCustomOption(null);
-    setTypingMessageId(null);
-    setTypedMessageLength(0);
     setIsTyping(true);
   };
 
@@ -459,35 +455,13 @@ const WhatsAppQualificationModal = ({ isOpen, onClose, variant }: WhatsAppQualif
     const timer = window.setTimeout(() => {
       if (nextMessage) {
         setMessageTimes((current) => current[nextMessage.id] ? current : { ...current, [nextMessage.id]: Date.now() });
-        setTypingMessageId(nextMessage.id);
-        setTypedMessageLength(0);
       }
       setVisibleMessageCount((current) => Math.min(current + 1, messages.length));
+      setIsTyping(false);
     }, Math.min(560, 180 + (nextMessage?.text?.length ?? 0) * 4));
 
     return () => window.clearTimeout(timer);
   }, [isOpen, messages.length, nextMessage?.from, nextMessage?.text?.length, visibleMessageCount]);
-
-  useEffect(() => {
-    if (!typingMessageId) return;
-
-    const message = messages.find((item) => item.id === typingMessageId);
-    if (!message) {
-      setTypingMessageId(null);
-      return;
-    }
-
-    if (typedMessageLength >= message.text.length) {
-      setTypingMessageId(null);
-      return;
-    }
-
-    const timer = window.setTimeout(() => {
-      setTypedMessageLength((current) => Math.min(current + 2, message.text.length));
-    }, 14);
-
-    return () => window.clearTimeout(timer);
-  }, [messages, typedMessageLength, typingMessageId]);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -495,7 +469,7 @@ const WhatsAppQualificationModal = ({ isOpen, onClose, variant }: WhatsAppQualif
       top: scrollAreaRef.current.scrollHeight,
       behavior: "smooth",
     });
-  }, [visibleMessageCount, isTyping, canAnswer, isOpen, typedMessageLength]);
+  }, [visibleMessageCount, isTyping, canAnswer, isOpen]);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -688,33 +662,31 @@ const WhatsAppQualificationModal = ({ isOpen, onClose, variant }: WhatsAppQualif
                 className="min-h-0 flex-1 space-y-3 overflow-y-auto p-3 pr-2 sm:p-4 sm:pr-3"
               >
                 {visibleMessages.map((message) => {
-                  const isBeingTyped = message.from === "assistant" && typingMessageId === message.id;
-                  const visibleText = isBeingTyped ? message.text.slice(0, typedMessageLength) : message.text;
-
                   return (
                     <div key={message.id} className={message.from === "user" ? "flex justify-end" : "flex justify-start"}>
                       <motion.div
-                        layoutId={message.from === "assistant" ? `assistant-bubble-${message.id}` : undefined}
-                        transition={{ type: "spring", stiffness: 360, damping: 30 }}
+                        initial={message.from === "assistant" ? { opacity: 0, scale: 0.96, y: 5 } : { opacity: 0, y: 5 }}
+                        animate={{ opacity: 1, scale: 1, y: 0 }}
+                        transition={{ type: "spring", stiffness: 340, damping: 28 }}
                         className={`max-w-[86%] px-4 py-3 shadow-sm ${
                           message.from === "user"
                             ? "rounded-[18px] rounded-tr-md bg-[#e7ffdb]"
                             : "rounded-[18px] rounded-tl-md bg-white"
                         }`}
                       >
-                        <p className="text-sm font-normal leading-relaxed text-[#111b21] sm:text-[15px]">{renderMessageText(visibleText)}</p>
-                        {!isBeingTyped && (
-                          <span className={`mt-1 flex text-[10px] text-gray-400 ${message.from === "user" ? "justify-end gap-1" : "justify-end"}`}>
-                            {formatMessageTime(messageTimes[message.id])}
-                            {message.from === "user" && <CheckCheck className="h-3.5 w-3.5 text-[#53bdeb]" aria-label="Visualizada" />}
-                          </span>
-                        )}
+                        <p className="text-sm font-normal leading-relaxed text-[#111b21] sm:text-[15px]">{renderMessageText(message.text)}</p>
+                        <span className={`mt-1 flex text-[10px] text-gray-400 ${message.from === "user" ? "justify-end gap-1" : "justify-end"}`}>
+                          {formatMessageTime(messageTimes[message.id])}
+                          {message.from === "user" && <CheckCheck className="h-3.5 w-3.5 text-[#53bdeb]" aria-label="Visualizada" />}
+                        </span>
                       </motion.div>
                     </div>
                   );
                 })}
 
-                {nextMessage?.from === "assistant" && isTyping && <TypingBubble messageId={nextMessage.id} />}
+                <AnimatePresence initial={false}>
+                  {nextMessage?.from === "assistant" && isTyping && <TypingBubble />}
+                </AnimatePresence>
 
                 {!selectedVariant && canAnswer && (
                   <motion.div
