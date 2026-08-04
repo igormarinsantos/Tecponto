@@ -26,3 +26,78 @@ dist-ssr
 # 3D Model source files
 *.zip
 src/assets/model/
+
+# TecPonto project workspace - local/private areas
+/_workspace/
+/_private/
+/_cloud/
+
+# Physical store records (local/cloud only)
+/store/fotos/
+/store/medidas/
+/store/orcamentos/
+
+# Business records (local/cloud only)
+/business/custos/
+/business/fornecedores/
+/business/documentos/
+
+# Operational records (local/cloud only)
+/operations/clientes/
+/operations/caixa/
+/operations/ordens-de-servico/
+
+# Raw and private media outside the website
+/assets/raw/
+/assets/fachada/
+/assets/fotos-loja/
+/assets/old-grsystem/
+/assets/retro-items/
+
+# Credentials and environment files
+.env
+.env.local
+.env.production
+.env.*
+!.env.example
+
+# Internal documents and data exports
+*.xlsx
+*.xls
+*.csv
+*.docx
+*.heic
+*.pdf
+
+# Raw images are ignored globally, except website assets below
+*.jpg
+*.jpeg
+*.png
+*.webp
+
+# Sensitive filenames
+**/*senha*
+**/*password*
+**/*token*
+**/*secret*
+**/*chave*
+**/*cliente*
+**/*fornecedor*
+**/*orcamento*
+**/*orçamento*
+**/*contrato*
+
+# Keep all website source and public assets eligible for version control
+!/src/**
+!/public/**
+!/brand/logos/**
+
+# Model source files remain intentionally local
+/src/assets/model/
+
+# Build outputs and local-only helpers
+/node_modules/
+/.next/
+/dist/
+/build/
+/dev-local.mjs

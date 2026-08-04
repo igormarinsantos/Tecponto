@@ -6,7 +6,6 @@ import Compre from "@/pages/Compre";
 import Garantia from "@/pages/Garantia";
 import FAQ from "@/pages/FAQ";
 import Contato from "@/pages/Contato";
-import Marca from "@/pages/Marca";
 import LinksBio from "@/pages/LinksBio";
 import NotFound from "@/pages/NotFound";
 
@@ -19,7 +18,6 @@ const AppRoutes = () => (
     <Route path="/garantia" element={<Garantia />} />
     <Route path="/faq" element={<FAQ />} />
     <Route path="/contato" element={<Contato />} />
-    <Route path="/marca" element={<Marca />} />
     <Route path="/links" element={<LinksBio />} />
     <Route path="/bio" element={<LinksBio />} />
     <Route path="*" element={<NotFound />} />

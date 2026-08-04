@@ -50,6 +50,8 @@ const Header = () => {
     };
   }, [isMenuOpen]);
 
+  if (location.pathname === "/bio" || location.pathname === "/links") return null;
+
   return (
     <header
       className={`fixed z-50 transition-all duration-200 ${

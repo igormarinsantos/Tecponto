@@ -1,7 +1,9 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { ArrowLeft, CheckCheck, ExternalLink, Pencil, RotateCcw, Send, X } from "lucide-react";
+import { ArrowLeft, BadgeAlert, BatteryCharging, CheckCheck, CircleCheck, CircleHelp, Clock3, Droplets, ExternalLink, FileText, Gauge, MoreHorizontal, Pencil, PlugZap, RotateCcw, ScanLine, Send, ShoppingBag, Smartphone, Sparkles, Wrench, X, type LucideIcon } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import appleLogo from "@/assets/brands/apple.png";
+import chatBackground from "@/assets/whatsapp/chat-background.png";
+import rodrigoWelcomeGif from "@/assets/whatsapp/rodrigo-welcome.gif";
 import whatsappAssistant from "@/assets/people/whatsapp-assistant.png";
 import { SHOPEE_STORE_URL } from "@/constants/links";
 import { trackCampaignEvent, withCampaignParameters } from "@/features/analytics/campaign";
@@ -22,14 +24,76 @@ type ChatMessage = {
 };
 
 const STORAGE_KEY = "tecponto_chat_state";
-const STORAGE_VERSION = 2;
+const STORAGE_VERSION = 6;
 const STORAGE_TTL = 30 * 60 * 1000;
+const TIMESTAMP_COOKIE_KEY = "tecponto_chat_timestamps";
 
-const initialOptions: Array<{ label: string; value: LandingVariant }> = [
-  { label: "Quero comprar", value: "compre" },
-  { label: "Quero trocar", value: "troque" },
-  { label: "Quero reparar", value: "repare" },
+const getSavedMessageTimes = (): Record<string, number> => {
+  const cookie = document.cookie.split("; ").find((item) => item.startsWith(`${TIMESTAMP_COOKIE_KEY}=`));
+  if (!cookie) return {};
+
+  try {
+    return JSON.parse(decodeURIComponent(cookie.slice(TIMESTAMP_COOKIE_KEY.length + 1)));
+  } catch {
+    return {};
+  }
+};
+
+const saveMessageTimesCookie = (messageTimes: Record<string, number>) => {
+  const expires = new Date(Date.now() + STORAGE_TTL).toUTCString();
+  document.cookie = `${TIMESTAMP_COOKIE_KEY}=${encodeURIComponent(JSON.stringify(messageTimes))}; expires=${expires}; path=/; SameSite=Lax`;
+};
+
+const clearMessageTimesCookie = () => {
+  document.cookie = `${TIMESTAMP_COOKIE_KEY}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/; SameSite=Lax`;
+};
+
+const formatMessageTime = (timestamp?: number) => new Intl.DateTimeFormat("pt-BR", {
+  hour: "2-digit",
+  minute: "2-digit",
+}).format(timestamp ?? Date.now());
+
+const renderMessageText = (text: string) => text.split("\n").map((line, lineIndex) => (
+  <span key={`${line}-${lineIndex}`}>
+    {line.split(/(\*\*[^*]+\*\*)/g).map((part, partIndex) =>
+      part.startsWith("**") && part.endsWith("**")
+        ? <strong key={`${part}-${partIndex}`} className="font-black">{part.slice(2, -2)}</strong>
+        : part,
+    )}
+    {lineIndex < text.split("\n").length - 1 && <br />}
+  </span>
+));
+
+const initialOptions: Array<{ label: string; value: LandingVariant; icon: LucideIcon }> = [
+  { label: "Reparar meu celular", value: "repare", icon: Wrench },
+  { label: "Trocar meu usado", value: "troque", icon: RotateCcw },
+  { label: "Comprar um celular", value: "compre", icon: ShoppingBag },
 ];
+
+const optionVisuals: Record<string, { icon?: LucideIcon; iconClassName?: string; logo?: string; mark?: string; markClassName?: string }> = {
+  iPhone: { logo: appleLogo },
+  Samsung: { mark: "S", markClassName: "bg-[#1428A0] text-white" },
+  Motorola: { mark: "M", markClassName: "bg-[#E60000] text-white" },
+  Xiaomi: { mark: "mi", markClassName: "bg-[#FF6900] text-white" },
+  "Outro aparelho": { icon: MoreHorizontal },
+  "Tela quebrada": { icon: Smartphone, iconClassName: "text-red-500" },
+  Bateria: { icon: BatteryCharging, iconClassName: "text-amber-500" },
+  "Não carrega": { icon: PlugZap, iconClassName: "text-sky-600" },
+  Molhou: { icon: Droplets, iconClassName: "text-cyan-600" },
+  Travando: { icon: Gauge, iconClassName: "text-orange-600" },
+  "Outro problema": { icon: Wrench, iconClassName: "text-[#FE5000]" },
+  "Quero resolver hoje": { icon: Clock3, iconClassName: "text-[#FE5000]" },
+  "Quero um orçamento": { icon: FileText, iconClassName: "text-[#FE5000]" },
+  "Posso ir nos próximos dias": { icon: Clock3 },
+  "Muito conservado": { icon: Sparkles },
+  "Marcas de uso": { icon: Smartphone },
+  "Tela trincada": { icon: ScanLine },
+  "Com defeito": { icon: BadgeAlert },
+  "Não sei avaliar": { icon: CircleHelp },
+  "Usar como entrada": { icon: RotateCcw, iconClassName: "text-[#FE5000]" },
+  "Trocar por outro iPhone": { logo: appleLogo },
+  "Só descobrir quanto vale": { icon: ScanLine, iconClassName: "text-[#FE5000]" },
+};
 
 const detectVariant = (text: string): LandingVariant | null => {
   const normalized = text.toLowerCase();
@@ -40,62 +104,75 @@ const detectVariant = (text: string): LandingVariant | null => {
 };
 
 const variantIntro: Record<LandingVariant, string> = {
-  compre: "Boa. Para comprar, o caminho mais rapido e seguro e pela nossa loja na Shopee.",
-  troque: "Perfeito. Vou fazer uma pre-avaliacao simples do seu usado para o atendimento continuar no WhatsApp.",
-  repare: "Certo. Vou pegar o essencial para o tecnico entender o caso e continuar com voce no WhatsApp.",
+  compre: "Boa escolha! 🛍️ Temos aparelhos **revisados** e com **garantia** na nossa Shopee.",
+  troque: "Perfeito! 🔄 São só **três respostas rápidas** para eu encaminhar sua pré-avaliação.",
+  repare: "Certo! 🔧 Me responda **três coisas rápidas** e eu preparo seu atendimento.",
 };
 
 const fieldQuestion = (label: string, placeholder: string) => {
   const normalized = label.toLowerCase();
 
-  if (normalized.includes("nome")) return "Como posso te chamar?";
-  if (normalized.includes("marca")) return placeholder;
-  if (normalized.includes("modelo")) return `${placeholder}. Pode mandar bem curto.`;
-  if (normalized.includes("problema")) return "O que aconteceu com o aparelho?";
-  if (normalized.includes("urg")) return "Pra quando voce precisa resolver?";
-  if (normalized.includes("atendimento")) return "Como voce prefere ser atendido?";
-  if (normalized.includes("estado")) return "Como esta o aparelho hoje?";
-  if (normalized.includes("quer trocar")) return "Que tipo de aparelho voce quer pegar?";
-  if (normalized.includes("volta")) return "Sobre volta em dinheiro, qual opcao combina melhor?";
+  if (normalized.includes("nome")) return "**Como posso te chamar?**";
+  if (normalized.includes("marca") || normalized.includes("aparelho")) return `**${placeholder}**`;
+  if (normalized.includes("problema")) return "🔧 **Qual é o problema principal do aparelho?**";
+  if (normalized.includes("prazo")) return "⏱️ **Para quando você quer resolver isso?**";
+  if (normalized.includes("atendimento")) return "**Como você prefere ser atendido?**";
+  if (normalized.includes("estado")) return "📱 **Como ele está hoje?**";
+  if (normalized.includes("quer trocar")) return "**Qual aparelho você quer pegar?**";
+  if (normalized.includes("volta")) return "**Qual opção combina melhor com sua volta em dinheiro?**";
 
-  return placeholder;
+  return `**${placeholder}**`;
 };
 
 const fieldAcknowledgement = (field?: QualificationField, answer?: string) => {
   if (!field || !answer) return "";
   const normalized = field.label.toLowerCase();
 
-  if (normalized.includes("modelo")) return `Boa, ${answer}.`;
-  if (normalized.includes("problema") || normalized.includes("estado")) return "Entendi.";
-  if (normalized.includes("urg")) return "Certo, vou considerar esse prazo.";
+  if (normalized.includes("aparelho")) return `Boa! 📱 **${answer}** anotado.`;
+  if (normalized.includes("problema") || normalized.includes("estado")) return "**Entendi.** ✅";
+  if (normalized.includes("prazo")) return "Certo! ⏱️ Vou considerar esse **prazo**.";
   if (normalized.includes("atendimento")) return "Perfeito.";
   if (normalized.includes("trocar") || normalized.includes("volta")) return "Boa, isso já ajuda na pré-avaliação.";
 
   return "Perfeito.";
 };
 
-const TypingBubble = () => (
+const TypingBubble = ({ messageId }: { messageId: string }) => (
   <div className="flex justify-start">
-    <div className="rounded-[18px] rounded-tl-md bg-white px-4 py-3 shadow-sm">
+    <motion.div
+      layoutId={`assistant-bubble-${messageId}`}
+      className="w-[62px] rounded-[18px] rounded-tl-md bg-white px-4 py-3 shadow-sm"
+      transition={{ type: "spring", stiffness: 360, damping: 30 }}
+    >
       <div className="flex items-center gap-1">
         <span className="h-2 w-2 animate-bounce rounded-full bg-gray-400 [animation-delay:-0.2s]" />
         <span className="h-2 w-2 animate-bounce rounded-full bg-gray-400 [animation-delay:-0.1s]" />
         <span className="h-2 w-2 animate-bounce rounded-full bg-gray-400" />
       </div>
-    </div>
+    </motion.div>
   </div>
 );
 
 const getFlowFields = (selectedVariant: LandingVariant | null, flowFields: QualificationField[] = []) =>
   selectedVariant === "compre" ? [] : flowFields;
 
+const shouldAnimateAssistantMessage = (message: ChatMessage | undefined, messageCount: number) => Boolean(
+  message?.from === "assistant"
+  && (message.id.endsWith("-current") || message.id === "intent-clearer" || (message.id === "hello" && messageCount === 1)),
+);
+
 const WhatsAppQualificationModal = ({ isOpen, onClose, variant }: WhatsAppQualificationModalProps) => {
   const [selectedVariant, setSelectedVariant] = useState<LandingVariant | null>(variant ?? null);
   const [values, setValues] = useState<QualificationValues>({});
   const [draft, setDraft] = useState("");
   const [needsClearerIntent, setNeedsClearerIntent] = useState(false);
+  const [isResuming, setIsResuming] = useState(false);
   const [isTyping, setIsTyping] = useState(true);
+  const [typingMessageId, setTypingMessageId] = useState<string | null>(null);
+  const [typedMessageLength, setTypedMessageLength] = useState(0);
   const [visibleMessageCount, setVisibleMessageCount] = useState(0);
+  const [messageTimes, setMessageTimes] = useState<Record<string, number>>({});
+  const [customOption, setCustomOption] = useState<string | null>(null);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const modalRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -117,7 +194,7 @@ const WhatsAppQualificationModal = ({ isOpen, onClose, variant }: WhatsAppQualif
       {
         id: "hello",
         from: "assistant",
-        text: "Oi, sou o Rodrigo, da TecPonto. O que você gostaria de resolver agora?",
+        text: "Oi! 👋 Sou o **Rodrigo**, da **TecPonto**. Em até **3 respostas**, eu organizo seu próximo passo.",
       },
     ];
 
@@ -126,7 +203,7 @@ const WhatsAppQualificationModal = ({ isOpen, onClose, variant }: WhatsAppQualif
         chat.push({
           id: "intent-clearer",
           from: "assistant",
-          text: "So para eu te mandar para o lugar certo: voce quer comprar, trocar ou reparar?",
+          text: "💬 **Para eu te ajudar sem perder tempo: você quer comprar, trocar ou reparar?**",
         });
       }
       return chat;
@@ -150,7 +227,7 @@ const WhatsAppQualificationModal = ({ isOpen, onClose, variant }: WhatsAppQualif
       chat.push({
         id: "shopee-link",
         from: "assistant",
-        text: `Temos nossa loja na Shopee. Voce pode ver os aparelhos disponiveis por aqui: ${SHOPEE_STORE_URL}`,
+        text: `🛍️ Você pode ver os aparelhos disponíveis na nossa **loja Shopee**: ${SHOPEE_STORE_URL}`,
       });
       return chat;
     }
@@ -181,10 +258,14 @@ const WhatsAppQualificationModal = ({ isOpen, onClose, variant }: WhatsAppQualif
         text: `${acknowledgement ? `${acknowledgement}\n\n` : ""}${fieldQuestion(currentField.label, currentField.placeholder)}`,
       });
     } else {
+      const completionText = selectedVariant === "repare"
+        ? "✅ **Pronto.** Vou encaminhar seu pedido. **Se quiser acelerar o orçamento**, envie uma foto do aparelho no WhatsApp."
+        : "✅ **Pronto.** Vou encaminhar sua pré-avaliação. **Se quiser acelerar a análise**, envie uma foto do aparelho no WhatsApp.";
+
       chat.push({
         id: "complete",
         from: "assistant",
-        text: `${acknowledgement ? `${acknowledgement} ` : ""}Já organizei tudo para você continuar com um atendente no WhatsApp.`,
+        text: `${acknowledgement ? `${acknowledgement} ` : ""}${completionText}`,
       });
     }
 
@@ -193,12 +274,11 @@ const WhatsAppQualificationModal = ({ isOpen, onClose, variant }: WhatsAppQualif
 
   const nextMessage = messages[visibleMessageCount];
   const visibleMessages = messages.slice(0, visibleMessageCount);
-  const canAnswer = visibleMessageCount >= messages.length && !isTyping;
+  const canAnswer = visibleMessageCount >= messages.length && !isTyping && !typingMessageId;
   const optionLabels = !selectedVariant
     ? initialOptions.map((option) => option.label)
     : currentField?.options ?? [];
   const expectsOption = optionLabels.length > 0;
-  const shouldUseOptionMenu = Boolean(selectedVariant && optionLabels.length > 4);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -214,8 +294,13 @@ const WhatsAppQualificationModal = ({ isOpen, onClose, variant }: WhatsAppQualif
           setSelectedVariant(parsed.selectedVariant ?? null);
           setValues(parsed.values ?? {});
           setNeedsClearerIntent(parsed.needsClearerIntent ?? false);
+          setIsResuming(Object.keys(parsed.values ?? {}).length > 0);
           setVisibleMessageCount(parsed.visibleMessageCount ?? 0);
           setDraft(parsed.draft ?? "");
+          setMessageTimes(parsed.messageTimes ?? getSavedMessageTimes());
+          setCustomOption(parsed.customOption ?? null);
+          setTypingMessageId(null);
+          setTypedMessageLength(0);
           return;
         }
 
@@ -230,7 +315,12 @@ const WhatsAppQualificationModal = ({ isOpen, onClose, variant }: WhatsAppQualif
     setValues({});
     setDraft("");
     setNeedsClearerIntent(false);
+    setIsResuming(false);
     setVisibleMessageCount(0);
+    setMessageTimes(getSavedMessageTimes());
+    setCustomOption(null);
+    setTypingMessageId(null);
+    setTypedMessageLength(0);
   }, [isOpen, variant]);
 
   useEffect(() => {
@@ -244,17 +334,26 @@ const WhatsAppQualificationModal = ({ isOpen, onClose, variant }: WhatsAppQualif
       needsClearerIntent,
       visibleMessageCount,
       draft,
+      messageTimes,
+      customOption,
     };
     localStorage.setItem(STORAGE_KEY, JSON.stringify(stateToSave));
-  }, [isOpen, selectedVariant, values, needsClearerIntent, visibleMessageCount, draft]);
+    saveMessageTimesCookie(messageTimes);
+  }, [isOpen, selectedVariant, values, needsClearerIntent, visibleMessageCount, draft, messageTimes, customOption]);
 
   const resetChat = () => {
     localStorage.removeItem(STORAGE_KEY);
+    clearMessageTimesCookie();
     setSelectedVariant(variant ?? null);
     setValues({});
     setDraft("");
     setNeedsClearerIntent(false);
+    setIsResuming(false);
     setVisibleMessageCount(0);
+    setMessageTimes({});
+    setCustomOption(null);
+    setTypingMessageId(null);
+    setTypedMessageLength(0);
     setIsTyping(true);
   };
 
@@ -262,6 +361,7 @@ const WhatsAppQualificationModal = ({ isOpen, onClose, variant }: WhatsAppQualif
 
   const goBack = () => {
     if (!canAnswer) return;
+    setCustomOption(null);
 
     if (selectedVariant && activeFields.length > 0) {
       const answeredFields = activeFields.filter((f) => values[f.id]);
@@ -297,6 +397,7 @@ const WhatsAppQualificationModal = ({ isOpen, onClose, variant }: WhatsAppQualif
       return updated;
     });
     setVisibleMessageCount(3 + fieldIndex * 2);
+    setCustomOption(null);
     setIsTyping(true);
   };
 
@@ -308,21 +409,52 @@ const WhatsAppQualificationModal = ({ isOpen, onClose, variant }: WhatsAppQualif
       return;
     }
 
-    if (nextMessage?.from === "user") {
+    const shouldTypeNextMessage = shouldAnimateAssistantMessage(nextMessage, messages.length);
+
+    if (nextMessage?.from === "user" || !shouldTypeNextMessage) {
       setIsTyping(false);
       const timer = window.setTimeout(() => {
+        if (nextMessage) {
+          setMessageTimes((current) => current[nextMessage.id] ? current : { ...current, [nextMessage.id]: Date.now() });
+        }
         setVisibleMessageCount((current) => Math.min(current + 1, messages.length));
-      }, 140);
+      }, nextMessage?.from === "user" ? 140 : 80);
       return () => window.clearTimeout(timer);
     }
 
     setIsTyping(true);
     const timer = window.setTimeout(() => {
+      if (nextMessage) {
+        setMessageTimes((current) => current[nextMessage.id] ? current : { ...current, [nextMessage.id]: Date.now() });
+        setTypingMessageId(nextMessage.id);
+        setTypedMessageLength(0);
+      }
       setVisibleMessageCount((current) => Math.min(current + 1, messages.length));
-    }, Math.min(800, 260 + (nextMessage?.text?.length ?? 0) * 6));
+    }, Math.min(560, 180 + (nextMessage?.text?.length ?? 0) * 4));
 
     return () => window.clearTimeout(timer);
   }, [isOpen, messages.length, nextMessage?.from, nextMessage?.text?.length, visibleMessageCount]);
+
+  useEffect(() => {
+    if (!typingMessageId) return;
+
+    const message = messages.find((item) => item.id === typingMessageId);
+    if (!message) {
+      setTypingMessageId(null);
+      return;
+    }
+
+    if (typedMessageLength >= message.text.length) {
+      setTypingMessageId(null);
+      return;
+    }
+
+    const timer = window.setTimeout(() => {
+      setTypedMessageLength((current) => Math.min(current + 2, message.text.length));
+    }, 14);
+
+    return () => window.clearTimeout(timer);
+  }, [messages, typedMessageLength, typingMessageId]);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -330,7 +462,7 @@ const WhatsAppQualificationModal = ({ isOpen, onClose, variant }: WhatsAppQualif
       top: scrollAreaRef.current.scrollHeight,
       behavior: "smooth",
     });
-  }, [visibleMessageCount, isTyping, canAnswer, isOpen]);
+  }, [visibleMessageCount, isTyping, canAnswer, isOpen, typedMessageLength]);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -373,10 +505,10 @@ const WhatsAppQualificationModal = ({ isOpen, onClose, variant }: WhatsAppQualif
   }, [isOpen]);
 
   useEffect(() => {
-    if (!isOpen || !canAnswer || isComplete || currentField?.options?.length) return;
+    if (!isOpen || !canAnswer || isComplete || (currentField?.options?.length && !customOption)) return;
     const timer = window.setTimeout(() => inputRef.current?.focus(), 80);
     return () => window.clearTimeout(timer);
-  }, [canAnswer, currentField?.id, currentField?.options?.length, isComplete, isOpen]);
+  }, [canAnswer, currentField?.id, currentField?.options?.length, customOption, isComplete, isOpen]);
 
   const answerCurrent = (answer: string) => {
     const cleanedAnswer = answer.trim();
@@ -393,13 +525,32 @@ const WhatsAppQualificationModal = ({ isOpen, onClose, variant }: WhatsAppQualif
 
       setSelectedVariant(detected);
       setNeedsClearerIntent(false);
+      setIsResuming(false);
       setDraft("");
+      setCustomOption(null);
       return;
     }
 
     if (!currentField) return;
     setValues((current) => ({ ...current, [currentField.id]: cleanedAnswer }));
+    setIsResuming(false);
     setDraft("");
+    setCustomOption(null);
+  };
+
+  const selectOption = (option: string) => {
+    if (option.toLowerCase().startsWith("outro")) {
+      setCustomOption(option);
+      setDraft("");
+      return;
+    }
+
+    answerCurrent(option);
+  };
+
+  const submitCustomOption = () => {
+    if (!customOption || !draft.trim()) return;
+    answerCurrent(`${customOption}: ${draft.trim()}`);
   };
 
   const handleFinalAction = () => {
@@ -451,11 +602,11 @@ const WhatsAppQualificationModal = ({ isOpen, onClose, variant }: WhatsAppQualif
                 <p id="whatsapp-chat-title" className="text-sm font-black text-white">Rodrigo - TecPonto</p>
                 <p className="text-[11px] font-black uppercase tracking-wide text-primary">
                   {isTyping
-                    ? "Digitando..."
+                    ? "Rodrigo está digitando..."
                     : selectedVariant && activeFields.length
                       ? isComplete
-                        ? "Informações prontas"
-                        : `Etapa ${progressStep} de ${activeFields.length}`
+                        ? "Pronto para continuar"
+                        : `${progressStep} de ${activeFields.length} etapas`
                       : "Atendimento online"}
                 </p>
               </div>
@@ -484,7 +635,10 @@ const WhatsAppQualificationModal = ({ isOpen, onClose, variant }: WhatsAppQualif
               </div>
             )}
 
-            <div className="flex min-h-0 flex-1 flex-col bg-[#ece5dd]">
+            <div
+              className="flex min-h-0 flex-1 flex-col bg-[#f8f3e9]"
+              style={{ backgroundImage: `url(${chatBackground})`, backgroundSize: "360px auto", backgroundRepeat: "repeat" }}
+            >
               <div
                 ref={scrollAreaRef}
                 role="log"
@@ -492,29 +646,56 @@ const WhatsAppQualificationModal = ({ isOpen, onClose, variant }: WhatsAppQualif
                 aria-relevant="additions"
                 className="min-h-0 flex-1 space-y-3 overflow-y-auto p-3 pr-2 sm:p-4 sm:pr-3"
               >
-                {visibleMessages.map((message) => (
-                  <div key={message.id} className={message.from === "user" ? "flex justify-end" : "flex justify-start"}>
-                    <div
-                      className={`max-w-[86%] px-4 py-3 shadow-sm ${
-                        message.from === "user"
-                          ? "rounded-[18px] rounded-tr-md bg-[#e7ffdb]"
-                          : "rounded-[18px] rounded-tl-md bg-white"
-                      }`}
-                    >
-                      <p className="whitespace-pre-line text-sm font-normal leading-relaxed text-[#111b21] sm:text-[15px]">{message.text}</p>
-                      <span className={`mt-1 flex text-[10px] text-gray-400 ${message.from === "user" ? "justify-end gap-1" : "justify-end"}`}>
-                        agora
-                        {message.from === "user" && <CheckCheck className="h-3.5 w-3.5 text-[#53bdeb]" />}
-                      </span>
-                    </div>
-                  </div>
-                ))}
+                {visibleMessages.map((message) => {
+                  const isBeingTyped = message.from === "assistant" && typingMessageId === message.id;
+                  const visibleText = isBeingTyped ? message.text.slice(0, typedMessageLength) : message.text;
 
-                {nextMessage?.from === "assistant" && isTyping && <TypingBubble />}
+                  return (
+                    <div key={message.id} className={message.from === "user" ? "flex justify-end" : "flex justify-start"}>
+                      <motion.div
+                        layoutId={message.from === "assistant" ? `assistant-bubble-${message.id}` : undefined}
+                        transition={{ type: "spring", stiffness: 360, damping: 30 }}
+                        className={`max-w-[86%] px-4 py-3 shadow-sm ${
+                          message.from === "user"
+                            ? "rounded-[18px] rounded-tr-md bg-[#e7ffdb]"
+                            : "rounded-[18px] rounded-tl-md bg-white"
+                        }`}
+                      >
+                        <p className="text-sm font-normal leading-relaxed text-[#111b21] sm:text-[15px]">{renderMessageText(visibleText)}</p>
+                        {!isBeingTyped && (
+                          <span className={`mt-1 flex text-[10px] text-gray-400 ${message.from === "user" ? "justify-end gap-1" : "justify-end"}`}>
+                            {formatMessageTime(messageTimes[message.id])}
+                            {message.from === "user" && <CheckCheck className="h-3.5 w-3.5 text-[#53bdeb]" aria-label="Visualizada" />}
+                          </span>
+                        )}
+                      </motion.div>
+                    </div>
+                  );
+                })}
+
+                {nextMessage?.from === "assistant" && isTyping && <TypingBubble messageId={nextMessage.id} />}
+
+                {!selectedVariant && canAnswer && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.25 }}
+                    className="w-[136px] overflow-hidden rounded-[18px] rounded-tl-md bg-[#FE5000] shadow-sm"
+                  >
+                    <img
+                      src={rodrigoWelcomeGif}
+                      alt="Rodrigo, da TecPonto, pronto para ajudar"
+                      className="aspect-[3/4] w-full object-cover object-top"
+                    />
+                  </motion.div>
+                )}
               </div>
 
-              {canAnswer && !isComplete && expectsOption && (
+              {canAnswer && !isComplete && expectsOption && !customOption && (
                 <div className="shrink-0 border-t border-black/5 bg-[#f0f2f5] p-3">
+                  <p className="mb-2 text-center text-[10px] font-black uppercase tracking-wide text-[#667781]">
+                    {isResuming ? "Você já está quase lá. Escolha uma opção para continuar" : "Escolha uma opção para avançar"}
+                  </p>
                   <div className="flex items-center gap-2">
                     {canGoBack && (
                       <button
@@ -527,37 +708,34 @@ const WhatsAppQualificationModal = ({ isOpen, onClose, variant }: WhatsAppQualif
                       </button>
                     )}
 
-                    {shouldUseOptionMenu ? (
-                      <Select key={currentField?.id} onValueChange={answerCurrent}>
-                        <SelectTrigger className="h-11 flex-1 rounded-full border-black/[0.08] bg-white px-4 text-sm font-semibold shadow-sm">
-                          <SelectValue placeholder="Selecione uma opção" />
-                        </SelectTrigger>
-                        <SelectContent className="z-[120] max-h-72">
-                          {optionLabels.map((option) => (
-                            <SelectItem key={option} value={option} className="py-3">
-                              {option}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    ) : (
-                      <div className="flex flex-1 flex-wrap justify-center gap-2">
-                        {optionLabels.map((option) => (
+                    <div className={`${selectedVariant ? "grid grid-cols-2" : "flex flex-col"} flex-1 gap-2`}>
+                      {optionLabels.map((option, optionIndex) => {
+                        const initialOption = !selectedVariant ? initialOptions.find((item) => item.label === option) : null;
+                        const OptionIcon = initialOption?.icon ?? optionVisuals[option]?.icon;
+                        const optionIconClassName = optionVisuals[option]?.iconClassName;
+                        const optionLogo = optionVisuals[option]?.logo;
+                        const optionMark = optionVisuals[option]?.mark;
+                        const optionMarkClassName = optionVisuals[option]?.markClassName;
+
+                        return (
                           <button
                             key={option}
-                            onClick={() => answerCurrent(option)}
-                            className="min-h-10 rounded-full border border-primary/20 bg-white px-3.5 py-2 text-xs font-bold uppercase tracking-wide text-primary shadow-sm transition-colors hover:bg-primary hover:text-white"
+                              onClick={() => selectOption(option)}
+                            className={`${selectedVariant ? "min-h-9 px-3 py-1.5 text-xs" : "min-h-11 px-4 py-2 text-[11px]"} ${selectedVariant && optionLabels.length % 2 !== 0 && optionIndex === optionLabels.length - 1 ? "col-span-2" : ""} inline-flex w-full items-center justify-center gap-2 rounded-full border border-primary/30 bg-white text-center font-bold uppercase tracking-wide text-primary shadow-sm shadow-primary/10 transition-all hover:-translate-y-px hover:bg-primary hover:text-white hover:shadow-md hover:shadow-primary/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2`}
                           >
-                            {option}
+                            {optionLogo && <img src={optionLogo} alt="" aria-hidden="true" className="h-4 w-4 shrink-0 object-contain" />}
+                            {optionMark && <span className={`flex h-4 w-4 shrink-0 items-center justify-center rounded-full text-[8px] font-black lowercase ${optionMarkClassName}`}>{optionMark}</span>}
+                            {OptionIcon && <OptionIcon className={`h-4 w-4 shrink-0 ${optionIconClassName ?? ""}`} aria-hidden="true" />}
+                            <span>{option}</span>
                           </button>
-                        ))}
-                      </div>
-                    )}
+                        );
+                      })}
+                    </div>
                   </div>
                 </div>
               )}
 
-              {canAnswer && !isComplete && !expectsOption && (
+              {canAnswer && !isComplete && (!expectsOption || Boolean(customOption)) && (
                 <div className="shrink-0 border-t border-black/5 bg-[#f0f2f5] p-3">
                   <div className="flex items-center gap-2">
                     {canGoBack && (
@@ -575,13 +753,13 @@ const WhatsAppQualificationModal = ({ isOpen, onClose, variant }: WhatsAppQualif
                         ref={inputRef}
                         value={draft}
                         onChange={(event) => setDraft(event.target.value)}
-                        onKeyDown={(event) => event.key === "Enter" && answerCurrent(draft)}
-                        placeholder="Digite uma resposta..."
+                        onKeyDown={(event) => event.key === "Enter" && (customOption ? submitCustomOption() : answerCurrent(draft))}
+                        placeholder={customOption ? `Digite ${currentField?.label.toLowerCase() ?? "a resposta"}...` : "Digite uma resposta..."}
                         className="h-8 w-full bg-transparent text-sm font-medium outline-none placeholder:text-gray-400"
                       />
                     </div>
                     <button
-                      onClick={() => answerCurrent(draft)}
+                      onClick={() => customOption ? submitCustomOption() : answerCurrent(draft)}
                       disabled={!draft.trim()}
                       aria-label="Enviar resposta"
                       className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-white shadow-md transition-all ${
@@ -617,9 +795,13 @@ const WhatsAppQualificationModal = ({ isOpen, onClose, variant }: WhatsAppQualif
                   )}
                   <button
                     onClick={handleFinalAction}
-                    className="flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-[#25D366] text-sm font-black uppercase tracking-wide text-white shadow-lg shadow-green-500/20 transition-colors hover:bg-[#20BA5A]"
+                    className="flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-[#25D366] text-sm font-black uppercase tracking-wide text-white shadow-lg shadow-green-500/25 transition-all hover:-translate-y-px hover:bg-[#20BA5A] hover:shadow-xl hover:shadow-green-500/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#25D366] focus-visible:ring-offset-2"
                   >
-                    {selectedVariant === "compre" ? "Abrir loja na Shopee" : "Enviar no WhatsApp"}
+                    {selectedVariant === "compre"
+                      ? "Abrir a loja na Shopee"
+                      : selectedVariant === "repare"
+                        ? "Enviar pedido no WhatsApp"
+                        : "Enviar para pré-avaliação"}
                     {selectedVariant === "compre" ? <ExternalLink className="h-4 w-4" /> : <Send className="h-4 w-4" />}
                   </button>
                 </div>
