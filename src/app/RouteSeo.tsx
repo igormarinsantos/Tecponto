@@ -76,6 +76,7 @@ const RouteSeo = () => {
     document.querySelector<HTMLMetaElement>('meta[property="og:description"]')?.setAttribute("content", seo.description);
     document.querySelector<HTMLMetaElement>('meta[name="twitter:title"]')?.setAttribute("content", seo.title);
     document.querySelector<HTMLMetaElement>('meta[name="twitter:description"]')?.setAttribute("content", seo.description);
+    ensureMeta("robots").content = pathname === "/marketing" ? "noindex, nofollow, noarchive" : "index, follow";
   }, [pathname]);
 
   return null;

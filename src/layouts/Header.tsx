@@ -50,7 +50,7 @@ const Header = () => {
     };
   }, [isMenuOpen]);
 
-  if (location.pathname === "/bio" || location.pathname === "/links") return null;
+  if (location.pathname === "/bio" || location.pathname === "/links" || location.pathname === "/marketing") return null;
 
   return (
     <header

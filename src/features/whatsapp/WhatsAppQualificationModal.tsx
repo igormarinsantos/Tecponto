@@ -6,7 +6,7 @@ import chatBackground from "@/assets/whatsapp/chat-background.png";
 import rodrigoWelcomeGif from "@/assets/whatsapp/rodrigo-welcome.gif";
 import whatsappAssistant from "@/assets/people/whatsapp-assistant.png";
 import { SHOPEE_STORE_URL } from "@/constants/links";
-import { trackCampaignEvent, withCampaignParameters } from "@/features/analytics/campaign";
+import { createMarketingLead, trackCampaignEvent, withCampaignParameters } from "@/features/analytics/campaign";
 import { buildWhatsAppUrl, qualificationFlow, type QualificationField, type QualificationValues } from "@/features/whatsapp/qualification";
 import type { LandingVariant } from "@/types/landing";
 
@@ -177,6 +177,8 @@ const WhatsAppQualificationModal = ({ isOpen, onClose, variant }: WhatsAppQualif
   const modalRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const onCloseRef = useRef(onClose);
+  const trackedStepRef = useRef<string | null>(null);
+  const hasTrackedCompletionRef = useRef(false);
 
   useEffect(() => {
     onCloseRef.current = onClose;
@@ -282,6 +284,34 @@ const WhatsAppQualificationModal = ({ isOpen, onClose, variant }: WhatsAppQualif
 
   useEffect(() => {
     if (!isOpen) return;
+    trackCampaignEvent("qualification_open", { modality: variant ?? "unspecified" });
+    trackedStepRef.current = null;
+    hasTrackedCompletionRef.current = false;
+  }, [isOpen, variant]);
+
+  useEffect(() => {
+    if (!isOpen || !selectedVariant || !canAnswer) return;
+
+    if (currentField && trackedStepRef.current !== currentField.id) {
+      trackedStepRef.current = currentField.id;
+      trackCampaignEvent("qualification_step_view", {
+        modality: selectedVariant,
+        step: currentField.id,
+        step_number: answeredFieldCount + 1,
+      });
+    }
+
+    if (isComplete && !hasTrackedCompletionRef.current) {
+      hasTrackedCompletionRef.current = true;
+      trackCampaignEvent("qualification_complete", {
+        modality: selectedVariant,
+        completed_fields: answeredFieldCount,
+      });
+    }
+  }, [answeredFieldCount, canAnswer, currentField, isComplete, isOpen, selectedVariant]);
+
+  useEffect(() => {
+    if (!isOpen) return;
 
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
@@ -301,6 +331,9 @@ const WhatsAppQualificationModal = ({ isOpen, onClose, variant }: WhatsAppQualif
           setCustomOption(parsed.customOption ?? null);
           setTypingMessageId(null);
           setTypedMessageLength(0);
+          if (Object.keys(parsed.values ?? {}).length > 0) {
+            trackCampaignEvent("qualification_resume", { modality: parsed.selectedVariant ?? "unspecified" });
+          }
           return;
         }
 
@@ -539,6 +572,12 @@ const WhatsAppQualificationModal = ({ isOpen, onClose, variant }: WhatsAppQualif
   };
 
   const selectOption = (option: string) => {
+    trackCampaignEvent("qualification_option_select", {
+      modality: selectedVariant ?? "unspecified",
+      step: currentField?.id ?? "intent",
+      option,
+    });
+
     if (option.toLowerCase().startsWith("outro")) {
       setCustomOption(option);
       setDraft("");
@@ -555,6 +594,8 @@ const WhatsAppQualificationModal = ({ isOpen, onClose, variant }: WhatsAppQualif
 
   const handleFinalAction = () => {
     if (!selectedVariant) return;
+
+    createMarketingLead(selectedVariant, values);
 
     if (selectedVariant === "compre") {
       trackCampaignEvent("bio_shopee_open", { placement: "qualification_modal" });

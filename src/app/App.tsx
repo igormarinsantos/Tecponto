@@ -7,6 +7,8 @@ import { BrowserRouter, useLocation } from "react-router-dom";
 import Header from "@/layouts/Header";
 import AppRoutes from "./routes";
 import RouteSeo from "./RouteSeo";
+import SiteAnalytics from "@/features/analytics/SiteAnalytics";
+import MarketingConsent from "@/features/analytics/MarketingConsent";
 
 const queryClient = new QueryClient();
 
@@ -28,7 +30,9 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <ScrollToTop />
+        <SiteAnalytics />
         <RouteSeo />
+        <MarketingConsent />
         <Header />
         <AppRoutes />
       </BrowserRouter>

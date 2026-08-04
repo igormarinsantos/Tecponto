@@ -6,7 +6,7 @@ import brokenPhone from "@/assets/devices/reparo.png";
 import usedPhoneTrade from "@/assets/devices/troca.png";
 import testimonialVideo from "@/assets/media/testimonial-video.webm";
 import { SHOPEE_STORE_URL } from "@/constants/links";
-import { captureCampaignAttribution, trackCampaignEvent, withCampaignParameters } from "@/features/analytics/campaign";
+import { trackCampaignEvent, withCampaignParameters } from "@/features/analytics/campaign";
 import WhatsAppQualificationModal from "@/features/whatsapp/WhatsAppQualificationModal";
 import type { LandingVariant } from "@/types/landing";
 
@@ -83,7 +83,6 @@ const LinksBio = () => {
   };
 
   useEffect(() => {
-    captureCampaignAttribution();
     trackCampaignEvent("bio_view", { page: "links_bio" });
 
     const action = getActionFromUrl();

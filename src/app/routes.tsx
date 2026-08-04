@@ -7,6 +7,7 @@ import Garantia from "@/pages/Garantia";
 import FAQ from "@/pages/FAQ";
 import Contato from "@/pages/Contato";
 import LinksBio from "@/pages/LinksBio";
+import Marketing from "@/pages/Marketing";
 import NotFound from "@/pages/NotFound";
 
 const AppRoutes = () => (
@@ -20,6 +21,7 @@ const AppRoutes = () => (
     <Route path="/contato" element={<Contato />} />
     <Route path="/links" element={<LinksBio />} />
     <Route path="/bio" element={<LinksBio />} />
+    <Route path="/marketing" element={<Marketing />} />
     <Route path="*" element={<NotFound />} />
   </Routes>
 );
