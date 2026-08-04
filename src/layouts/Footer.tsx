@@ -1,4 +1,4 @@
-import { ExternalLink, Instagram, MessageCircle } from "lucide-react";
+import { Cookie, ExternalLink, Instagram, MessageCircle } from "lucide-react";
 import { NavLink } from "react-router-dom";
 import logo from "@/assets/brand/logo-horizontal.png";
 import { SHOPEE_STORE_URL } from "@/constants/links";
@@ -74,6 +74,14 @@ const Footer = () => {
               <span className="font-semibold">Shopee</span>
               <ExternalLink className="h-3.5 w-3.5" />
             </a>
+            <button
+              type="button"
+              onClick={() => window.dispatchEvent(new CustomEvent("tecponto:open-cookie-preferences"))}
+              className="flex items-center gap-2 text-left transition-colors hover:text-foreground"
+            >
+              <Cookie className="h-4 w-4 text-primary" />
+              <span className="font-semibold">Cookies</span>
+            </button>
           </div>
         </div>
 

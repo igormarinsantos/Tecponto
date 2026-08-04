@@ -1,4 +1,4 @@
-import { Cookie, SlidersHorizontal, X } from "lucide-react";
+import { Cookie, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { captureCampaignAttribution, trackCampaignEvent } from "@/features/analytics/campaign";
@@ -12,6 +12,8 @@ declare global {
     _fbq?: (...args: unknown[]) => void;
   }
 }
+
+const PREFERENCES_EVENT = "tecponto:open-cookie-preferences";
 
 const loadScript = (id: string, source: string) => {
   if (document.getElementById(id)) return;
@@ -51,13 +53,23 @@ const activateAdvertisingTools = () => {
 const MarketingConsent = () => {
   const { pathname } = useLocation();
   const [consent, setConsent] = useState<MarketingConsent>(() => getMarketingConsent());
-  const [isExpanded, setIsExpanded] = useState(true);
+  const [isPreferencesOpen, setIsPreferencesOpen] = useState(false);
 
   useEffect(() => {
     const onConsent = () => setConsent(getMarketingConsent());
+    const openPreferences = () => setIsPreferencesOpen(true);
     window.addEventListener(MARKETING_CONSENT_EVENT, onConsent);
-    return () => window.removeEventListener(MARKETING_CONSENT_EVENT, onConsent);
+    window.addEventListener(PREFERENCES_EVENT, openPreferences);
+    return () => {
+      window.removeEventListener(MARKETING_CONSENT_EVENT, onConsent);
+      window.removeEventListener(PREFERENCES_EVENT, openPreferences);
+    };
   }, []);
+
+  useEffect(() => {
+    if (consent !== null) return;
+    setMarketingConsent("granted");
+  }, [consent]);
 
   useEffect(() => {
     if (consent !== "granted") return;
@@ -66,24 +78,18 @@ const MarketingConsent = () => {
     trackCampaignEvent("page_view", { page_path: pathname, page_type: pathname === "/" ? "home" : pathname.slice(1) || "home", consent_granted: true });
   }, [consent, pathname]);
 
-  useEffect(() => {
-    if (consent || !isExpanded) return;
-    const timer = window.setTimeout(() => setIsExpanded(false), 6500);
-    return () => window.clearTimeout(timer);
-  }, [consent, isExpanded]);
-
-  if (pathname === "/marketing" || consent) return null;
+  if (pathname === "/marketing" || !isPreferencesOpen) return null;
 
   const chooseConsent = (choice: Exclude<MarketingConsent, null>) => {
     setMarketingConsent(choice);
-    setIsExpanded(false);
+    setIsPreferencesOpen(false);
   };
 
-  return <div className="fixed bottom-5 left-4 z-[120] sm:left-5">
-    {isExpanded ? <aside className="w-[min(360px,calc(100vw-2rem))] rounded-xl border border-white/15 bg-[#25292C] p-4 text-white shadow-[0_18px_50px_rgba(37,41,44,0.28)]" aria-label="Preferencias de cookies">
-      <div className="flex items-start gap-3"><div className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-white/10 text-[#FE5000]"><Cookie className="h-4 w-4" /></div><div className="min-w-0 flex-1"><p className="text-sm font-black">Sua navegacao, suas escolhas.</p><p className="mt-1 text-xs font-medium leading-relaxed text-white/70">Usamos medicao opcional para melhorar campanhas e atendimento.</p></div><button onClick={() => setIsExpanded(false)} className="grid h-8 w-8 shrink-0 place-items-center rounded-md text-white/55 transition hover:bg-white/10 hover:text-white" aria-label="Recolher preferencias"><X className="h-4 w-4" /></button></div>
-      <div className="mt-4 flex gap-2"><button onClick={() => chooseConsent("denied")} className="h-9 flex-1 rounded-lg border border-white/25 px-3 text-[11px] font-black uppercase text-white transition hover:bg-white/10">Recusar</button><button onClick={() => chooseConsent("granted")} className="h-9 flex-1 rounded-lg bg-[#FE5000] px-3 text-[11px] font-black uppercase text-white transition hover:bg-[#df4600]">Aceitar</button></div>
-    </aside> : <button onClick={() => setIsExpanded(true)} className="inline-flex h-11 items-center gap-2 rounded-full bg-[#25292C] px-4 text-xs font-black text-white shadow-[0_12px_30px_rgba(37,41,44,0.22)] transition hover:bg-[#353a3e]" aria-label="Abrir preferencias de cookies"><SlidersHorizontal className="h-4 w-4 text-[#FE5000]" /> Cookies</button>}
+  return <div className="fixed inset-0 z-[150] grid place-items-center bg-[#25292C]/45 p-4 backdrop-blur-sm" role="dialog" aria-modal="true" aria-label="Preferencias de cookies">
+    <section className="w-full max-w-md rounded-xl border border-black/10 bg-white p-5 text-[#25292C] shadow-[0_24px_70px_rgba(37,41,44,0.3)]">
+      <div className="flex items-start gap-3"><div className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-[#FE5000]/10 text-[#FE5000]"><Cookie className="h-5 w-5" /></div><div className="min-w-0 flex-1"><h2 className="font-black">Preferencias de cookies</h2><p className="mt-1 text-sm font-medium leading-relaxed text-[#25292C]/60">A medicao ajuda a TecPonto a entender campanhas e melhorar o atendimento.</p></div><button onClick={() => setIsPreferencesOpen(false)} className="grid h-8 w-8 place-items-center rounded-md text-[#25292C]/45 transition hover:bg-black/5 hover:text-[#25292C]" aria-label="Fechar preferencias"><X className="h-4 w-4" /></button></div>
+      <div className="mt-5 grid grid-cols-2 gap-2"><button onClick={() => chooseConsent("denied")} className="h-10 rounded-lg border border-black/15 text-xs font-black uppercase transition hover:bg-black/[0.03]">Recusar medicao</button><button onClick={() => chooseConsent("granted")} className="h-10 rounded-lg bg-[#FE5000] text-xs font-black uppercase text-white transition hover:bg-[#df4600]">Aceitar medicao</button></div>
+    </section>
   </div>;
 };
 
